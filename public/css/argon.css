@@ -18531,3 +18531,6 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle
 .dark{
     color: #212121;
 }
+.wrap {
+    word-wrap:break-word
+}

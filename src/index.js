@@ -17,6 +17,8 @@ ReactDOM.render(
         <Route path='/administrador/' component={Admin.Padrao}>
             <IndexRoute component={Admin.HomeScreen}/>
             <Route path="/administrador/questoes/adicionar" component={Admin.Questao.NovaQuestaoScreen}></Route>
+            <Route path="/administrador/questoes/ver" component={Admin.Questao.VerQuestoesScreen}></Route>
+            <Route path="/administrador/rodada/adicionar" component={Admin.Rodadas.NovaRodadaScreen}></Route>
         </Route>
     </Router>
     , document.getElementById('root'));

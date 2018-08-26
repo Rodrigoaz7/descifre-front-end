@@ -1,2 +1,3 @@
 import NovaQuestaoScreen from './NovaQuestaoScreen/NovaQuestaoScreen';
-export default {NovaQuestaoScreen};
+import VerQuestoesScreen from './VerQuestoesScreen/VerQuestoesScreen';
+export default {NovaQuestaoScreen, VerQuestoesScreen};

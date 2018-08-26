@@ -42,7 +42,7 @@ export default class HomeScreen extends Component {
                                         <div className="row">
                                             <div className="col-lg-12">
                                                 <br/><br/>
-                                                <table class="table table-bordered">
+                                                <table className="table table-bordered">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Nome</th>

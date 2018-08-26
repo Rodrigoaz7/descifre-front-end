@@ -18,7 +18,7 @@ export default class Info extends Component {
                 <div className="col-lg-3 col-md-3">
                     <center>
                         <h4 style={{ color: '#212121' }} className="display-1 mb-0">3</h4>
-                        <h4 style={{ color: '#212121' }}>Quizzes</h4>
+                        <h4 style={{ color: '#212121' }}>Rodadas</h4>
                     </center>
                 </div>
                 <div className="col-lg-3 col-md-3">

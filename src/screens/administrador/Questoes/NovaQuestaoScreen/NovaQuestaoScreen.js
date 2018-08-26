@@ -2,19 +2,32 @@
 *   Autor: Marcus Dantas
 */
 import React, { Component } from "react";
+import Select from 'react-select';
 import toastr from "toastr";
-export default class HomeScreen extends Component {
+const options = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' }
+];
+export default class NovaQuestaoScreen extends Component {
     constructor() {
         super();
         this.state = {
             alternativas:[{
                 descricao: ""
-            }]
+            }],
+            selectedOption: null,
+            categoria: '',
+            estadoCategoria: false
         };
     }
 
     componentDidMount() {
-        document.title = "Administrador - Tela de administração de$cifre."
+        document.title = "Adicionar nova questão - Tela de administração de$cifre."
+    }
+    handleChange = (selectedOption) => {
+        this.setState({ selectedOption });
+        console.log(`Option selected:`, selectedOption);
     }
 
     handleInputChange = async (input, index)=>{
@@ -39,6 +52,7 @@ export default class HomeScreen extends Component {
 
     removerAlternativa = async () => {
         let that = this.state;
+        if(!that.alternativas) return;
         if(that.alternativas.length>1){
             that.alternativas.splice(that.alternativas.length-1,1);
         
@@ -68,7 +82,12 @@ export default class HomeScreen extends Component {
        
     }
 
+    mudarEstadoSelect = async () =>{
+        await this.setState({estadoCategoria: !this.state.estadoCategoria});
+    }
+
     render() {
+        const { selectedOption } = this.state;
         return (
             <div className="position-relative alt">
                 <section className="section section-shaped section-lg my-0">
@@ -91,6 +110,32 @@ export default class HomeScreen extends Component {
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div className="row">
+                                                <div className="offset-lg-1 col-lg-8">
+                                                    <div className="form-group">
+                                                        {!this.state.estadoCategoria && <Select
+                                                            value={selectedOption}
+                                                            onChange={this.handleChange}
+                                                            options={options}
+                                                            placeholder="Selecione uma categoria"
+                                                        />}
+                                                        {this.state.estadoCategoria && 
+                                                            <input type="text"
+                                                            className="form-control form-control-lg form-control-alternative"  placeholder="Digite sua nova categoria"
+                                                            />
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div className="col-lg-2">
+                                                    {!this.state.estadoCategoria && 
+                                                        <button onClick={()=>this.mudarEstadoSelect()} type="button" className="btn btn-success btn-sm btn-block"><i style={{fontSize: '28px'}} className="fa fa-plus-square" aria-hidden="true"></i></button>
+                                                    }
+                                                    {this.state.estadoCategoria && 
+                                                        <button onClick={()=>this.mudarEstadoSelect()} type="button" className="btn btn-primary btn-lg btn-block"><i style={{fontSize: '28px'}} className="fa fa-search" aria-hidden="true"></i></button>
+                                                    }
+                                                </div>
+                                            </div>
+                                            
                                             <div className="row">
                                                 <div className="col-lg-12">
                                                     <center>

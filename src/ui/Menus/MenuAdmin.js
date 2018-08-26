@@ -8,7 +8,7 @@ export default class MenuNavPublic extends Component{
                     <Link to='/administrador/' className="nav-link">Início</Link>
                 </li>
                 <li className="nav-item">
-                    <Link to='/administrador/home' className="nav-link">Jogadores</Link>
+                    <Link to='/administrador/home' className="nav-link">Usuários</Link>
                 </li>
                 <li className="nav-item dropdown">
                     <Link to="" className="nav-link" data-toggle="dropdown" href="" role="button">
@@ -27,7 +27,7 @@ export default class MenuNavPublic extends Component{
                     </Link>
                     <div className="dropdown-menu">
                         <Link to="/administrador/questoes/adicionar" className="dropdown-item">Nova</Link>
-                        <Link to="/administrador/questoes/" className="dropdown-item">Ver questões</Link>
+                        <Link to="/administrador/questoes/ver" className="dropdown-item">Ver questões</Link>
                     </div>
                 </li>
                 <li className="nav-item dropdown">
@@ -36,7 +36,7 @@ export default class MenuNavPublic extends Component{
                         <span className="nav-link-inner--text">Rodadas</span>
                     </Link>
                     <div className="dropdown-menu">
-                        <Link to="/administrador/questoes/adicionar" className="dropdown-item">Nova</Link>
+                        <Link to="/administrador/rodada/adicionar" className="dropdown-item">Nova</Link>
                         <Link to="/administrador/questoes/" className="dropdown-item">Ver rodadas</Link>
                     </div>
                 </li>
@@ -44,7 +44,10 @@ export default class MenuNavPublic extends Component{
                     <Link to='/administrador/home' className="nav-link">Cifras</Link>
                 </li>
                 <li className="nav-item">
-                    <Link to='/administrador/home' className="nav-link">Sair</Link>
+                    <Link to='/administrador/perfil' className="nav-link">Perfil</Link>
+                </li> 
+                <li className="nav-item">
+                    <Link to='/administrador/sair' className="nav-link">Sair</Link>
                 </li> 
             </ul>
         );

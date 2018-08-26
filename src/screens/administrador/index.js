@@ -4,4 +4,6 @@
 import HomeScreen from "./Home/HomeScreen";
 import Padrao from "./Padrao";
 import Questao from "./Questoes";
-export default {HomeScreen, Padrao, Questao}; 
+import Rodadas from "./Rodadas";
+
+export default {HomeScreen, Padrao, Questao, Rodadas}; 
