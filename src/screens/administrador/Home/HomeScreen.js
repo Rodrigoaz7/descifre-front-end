@@ -19,7 +19,7 @@ export default class HomeScreen extends Component {
         return (
             <div className="position-relative alt">
                 <section className="section section-shaped section-lg my-0">
-                    <div className="shape shape-style-1 bg-gradient-default">
+                    <div className="shape shape-style-1 bg-gradient-dark">
                     </div>
                     <div className="container-fluid pt-lg-md">
                         <div className="row justify-content-center">

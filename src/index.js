@@ -19,6 +19,7 @@ ReactDOM.render(
             <Route path="/administrador/questoes/adicionar" component={Admin.Questao.NovaQuestaoScreen}></Route>
             <Route path="/administrador/questoes/ver" component={Admin.Questao.VerQuestoesScreen}></Route>
             <Route path="/administrador/rodada/adicionar" component={Admin.Rodadas.NovaRodadaScreen}></Route>
+            <Route path="/administrador/rodada/ver" component={Admin.Rodadas.VerRodadaScreen}></Route>
         </Route>
     </Router>
     , document.getElementById('root'));

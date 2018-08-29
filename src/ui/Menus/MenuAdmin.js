@@ -37,7 +37,7 @@ export default class MenuNavPublic extends Component{
                     </Link>
                     <div className="dropdown-menu">
                         <Link to="/administrador/rodada/adicionar" className="dropdown-item">Nova</Link>
-                        <Link to="/administrador/questoes/" className="dropdown-item">Ver rodadas</Link>
+                        <Link to="/administrador/rodada/ver" className="dropdown-item">Ver rodadas</Link>
                     </div>
                 </li>
                 <li className="nav-item">
