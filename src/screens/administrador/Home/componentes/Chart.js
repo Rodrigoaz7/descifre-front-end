@@ -12,7 +12,6 @@ const data = [
 export default class SimpleLineChart extends Component {
     constructor(props){
         super();
-        console.log(props);
     }
     render () {
         return (

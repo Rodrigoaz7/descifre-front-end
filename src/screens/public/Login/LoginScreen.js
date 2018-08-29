@@ -14,6 +14,10 @@ export default class LoginScreen extends Component {
     componentDidMount() {
         document.title = "Login - Tela de login"
     }
+    /*
+    *   Handle para mudar os valores da senha e email.
+    *   Autor: Marcus Dantas
+    */
     handleSubmit = async (e) => {
         e.preventDefault();
         await this.setState({email: this.email.value, senha: this.senha.value});

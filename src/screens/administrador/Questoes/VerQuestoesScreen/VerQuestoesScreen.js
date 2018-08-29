@@ -10,6 +10,7 @@ const options = [
     { value: 'vanilla', label: 'Vanilla' }
 ];
 export default class VerQuestoesScreen extends Component {
+
     constructor() {
         super();
         this.state = {
@@ -17,6 +18,10 @@ export default class VerQuestoesScreen extends Component {
         };
     }
 
+    /*
+    *   Função para alterar o valor do select de categorias.
+    *   Autor: Marcus Dantas
+    */
     handleChange = (selectedOption) => {
         this.setState({ selectedOption });
         console.log(`Option selected:`, selectedOption);

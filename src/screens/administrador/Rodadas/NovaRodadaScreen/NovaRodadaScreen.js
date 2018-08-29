@@ -5,11 +5,8 @@ import React, { Component } from "react";
 import Linha from "../../../../ui/components/linha";
 
 const adicionarPremicao = (numeroParaPremiar) => {
-    let usuarioPremiado = {
-        porcentagemPremio: ""
-    };
     let usuariosPremiados = [];
-    for(let i =0; i < numeroParaPremiar; i++) usuariosPremiados.push(usuarioPremiado);
+    for(let i =0; i < numeroParaPremiar; i++) usuariosPremiados.push({porcentagemPremio:""});
     return usuariosPremiados;
 };
 
@@ -18,11 +15,11 @@ export default class NovaRodadaScreen extends Component {
     constructor() {
         super();
         this.state = {
-            tempoParaResposta: 10,
-            quantidadeUsuariosPremiados: []
+            tempoParaResposta: 10, // Tempo para usuários responderem.
+            quantidadeUsuariosPremiados: []  // Quantidade de usuários premiados.
         };
-        this.numeroPremiados = null;
-        this.usuariosPremiados = [];
+        this.numeroPremiados = null; // Variavel para ajudar na adição dos inputs.
+        this.usuariosPremiados = []; // Array de usuários premiados.
     }
 
     componentDidMount() {
@@ -30,17 +27,28 @@ export default class NovaRodadaScreen extends Component {
         
     }
 
+    /*
+    *   Handle que altera o valor do tempo do input.
+    *   Autor: Marcus Dantas
+    */
     handleTempo = async (input) => this.setState({tempoParaResposta:input.target.value});
     
+    /*
+    *   Handle que cria os inputs de usuários premiados.
+    *   Autor: Marcus Dantas
+    */
     handleUsuariosPremiados = async () => {
         this.setState({quantidadeUsuariosPremiados: adicionarPremicao(this.numeroPremiados.value)});
         this.usuariosPremiados = adicionarPremicao(this.numeroPremiados.value);
     }
     
+    /*
+    *   Handle que popula o valor do premio para os usuários.
+    *   Autor: Marcus Dantas
+    */
     handleValorPremiacao = async (input, index) => {
         let that = this.state;
         let premiados = that.quantidadeUsuariosPremiados;
-
         premiados[index].porcentagemPremio = input.target.value;
         this.setState({quantidadeUsuariosPremiados: premiados});
         

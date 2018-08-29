@@ -4,34 +4,48 @@
 import React, { Component } from "react";
 import Select from 'react-select';
 import toastr from "toastr";
+import Linha from '../../../../ui/components/linha';
+
+// Mock inicial para alternativas substituir por um state.
 const options = [
     { value: 'chocolate', label: 'Chocolate' },
     { value: 'strawberry', label: 'Strawberry' },
     { value: 'vanilla', label: 'Vanilla' }
 ];
+
 export default class NovaQuestaoScreen extends Component {
+
     constructor() {
         super();
         this.state = {
+            // Alternativas da questão.
             alternativas:[{
                 descricao: ""
             }],
-            selectedOption: null,
-            categoria: '',
-            estadoCategoria: false
+            selectedOption: null, // Select da categoria
+            categoria: '', // Nova categoria se for cadastada.
+            estadoCategoria: false // Estado para select ou input de categoria.
         };
     }
 
     componentDidMount() {
         document.title = "Adicionar nova questão - Tela de administração de$cifre."
     }
+
+    /*
+    *   HandleChange de mudança do select da categoria.
+    *   Autor: Marcus Dantas
+    */
     handleChange = (selectedOption) => {
         this.setState({ selectedOption });
         console.log(`Option selected:`, selectedOption);
     }
 
+    /*
+    *   HandleChange para  mudar o valor da descrição da alternativa.
+    *   Autor: Marcus Dantas
+    */
     handleInputChange = async (input, index)=>{
-
         let that = this.state;
         let alternativas = that.alternativas;
 
@@ -39,6 +53,10 @@ export default class NovaQuestaoScreen extends Component {
         this.setState({alternativas: alternativas});
     }
 
+    /*
+    *   Função para adicionar um novo input de alternativa.
+    *   Autor: Marcus Dantas
+    */
     adicionarAlternativa = async () => {
         let that = this.state;
 
@@ -50,6 +68,10 @@ export default class NovaQuestaoScreen extends Component {
         await this.setState({alternativas: alternativas});
     }
 
+    /*
+    *   Função para remover um input de alternativa.
+    *   Autor: Marcus Dantas
+    */
     removerAlternativa = async () => {
         let that = this.state;
         if(!that.alternativas) return;
@@ -82,6 +104,10 @@ export default class NovaQuestaoScreen extends Component {
        
     }
 
+    /*
+    *   Função alterar o state da varivel que exibe o select ou adição de categoria.
+    *   Autor: Marcus Dantas
+    */
     mudarEstadoSelect = async () =>{
         await this.setState({estadoCategoria: !this.state.estadoCategoria});
     }
@@ -188,6 +214,29 @@ export default class NovaQuestaoScreen extends Component {
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div className="row">
+                                                <div className="col-lg-12">
+                                                    <center>
+                                                        <h3>Selecione a alternativa correta</h3>
+                                                    </center>
+                                                </div>
+                                            </div>
+                                            <Linha tamanho={8} />
+                                            <div className="row">
+                                                <div className="col-lg-10 offset-lg-1">
+                                                    <div className="form-group">
+                                                        <select className="form-control">
+                                                            <option value="Nenhuma alternativa">Nenhuma alternativa</option>
+                                                            {this.state.alternativas.map((alternativa,index)=>{
+                                                                return(
+                                                                    <option value={index} key={index}>{alternativa.descricao}</option>
+                                                                )
+                                                            })}          
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <Linha tamanho={8}/>
                                             <div className="row">
                                                 <div className="offset-lg-1 col-lg-10">
                                                     <div className="row">
