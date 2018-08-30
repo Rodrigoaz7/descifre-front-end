@@ -8,7 +8,7 @@ export default class MenuNavPublic extends Component{
                     <Link to='/administrador/' className="nav-link">Início</Link>
                 </li>
                 <li className="nav-item">
-                    <Link to='/administrador/home' className="nav-link">Usuários</Link>
+                    <Link to='/administrador/usuarios' className="nav-link">Usuários</Link>
                 </li>
                 <li className="nav-item dropdown">
                     <Link to="" className="nav-link" data-toggle="dropdown" href="" role="button">

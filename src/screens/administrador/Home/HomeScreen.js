@@ -45,10 +45,10 @@ export default class HomeScreen extends Component {
                                                 <table className="table table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col">Nome</th>
-                                                            <th scope="col">E-mail</th>
-                                                            <th scope="col">Telefone</th>
-                                                            <th scope="col">Data cadastro</th>
+                                                            <th scope="col"><center>Nome</center></th>
+                                                            <th scope="col"><center>E-mail</center></th>
+                                                            <th scope="col"><center>Telefone</center></th>
+                                                            <th scope="col"><center>Data cadastro</center></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>

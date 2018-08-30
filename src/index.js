@@ -21,6 +21,7 @@ ReactDOM.render(
             <Route path="/administrador/rodada/adicionar" component={Admin.Rodadas.NovaRodadaScreen}></Route>
             <Route path="/administrador/rodada/ver" component={Admin.Rodadas.VerRodadaScreen}></Route>
             <Route path="/administrador/perfil" component={Admin.Perfil.PerfilScreen}></Route>
+            <Route path="/administrador/usuarios" component={Admin.Usuario.UsuarioScreen}></Route>
         </Route>
     </Router>
     , document.getElementById('root'));
