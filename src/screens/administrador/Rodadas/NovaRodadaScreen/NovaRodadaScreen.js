@@ -97,7 +97,7 @@ export default class NovaRodadaScreen extends Component {
                                                                     <div className="input-group-prepend">
                                                                     <span className="input-group-text"><i className="ni ni-calendar-grid-58"></i></span>
                                                                     </div>
-                                                                    <input className="form-control " placeholder="Select date" type="datetime-local"/>
+                                                                    <input className="form-control datepicker" placeholder="Select date" type="datetime-local"/>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -109,7 +109,7 @@ export default class NovaRodadaScreen extends Component {
                                                                     <div className="input-group-prepend">
                                                                     <span className="input-group-text"><i className="ni ni-calendar-grid-58"></i></span>
                                                                     </div>
-                                                                    <input className="form-control " placeholder="Select date" type="datetime-local"/>
+                                                                    <input className="form-control datepicker" placeholder="Select date" type="datetime-local"/>
                                                                 </div>
                                                             </div>
                                                         </div>
