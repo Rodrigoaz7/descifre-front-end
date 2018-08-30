@@ -238,6 +238,22 @@ export default class NovaQuestaoScreen extends Component {
                                             </div>
                                             <Linha tamanho={8}/>
                                             <div className="row">
+                                                <div className="col-lg-12">
+                                                    <center>
+                                                        <h3>Pontuação da questão</h3>
+                                                    </center>
+                                                </div>
+                                            </div>
+                                            <Linha tamanho={6}/>
+                                            <div className="row">
+                                                <div className="col-lg-10 offset-lg-1">
+                                                    <div className="form-group">
+                                                        <input type="number" className="form-control form-control-lg form-control-alternative"  placeholder="Digite a pontuação aqui"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <Linha tamanho={6}/>
+                                            <div className="row">
                                                 <div className="offset-lg-1 col-lg-10">
                                                     <div className="row">
                                                         <div className="col-lg-6">
