@@ -5,8 +5,12 @@ import React, { Component } from "react";
 import Linha from '../../../../ui/components/linha';
 import { Link } from "react-router";
 
-export default class VerQuestoesScreen extends Component {
-
+export default class PerfilScreen extends Component {
+    
+    componentDidMount(){
+        document.title = "Perfil - Tela de administração de$cifre.";
+    }
+    
     render() {
         return (
             <div className="position-relative">

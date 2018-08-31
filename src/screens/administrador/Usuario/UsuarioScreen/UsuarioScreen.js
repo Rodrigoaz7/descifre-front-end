@@ -2,37 +2,14 @@
 *   Autor: Rodrigo Azevedo
 */
 import React, { Component } from "react";
-// import Select from 'react-select';
 
-// const options = [
-//     { value: 'chocolate', label: 'Chocolate' },
-//     { value: 'strawberry', label: 'Strawberry' },
-//     { value: 'vanilla', label: 'Vanilla' }
-// ];
 export default class VerQuestoesScreen extends Component {
 
-    // constructor() {
-    //     super();
-    //     this.state = {
-    //         selectedOption: null
-    //     };
-    // }
-
-    // /*
-    // *   Função para alterar o valor do select de categorias.
-    // *   Autor: Marcus Dantas
-    // */
-    // handleChange = (selectedOption) => {
-    //     this.setState({ selectedOption });
-    //     console.log(`Option selected:`, selectedOption);
-    // }
-
-    // componentDidMount() {
-    //     document.title = "Ver questões - Tela de administração de$cifre."
-    // }
+    componentDidMount() {
+        document.title = "Usuarios - Tela de administração de$cifre."
+    }
 
     render() {
-        //const { selectedOption } = this.state;
         return (
             <div className="position-relative alt">
                 <section className="section section-shaped section-lg my-0">

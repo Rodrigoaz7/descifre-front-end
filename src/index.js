@@ -16,12 +16,19 @@ ReactDOM.render(
         </Route>
         <Route path='/administrador/' component={Admin.Padrao}>
             <IndexRoute component={Admin.HomeScreen}/>
+            
             <Route path="/administrador/questoes/adicionar" component={Admin.Questao.NovaQuestaoScreen}></Route>
             <Route path="/administrador/questoes/ver" component={Admin.Questao.VerQuestoesScreen}></Route>
+            
+            <Route path="/administrador/patrocinador/adicionar" component={Admin.Patrocinadores.NovoPatrocinadorScreen}></Route>
+
             <Route path="/administrador/rodada/adicionar" component={Admin.Rodadas.NovaRodadaScreen}></Route>
             <Route path="/administrador/rodada/ver" component={Admin.Rodadas.VerRodadaScreen}></Route>
+            
             <Route path="/administrador/perfil" component={Admin.Perfil.PerfilScreen}></Route>
+            
             <Route path="/administrador/usuarios" component={Admin.Usuario.UsuarioScreen}></Route>
+            
             <Route path="/administrador/cifras" component={Admin.Cifras.CifrasScreen}></Route>
         </Route>
     </Router>
