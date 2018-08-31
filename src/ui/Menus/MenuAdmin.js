@@ -41,7 +41,7 @@ export default class MenuNavPublic extends Component{
                     </div>
                 </li>
                 <li className="nav-item">
-                    <Link to='/administrador/home' className="nav-link">Cifras</Link>
+                    <Link to='/administrador/cifras' className="nav-link">Cifras</Link>
                 </li>
                 <li className="nav-item">
                     <Link to='/administrador/perfil' className="nav-link">Perfil</Link>
