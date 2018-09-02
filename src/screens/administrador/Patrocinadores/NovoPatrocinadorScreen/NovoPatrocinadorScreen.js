@@ -52,11 +52,6 @@ export default class NovoPatrocinadorScreen extends Component {
     // }
 
     render() {
-<<<<<<< HEAD
-=======
-        
-        const { selectedOption } = this.state;
->>>>>>> aafcd39fc63a4548467f8bc15027d650dca2ac79
         return (
             <div className="position-relative alt">
                 <section className="section section-shaped section-lg my-0">
