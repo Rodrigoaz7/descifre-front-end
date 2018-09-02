@@ -1,2 +1,3 @@
 import NovoPatrocinadorScreen from './NovoPatrocinadorScreen/NovoPatrocinadorScreen';
-export default {NovoPatrocinadorScreen};
+import PatrocinadoresScreen from "./PatrocinadoresScreen/PatrocinadoresScreen";
+export default {NovoPatrocinadorScreen, PatrocinadoresScreen};
