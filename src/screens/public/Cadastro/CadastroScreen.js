@@ -70,8 +70,8 @@ export default class LoginScreen extends Component {
             return;
         } 
 
-        localStorage.setItem('descifre_tokenUsuario', postCadastro.data.token);
-        localStorage.setItem('descifre_userData', postCadastro.data.usuario);
+        localStorage.setItem('descifre_tokenUsuario', JSON.stringify(postCadastro.data.token));
+        localStorage.setItem('descifre_userData', JSON.stringify(postCadastro.data.usuario));
 
         postCadastro.data.usuario.permissoes.map((permissao, index) =>{
             if(permissao=="Administrador") browserHistory.push(`administrador/`);

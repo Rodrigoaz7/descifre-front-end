@@ -3,13 +3,19 @@
 */
 import React, { Component } from "react";
 import { Link } from "react-router";
+import providerLogin from "../../../providers/public/autenticacao/providerLogin";
+import Erros from '../../../ui/components/erros';
+import {browserHistory} from "react-router/lib";
+
 export default class LoginScreen extends Component {
     constructor() {
         super();
         this.state = {
             email: '',
-            senha: ''
+            senha: '',
+            erros: []
         }
+        this.erros = [];
     }
     componentDidMount() {
         document.title = "Login - Tela de login"
@@ -21,6 +27,30 @@ export default class LoginScreen extends Component {
     handleSubmit = async (e) => {
         e.preventDefault();
         await this.setState({email: this.email.value, senha: this.senha.value});
+        const data = {
+            email: this.state.email,
+            senha: this.state.senha
+        };
+        const postLogin = await providerLogin.realizarLogin(data);
+
+        /* Caso ocorra algum erro */
+        if(!postLogin.status){
+            if(postLogin.erros == undefined){
+                await this.setState({erros:[{msg:postLogin.msg}]});
+                return;
+            }
+            await this.setState({erros:postLogin.erros});
+            return;
+        } 
+        
+        localStorage.setItem('descifre_tokenUsuario', JSON.stringify(postLogin.data.token));
+        localStorage.setItem('descifre_userData', JSON.stringify(postLogin.data.usuario));
+
+        postLogin.data.usuario.permissoes.map((permissao, index) =>{
+            if(permissao=="Administrador") browserHistory.push(`/administrador/`);
+        });
+
+        browserHistory.push(`/publico/`);
     }
     render() {
         return (
@@ -55,6 +85,20 @@ export default class LoginScreen extends Component {
                                             </center>
                                         </div>
                                         <form onSubmit={this.handleSubmit}>
+                                            <div className="form-group">
+                                            {this.state.erros.map((erro, index)=>{
+                                                return(
+                                                    <div key={index}>
+                                                        <div  className="alert alert-warning alert-dismissible fade show" role="alert">
+                                                            <span className="alert-inner--text">{erro.msg}</span>
+                                                            <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            })}
+                                            </div>
                                             <div className="form-group mb-3">
                                                 <div className="input-group input-group-alternative">
                                                     <div className="input-group-prepend">
