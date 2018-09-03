@@ -3,6 +3,10 @@
 */
 import React, { Component } from "react";
 import Swal from 'sweetalert2'
+import {browserHistory} from "react-router/lib";
+
+import providerCadastro from '../../../providers/public/autenticacao/providerCadastro';
+import Erros from '../../../ui/components/erros';
 
 export default class LoginScreen extends Component {
 
@@ -12,8 +16,11 @@ export default class LoginScreen extends Component {
             nome: '',
             email: '',
             senha: '',
-            termos: false
+            repetirSenha: '',
+            termos: false,
+            erros: []
         };
+        this.erros = [];
     }
 
     componentDidMount() {
@@ -23,11 +30,14 @@ export default class LoginScreen extends Component {
 
     handleChange = async (event) => await this.setState({senha: event.target.value});
     
-    handleCheckBox = async () => await this.setState({termos: !this.state.termos});
+    handleRepetirSenhaChange = async (event) => await this.setState({repetirSenha: event.target.value});
     
+    handleCheckBox = async () => await this.setState({termos: !this.state.termos});
+   
     handleSubmit = async (e) => {
         e.preventDefault();
-        await this.setState({nome: this.nome.value, email: this.email.value, senha: this.senha.value});
+        await this.setState({nome: this.nome.value, email: this.email.value, senha: this.senha.value, repetirSenha: this.repetirSenha.value, erros:[]});
+
         if(!this.state.termos){
             Swal({
                 type: 'error',
@@ -36,7 +46,38 @@ export default class LoginScreen extends Component {
                 footer: '<a href>Voltar para página de cadastro</a>'
             });
             return;
-        }
+        };
+
+        const data = {
+            nome: this.state.nome,
+            email: this.state.email,
+            senha: this.state.senha,
+            repetirSenha: this.state.repetirSenha,
+            termos: this.state.termos
+        };
+
+        let postCadastro = await providerCadastro.realizarCadastro(data);
+        this.erros = [];
+
+        /* Caso ocorra algum erro */
+        if(!postCadastro.status){
+            if(postCadastro.code==11000){
+                this.erros = [{msg:postCadastro.msg +"\nE-mail já utilizado para cadastro."}].slice();
+            }else{
+                this.erros = postCadastro.erros.slice();
+            }
+            await this.setState({ erros: this.erros });
+            return;
+        } 
+
+        localStorage.setItem('descifre_tokenUsuario', postCadastro.data.token);
+        localStorage.setItem('descifre_userData', postCadastro.data.usuario);
+
+        postCadastro.data.usuario.permissoes.map((permissao, index) =>{
+            if(permissao=="Administrador") browserHistory.push(`administrador/`);
+        });
+
+        browserHistory.push(`publico/`);
     }
 
     render() {
@@ -69,7 +110,11 @@ export default class LoginScreen extends Component {
                                         <div className="text-muted text-center mb-3">
                                             <small>Junte-se a comunidade De$cifre agora</small>
                                         </div>
+                                        <div className="form-group">
+                                            <Erros erros={this.state.erros}/>
+                                        </div>
                                         <form onSubmit={this.handleSubmit}>
+                                            
                                             <div className="form-group">
                                                 <div className="input-group input-group-alternative mb-3">
                                                     <div className="input-group-prepend">
@@ -91,7 +136,15 @@ export default class LoginScreen extends Component {
                                                     <div className="input-group-prepend">
                                                         <span className="input-group-text"><i className="ni ni-lock-circle-open"></i></span>
                                                     </div>
-                                                    <input className="form-control" placeholder="Password" ref={input => this.senha = input} value={this.state.tamanhoSenha} onChange={this.handleChange} type="password"/>
+                                                    <input className="form-control" placeholder="Senha" ref={input => this.senha = input} value={this.state.tamanhoSenha} onChange={this.handleChange} type="password"/>
+                                                </div>
+                                            </div>
+                                            <div className="form-group">
+                                                <div className="input-group input-group-alternative">
+                                                    <div className="input-group-prepend">
+                                                        <span className="input-group-text"><i className="ni ni-lock-circle-open"></i></span>
+                                                    </div>
+                                                    <input className="form-control" placeholder="Repita sua senha" ref={input => this.repetirSenha = input} value={this.state.tamanhoRepetirSenha} onChange={this.handleRepetirSenhaChange} type="password"/>
                                                 </div>
                                             </div>
                                             <div className="text-muted font-italic">
