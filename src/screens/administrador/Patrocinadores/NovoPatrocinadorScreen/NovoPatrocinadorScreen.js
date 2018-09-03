@@ -4,37 +4,12 @@
 import React, { Component } from "react";
 import Linha from '../../../../ui/components/linha';
 
-const style_file_input = {
-    position: 'absolute',
-    top: '0',
-    left: '0',
-    width: '12%',
-    opacity: '0',
-    padding: '4px 0',
-    cursor: 'pointer'
-}
-const style_file_input_label = {
-  
-    padding: '14px 25px',
-    background:'#39D2B4',
-    color: '#fff',
-    fontSize: '1em',
-    transition: 'all .4s',
-    cursor: 'pointer'
-}
-const style_file_description = {
-    margin: '0',
-    fontStyle: 'italic',
-    fontSize: '.9em',
-    fontWeight: 'bold'
-}
-
 export default class NovoPatrocinadorScreen extends Component {
 
     constructor() {
         super();
         this.state = {
-            value: ''
+            FileInputValue: ''
         };
     }
 
@@ -42,14 +17,9 @@ export default class NovoPatrocinadorScreen extends Component {
         document.title = "Adicionar novo patrocinador - Tela de administração de$cifre."
     }
 
-    // handleChange (e) {
-    //     console.log("asokdsodka")
-        
-    // }
-
-    // handleClick () {
-    //     this.handleChange(new Event)
-    // }
+    handleChange = (e) => {
+        this.setState({ FileInputValue: e.target.files[0].name })
+    }
 
     render() {
         return (
@@ -82,14 +52,15 @@ export default class NovoPatrocinadorScreen extends Component {
                                                 </div>
                                                 <div className="col-lg-5">
                                                     <div className="form-group">
+                                                        <div className="input-group">
 
-                                                        <div class="input-group">
-                                                            <label class="input-group-btn">
-                                                                <span class="btn btn-primary">
-                                                                    Logo<input type="file" style={{ display: 'none'}} multiple onClick={this.handleClick}/>
+                                                            <label className="input-group-btn">
+                                                                <span className="btn btn-primary">
+                                                                    Logo<input type="file" style={{ display: 'none' }} onChange={this.handleChange} />
                                                                 </span>
                                                             </label>
-                                                            {/* <input type="text" class="form-control" value={this.state.value} readonly onChange={(e) => {this.handleChange}} /> */}
+
+                                                            <input type="text" className="form-control" value={this.state.FileInputValue} readOnly />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -109,7 +80,7 @@ export default class NovoPatrocinadorScreen extends Component {
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
                                             <div className="row">
                                                 <div className="col-lg-5 offset-lg-1">
                                                     <div className="form-group">
@@ -122,7 +93,7 @@ export default class NovoPatrocinadorScreen extends Component {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <Linha tamanho={10}/>
+                                            <Linha tamanho={10} />
                                             <div className="row">
                                                 <div className="offset-lg-1 col-lg-10">
                                                     <div className="row">
@@ -142,7 +113,7 @@ export default class NovoPatrocinadorScreen extends Component {
                         </div>
                     </div>
                 </section>
-            </div>
+            </div >
         );
     }
 }
