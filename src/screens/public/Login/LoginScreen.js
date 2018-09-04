@@ -8,6 +8,7 @@ import providerLogin from "../../../providers/public/autenticacao/providerLogin"
 
 import Erros from '../../../ui/components/erros';
 import {browserHistory} from "react-router/lib";
+import BotaoLoad from "../../../ui/components/botaoLoad";
 
 export default class LoginScreen extends Component {
     constructor() {
@@ -15,7 +16,8 @@ export default class LoginScreen extends Component {
         this.state = {
             email: '',
             senha: '',
-            erros: []
+            erros: [],
+            loading: false
         }
         this.erros = [];
     }
@@ -33,8 +35,9 @@ export default class LoginScreen extends Component {
             email: this.state.email,
             senha: this.state.senha
         };
+        await this.setState({loading: !this.state.loading});
         const postLogin = await providerLogin.realizarLogin(data);
-
+        await this.setState({loading: !this.state.loading});
         /* Caso ocorra algum erro */
         if(!postLogin.status){
             if(postLogin.erros === undefined){
@@ -49,13 +52,15 @@ export default class LoginScreen extends Component {
         
         localStorage.setItem('descifre_tokenUsuario', JSON.stringify(postLogin.data.token));
         localStorage.setItem('descifre_userData', JSON.stringify(postLogin.data.usuario));
+        
+        let admin = false;
 
         postLogin.data.usuario.permissoes.map((permissao, index) =>{
-            if(permissao==="Administrador") browserHistory.push(`/administrador/`);
-            return false;
+            if(permissao==="Administrador") admin = true;
+            return null;
         });
-
-        browserHistory.push(`/publico/`);
+        if(admin) browserHistory.push(`/administrador/`);
+        else browserHistory.push(`/publico/`);
     }
     render() {
         return (
@@ -108,7 +113,13 @@ export default class LoginScreen extends Component {
                                                 </div>
                                             </div>
                                             <div className="text-center">
-                                                <button type="submit" className="btn btn-primary btn-block my-4">Entrar</button>
+                                                <BotaoLoad
+                                                    classeBotao="btn btn-primary btn-block my-4"
+                                                    tipo="submit"
+                                                    carregando={this.state.loading}
+                                                    nome="Entrar"
+                                                    nomeCarregando="Carregando"
+                                                />
                                             </div>
                                         </form>
                                     </div>

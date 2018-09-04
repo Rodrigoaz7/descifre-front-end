@@ -11,7 +11,7 @@ const loggedAdministrador = () => {
         let admin = false;
         data.permissoes.map((permissao, index) =>{
             if(permissao==="Administrador") admin = true;
-            return false;
+            return null;
         });
         if(admin) return true;
         return false;
