@@ -4,31 +4,6 @@
 import React, { Component } from "react";
 import Linha from '../../../../ui/components/linha';
 
-const style_file_input = {
-    position: 'absolute',
-    top: '0',
-    left: '0',
-    width: '12%',
-    opacity: '0',
-    padding: '4px 0',
-    cursor: 'pointer'
-}
-const style_file_input_label = {
-  
-    padding: '14px 25px',
-    background:'#39D2B4',
-    color: '#fff',
-    fontSize: '1em',
-    transition: 'all .4s',
-    cursor: 'pointer'
-}
-const style_file_description = {
-    margin: '0',
-    fontStyle: 'italic',
-    fontSize: '.9em',
-    fontWeight: 'bold'
-}
-
 export default class NovoPatrocinadorScreen extends Component {
 
     constructor() {

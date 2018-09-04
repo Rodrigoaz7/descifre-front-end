@@ -10,11 +10,13 @@ const loggedAdministrador = () => {
         let data = JSON.parse(localStorage.getItem('descifre_userData'));
         let admin = false;
         data.permissoes.map((permissao, index) =>{
-            if(permissao=="Administrador") admin = true;
+            if(permissao==="Administrador") admin = true;
+            return false;
         });
         if(admin) return true;
         return false;
     }
+    return false;
 }
 const requireAdmistrador = (nextState, replace) => {
     if (!loggedAdministrador()) {

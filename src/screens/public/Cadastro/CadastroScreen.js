@@ -61,7 +61,7 @@ export default class LoginScreen extends Component {
 
         /* Caso ocorra algum erro */
         if(!postCadastro.status){
-            if(postCadastro.code==11000){
+            if(postCadastro.code===11000){
                 this.erros = [{msg:postCadastro.msg +"\nE-mail já utilizado para cadastro."}].slice();
             }else{
                 this.erros = postCadastro.erros.slice();
@@ -74,7 +74,8 @@ export default class LoginScreen extends Component {
         localStorage.setItem('descifre_userData', JSON.stringify(postCadastro.data.usuario));
 
         postCadastro.data.usuario.permissoes.map((permissao, index) =>{
-            if(permissao=="Administrador") browserHistory.push(`administrador/`);
+            if(permissao==="Administrador") browserHistory.push(`administrador/`);
+            return false;
         });
 
         browserHistory.push(`publico/`);

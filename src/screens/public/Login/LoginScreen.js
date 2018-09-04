@@ -3,7 +3,9 @@
 */
 import React, { Component } from "react";
 import { Link } from "react-router";
+
 import providerLogin from "../../../providers/public/autenticacao/providerLogin";
+
 import Erros from '../../../ui/components/erros';
 import {browserHistory} from "react-router/lib";
 
@@ -35,11 +37,13 @@ export default class LoginScreen extends Component {
 
         /* Caso ocorra algum erro */
         if(!postLogin.status){
-            if(postLogin.erros == undefined){
-                await this.setState({erros:[{msg:postLogin.msg}]});
-                return;
+            if(postLogin.erros === undefined){
+                this.erros = [{msg:postLogin.msg}];
+            }else{
+                this.erros = postLogin.erros;
             }
-            await this.setState({erros:postLogin.erros});
+
+            this.setState({erros:this.erros});
             return;
         } 
         
@@ -47,7 +51,8 @@ export default class LoginScreen extends Component {
         localStorage.setItem('descifre_userData', JSON.stringify(postLogin.data.usuario));
 
         postLogin.data.usuario.permissoes.map((permissao, index) =>{
-            if(permissao=="Administrador") browserHistory.push(`/administrador/`);
+            if(permissao==="Administrador") browserHistory.push(`/administrador/`);
+            return false;
         });
 
         browserHistory.push(`/publico/`);
@@ -85,20 +90,7 @@ export default class LoginScreen extends Component {
                                             </center>
                                         </div>
                                         <form onSubmit={this.handleSubmit}>
-                                            <div className="form-group">
-                                            {this.state.erros.map((erro, index)=>{
-                                                return(
-                                                    <div key={index}>
-                                                        <div  className="alert alert-warning alert-dismissible fade show" role="alert">
-                                                            <span className="alert-inner--text">{erro.msg}</span>
-                                                            <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                                                                <span aria-hidden="true">×</span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            })}
-                                            </div>
+                                            <Erros erros={this.state.erros}/>
                                             <div className="form-group mb-3">
                                                 <div className="input-group input-group-alternative">
                                                     <div className="input-group-prepend">
