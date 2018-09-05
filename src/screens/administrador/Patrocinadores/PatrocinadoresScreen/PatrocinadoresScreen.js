@@ -20,7 +20,6 @@ export default class NovoPatrocinadorScreen extends Component {
 
    
     render() {
-        const { selectedOption } = this.state;
     
         return (
             <div className="position-relative alt">

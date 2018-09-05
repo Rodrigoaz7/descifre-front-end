@@ -3,13 +3,23 @@
 */
 import React, { Component } from "react";
 import { Link } from "react-router";
+
+import providerLogin from "../../../providers/public/autenticacao/providerLogin";
+
+import Erros from '../../../ui/components/erros';
+import {browserHistory} from "react-router/lib";
+import BotaoLoad from "../../../ui/components/botaoLoad";
+
 export default class LoginScreen extends Component {
     constructor() {
         super();
         this.state = {
             email: '',
-            senha: ''
+            senha: '',
+            erros: [],
+            loading: false
         }
+        this.erros = [];
     }
     componentDidMount() {
         document.title = "Login - Tela de login"
@@ -21,6 +31,36 @@ export default class LoginScreen extends Component {
     handleSubmit = async (e) => {
         e.preventDefault();
         await this.setState({email: this.email.value, senha: this.senha.value});
+        const data = {
+            email: this.state.email,
+            senha: this.state.senha
+        };
+        await this.setState({loading: !this.state.loading});
+        const postLogin = await providerLogin.realizarLogin(data);
+        await this.setState({loading: !this.state.loading});
+        /* Caso ocorra algum erro */
+        if(!postLogin.status){
+            if(postLogin.erros === undefined){
+                this.erros = [{msg:postLogin.msg}];
+            }else{
+                this.erros = postLogin.erros;
+            }
+
+            this.setState({erros:this.erros});
+            return;
+        } 
+        
+        localStorage.setItem('descifre_tokenUsuario', JSON.stringify(postLogin.data.token));
+        localStorage.setItem('descifre_userData', JSON.stringify(postLogin.data.usuario));
+        
+        let admin = false;
+
+        postLogin.data.usuario.permissoes.map((permissao, index) =>{
+            if(permissao==="Administrador") admin = true;
+            return null;
+        });
+        if(admin) browserHistory.push(`/administrador/`);
+        else browserHistory.push(`/publico/`);
     }
     render() {
         return (
@@ -55,6 +95,7 @@ export default class LoginScreen extends Component {
                                             </center>
                                         </div>
                                         <form onSubmit={this.handleSubmit}>
+                                            <Erros erros={this.state.erros}/>
                                             <div className="form-group mb-3">
                                                 <div className="input-group input-group-alternative">
                                                     <div className="input-group-prepend">
@@ -72,7 +113,13 @@ export default class LoginScreen extends Component {
                                                 </div>
                                             </div>
                                             <div className="text-center">
-                                                <button type="submit" className="btn btn-primary btn-block my-4">Entrar</button>
+                                                <BotaoLoad
+                                                    classeBotao="btn btn-primary btn-block my-4"
+                                                    tipo="submit"
+                                                    carregando={this.state.loading}
+                                                    nome="Entrar"
+                                                    nomeCarregando="Carregando"
+                                                />
                                             </div>
                                         </form>
                                     </div>

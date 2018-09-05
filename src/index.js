@@ -5,6 +5,27 @@ import Admin from './screens/administrador/index';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router/lib';
 import registerServiceWorker from './registerServiceWorker';
 
+const loggedAdministrador = () => {
+    if(localStorage.getItem('descifre_userData')!==null && localStorage.getItem('descifre_tokenUsuario')!==null){
+        let data = JSON.parse(localStorage.getItem('descifre_userData'));
+        let admin = false;
+        data.permissoes.map((permissao, index) =>{
+            if(permissao==="Administrador") admin = true;
+            return null;
+        });
+        if(admin) return true;
+        return false;
+    }
+    return false;
+}
+const requireAdmistrador = (nextState, replace) => {
+    if (!loggedAdministrador()) {
+        replace({
+            pathname: '/usuario/login'
+        });
+    }
+}
+
 
 ReactDOM.render(
     <Router history={browserHistory}>
@@ -14,7 +35,8 @@ ReactDOM.render(
             <Route path='/usuario/cadastro' component={Public.CadastroScreen}></Route>
             <Route path='/usuario/recuperar-senha' component={Public.RecuperarSenhaScreen}></Route>
         </Route>
-        <Route path='/administrador/' component={Admin.Padrao}>
+
+        <Route path='/administrador/' component={Admin.Padrao} onEnter={requireAdmistrador}>
             <IndexRoute component={Admin.HomeScreen}/>
             
             <Route path="/administrador/questoes/adicionar" component={Admin.Questao.NovaQuestaoScreen}></Route>
