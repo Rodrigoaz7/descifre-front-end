@@ -38,8 +38,10 @@ export default class VerQuestoesScreen extends Component {
 
     async componentDidMount() {
         const resultado_questoes = await providerListarQuestoes.getQuestoes();
-        this.setState({ questoes: resultado_questoes.data.questoes, 
-            categorias: resultado_questoes.data.categorias });
+        this.setState({
+            questoes: resultado_questoes.data.questoes,
+            categorias: resultado_questoes.data.categorias
+        });
         console.log(this.state.questoes);
         document.title = "Ver questões - Tela de administração de$cifre."
     }
@@ -62,63 +64,74 @@ export default class VerQuestoesScreen extends Component {
                                         <div className="col-lg-1 col-lg-10">
                                             <h3 style={{ color: '#212121' }}>Pesquisar questões</h3>
                                         </div>
-                                        <hr />
-                                        <div className="row">
-                                            <div className="col-lg-12">
-                                                <div className="form-group">
-                                                    <Select
-                                                        value={selectedOption}
-                                                        onChange={this.handleChange}
-                                                        options={this.state.categorias.map(d => d.nome)}
-                                                        placeholder="Selecione uma categoria"
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="offset-lg-2 col-lg-8">
-                                                <div className="form-group">
-                                                    <hr />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-lg-12">
-                                                <div className="form-group">
-                                                    <div className="table-responsive">
-                                                        <table className="table table-bordered">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Enunciado</th>
-                                                                    <th>Categoria</th>
-                                                                    <th>Cadastrado por</th>
-                                                                    <th>Editar</th>
-                                                                    <th>Apagar</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-
-                                                                {this.state.questoes.map((q,index) =>
-                                                                    <tr key={index}>
-                                                                        <td style={{ maxWidth: '100px' }}>
-                                                                            {q.enunciado}
-                                                                        </td>
-
-                                                                        <td>{q.categoria.nome}</td>
-                                                                        <td>{q.usuario}</td>
-
-                                                                        <td><center><button className="btn btn-primary" type="button" id={q._id}>editar</button></center></td>
-
-                                                                        <td><center><button className="btn btn-danger" type="button" id={q._id}>apagar</button></center></td>
-                                                                    </tr>
-                                                                )}
-
-                                                            </tbody>
-                                                        </table>
+                                        <hr/>
+                                        {
+                                            this.state.questoes==0 &&
+                                            <center>
+                                                <h2 style={{color: '#212121'}}>Não existem questões cadastradas</h2>
+                                            </center>
+                                        }
+                                        {
+                                        this.state.questoes.length>0 &&
+                                        <div>
+                                            <div className="row">
+                                                <div className="col-lg-12">
+                                                    <div className="form-group">
+                                                        <Select
+                                                            value={selectedOption}
+                                                            onChange={this.handleChange}
+                                                            options={this.state.categorias.map(d => d.nome)}
+                                                            placeholder="Selecione uma categoria"
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                            <div className="row">
+                                                <div className="offset-lg-2 col-lg-8">
+                                                    <div className="form-group">
+                                                        <hr />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-lg-12">
+                                                    <div className="form-group">
+                                                        <div className="table-responsive">
+                                                            <table className="table table-bordered">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Enunciado</th>
+                                                                        <th>Categoria</th>
+                                                                        <th>Cadastrado por</th>
+                                                                        <th>Editar</th>
+                                                                        <th>Apagar</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+
+                                                                    {this.state.questoes.map((q, index) =>
+                                                                        <tr key={index}>
+                                                                            <td style={{ maxWidth: '100px' }}>
+                                                                                {q.enunciado}
+                                                                            </td>
+
+                                                                            <td>{q.categoria.nome}</td>
+                                                                            <td>{q.usuario}</td>
+
+                                                                            <td><center><button className="btn btn-primary" type="button" id={q._id}>editar</button></center></td>
+
+                                                                            <td><center><button className="btn btn-danger" type="button" id={q._id}>apagar</button></center></td>
+                                                                        </tr>
+                                                                    )}
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>}
+
                                     </div>
                                 </div>
                             </div>
