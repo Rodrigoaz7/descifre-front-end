@@ -35,8 +35,11 @@ export default class LoginScreen extends Component {
             email: this.state.email,
             senha: this.state.senha
         };
+
         await this.setState({loading: !this.state.loading});
+        
         const postLogin = await providerLogin.realizarLogin(data);
+        
         await this.setState({loading: !this.state.loading});
         /* Caso ocorra algum erro */
         if(!postLogin.status){

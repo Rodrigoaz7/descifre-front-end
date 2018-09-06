@@ -5,6 +5,8 @@ import React, { Component } from "react";
 import Apresentacao from './Componentes/Apresentacao';
 import Descricao from './Componentes/Descricao';
 import Slide from "./Componentes/Slide";
+import utilJson from '../../../util/jsonFormat';
+
 export default class TelaInicial extends Component {
     constructor() {
         super();
@@ -13,7 +15,8 @@ export default class TelaInicial extends Component {
         }
     }
     componentDidMount() {
-        document.title = "De$cifre - Ganhe cifras que podem ser trocadas por dinheiro"
+        document.title = "De$cifre - Ganhe cifras que podem ser trocadas por dinheiro";
+        
     }
     render() {
         return (

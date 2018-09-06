@@ -4,7 +4,7 @@
 
 import React, { Component } from "react";
 
-export default class Erros extends Component {
+export default class BotaoErros extends Component {
     constructor(props){
         super(); 
     }
