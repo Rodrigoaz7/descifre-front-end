@@ -5,6 +5,8 @@ import React, { Component } from "react";
 import Select from 'react-select';
 
 import providerListarQuestoes from "../../../../providers/administrador/questoes/listarQuestoes";
+import providerDeleteQuestoes from "../../../../providers/administrador/questoes/deletarQuestao";
+import jsonutil from "../../../../util/jsonFormat";
 
 const options = [
     { value: 'chocolate', label: 'Chocolate' },
@@ -32,14 +34,18 @@ export default class VerQuestoesScreen extends Component {
         console.log(`Option selected:`, selectedOption);
     }
 
-    // handleClickDelete = (id) => {
-    //     console.log(id);
-    // }
+    handleClickDelete = (e) => {
+        // Faltando ainda modal para confirmação da remoção
+        providerDeleteQuestoes.DeleteQuestoes(e.target.id);
+    }
 
     async componentDidMount() {
         const resultado_questoes = await providerListarQuestoes.getQuestoes();
-        this.setState({ questoes: resultado_questoes.data.questoes, 
-            categorias: resultado_questoes.data.categorias });
+        let categorias_formatado = jsonutil.mutationArrayJson(resultado_questoes.data.categorias, ['_id', 'nome'], ['value', 'label']);
+        this.setState({ 
+            questoes: resultado_questoes.data.questoes, 
+            categorias: categorias_formatado
+        });
         console.log(this.state.questoes);
         document.title = "Ver questões - Tela de administração de$cifre."
     }
@@ -69,7 +75,7 @@ export default class VerQuestoesScreen extends Component {
                                                     <Select
                                                         value={selectedOption}
                                                         onChange={this.handleChange}
-                                                        options={this.state.categorias.map(d => d.nome)}
+                                                        options={this.state.categorias}
                                                         placeholder="Selecione uma categoria"
                                                     />
                                                 </div>
@@ -109,7 +115,7 @@ export default class VerQuestoesScreen extends Component {
 
                                                                         <td><center><button className="btn btn-primary" type="button" id={q._id}>editar</button></center></td>
 
-                                                                        <td><center><button className="btn btn-danger" type="button" id={q._id}>apagar</button></center></td>
+                                                                        <td><center><button className="btn btn-danger" type="button" id={q._id} onClick={this.handleClickDelete}>apagar</button></center></td>
                                                                     </tr>
                                                                 )}
 
