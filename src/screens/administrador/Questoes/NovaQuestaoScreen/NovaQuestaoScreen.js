@@ -5,6 +5,7 @@ import React, { Component } from "react";
 import Select from 'react-select';
 import toastr from "toastr";
 import Linha from '../../../../ui/components/linha';
+import providerCadastro from '../../../../providers/administrador/questoes/cadastroQuestao';
 
 // Mock inicial para alternativas substituir por um state.
 const options = [
@@ -23,13 +24,50 @@ export default class NovaQuestaoScreen extends Component {
                 descricao: ""
             }],
             selectedOption: null, // Select da categoria
-            categoria: '', // Nova categoria se for cadastada.
-            estadoCategoria: false // Estado para select ou input de categoria.
+            new_categoria: '',
+            enunciado: '',
+            correta: '',
+            pontuacao: '',
+            dataCriacao: '',
+            estadoCategoria: false, // Estado para select ou input de categoria.
+            erros: []
         };
+        this.erros = [];
     }
 
     componentDidMount() {
         document.title = "Adicionar nova questão - Tela de administração de$cifre."
+    }
+
+    handleSubmit = async (e) => {
+        e.preventDefault();
+
+        //Se o usuario nao tiver selecionado uma categoria, entao pego o input digitado
+        if(this.state.selectedOption == null && this.new_categoria != null) {
+            const new_json = {
+                'value': this.new_categoria.value,
+                'label': this.new_categoria.value
+            }
+            await this.setState({selectedOption: new_json});
+        }
+
+        await this.setState({enunciado: this.enunciado.value, correta: this.correta.value, pontuacao: this.pontuacao.value, dataCriacao: Date.now(), erros:[]});
+
+        const data = {
+            enunciado: this.state.enunciado, 
+            correta: this.state.correta, 
+            categoria: this.state.selectedOption.label, 
+            pontuacao: this.state.pontuacao, 
+            alternativas: this.state.alternativas, 
+            dataCriacao: this.state.dataCriacao,
+            usuario: "5b8c585be1a8182a1887040c" //teste = meu usuario
+        };
+
+        console.log(data);
+
+        let postCadastro = await providerCadastro.realizarCadastro(data);
+        console.log(postCadastro);
+        this.erros = [];
     }
 
     /*
@@ -110,6 +148,8 @@ export default class NovaQuestaoScreen extends Component {
     */
     mudarEstadoSelect = async () =>{
         await this.setState({estadoCategoria: !this.state.estadoCategoria});
+        //Resetando select quando escolher criar nova categoria
+        await this.setState({selectedOption: null});
     }
 
     render() {
@@ -119,6 +159,7 @@ export default class NovaQuestaoScreen extends Component {
                 <section className="section section-shaped section-lg my-0">
                     <div className="shape shape-style-1 bg-gradient-dark">
                     </div>
+
                     <div className="container-fluid pt-lg-md">
                         <div className="row justify-content-center">
                             <div className="col-lg-12">
@@ -128,11 +169,11 @@ export default class NovaQuestaoScreen extends Component {
                                             <h3 style={{color: '#212121'}}>Adicionar uma nova questão</h3>
                                         </div>
                                         <hr />
-                                        <form>
+                                        <form onSubmit={this.handleSubmit}>
                                             <div className="row">
                                                 <div className="col-lg-10 offset-lg-1">
                                                     <div className="form-group">
-                                                        <input type="text" className="form-control form-control-lg form-control-alternative"  placeholder="Enunciado da questão"/>
+                                                        <input type="text" className="form-control form-control-lg form-control-alternative"  placeholder="Enunciado da questão" ref={input => this.enunciado = input}/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -147,7 +188,7 @@ export default class NovaQuestaoScreen extends Component {
                                                         />}
                                                         {this.state.estadoCategoria && 
                                                             <input type="text"
-                                                            className="form-control form-control-lg form-control-alternative"  placeholder="Digite sua nova categoria"
+                                                            className="form-control form-control-lg form-control-alternative"  placeholder="Digite sua nova categoria" ref={input => this.new_categoria = input}
                                                             />
                                                         }
                                                     </div>
@@ -183,7 +224,7 @@ export default class NovaQuestaoScreen extends Component {
                                                                 <div className="form-group">
                                                                     <input type="text"
                                                                     value={this.state.alternativas[index].descricao || ''} className="form-control form-control-lg form-control-alternative"  placeholder="Digite sua alternativa"
-                                                                    onChange={input => this.handleInputChange(input, index)}
+                                                                    onChange={input => this.handleInputChange(input, index)}  ref={input => this.alternativas = input}
                                                                     />
                                                                 </div>
                                                             </div>
@@ -225,7 +266,7 @@ export default class NovaQuestaoScreen extends Component {
                                             <div className="row">
                                                 <div className="col-lg-10 offset-lg-1">
                                                     <div className="form-group">
-                                                        <select className="form-control">
+                                                        <select className="form-control" ref={(input) => this.correta = input}>
                                                             <option value="Nenhuma alternativa">Nenhuma alternativa</option>
                                                             {this.state.alternativas.map((alternativa,index)=>{
                                                                 return(
@@ -248,7 +289,7 @@ export default class NovaQuestaoScreen extends Component {
                                             <div className="row">
                                                 <div className="col-lg-10 offset-lg-1">
                                                     <div className="form-group">
-                                                        <input type="number" className="form-control form-control-lg form-control-alternative"  placeholder="Digite a pontuação aqui"/>
+                                                        <input type="number" className="form-control form-control-lg form-control-alternative"  placeholder="Digite a pontuação aqui" ref={input => this.pontuacao = input}/>
                                                     </div>
                                                 </div>
                                             </div>

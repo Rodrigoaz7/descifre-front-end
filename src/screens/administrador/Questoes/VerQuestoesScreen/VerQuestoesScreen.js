@@ -7,6 +7,7 @@ import Select from 'react-select';
 import providerListarQuestoes from "../../../../providers/administrador/questoes/listarQuestoes";
 import providerDeleteQuestoes from "../../../../providers/administrador/questoes/deletarQuestao";
 import jsonutil from "../../../../util/jsonFormat";
+import Erros from '../../../../ui/components/erros';
 
 const options = [
     { value: 'chocolate', label: 'Chocolate' },
@@ -21,7 +22,8 @@ export default class VerQuestoesScreen extends Component {
         this.state = {
             selectedOption: null,
             questoes: [],
-            categorias: []
+            categorias: [],
+            erros: []
         };
     }
 
@@ -34,16 +36,28 @@ export default class VerQuestoesScreen extends Component {
         console.log(`Option selected:`, selectedOption);
     }
 
-    handleClickDelete = (e) => {
+    handleClickDelete = async (e) => {
         // Faltando ainda modal para confirmação da remoção
-        providerDeleteQuestoes.DeleteQuestoes(e.target.id);
+        const resultDelete = await providerDeleteQuestoes.DeleteQuestoes(e.target.id);
+        if(!resultDelete.status){
+            if(resultDelete.erros === undefined){
+                this.erros = [{msg:resultDelete.msg}];
+            }else{
+                this.erros = resultDelete.erros;
+            }
+
+            this.setState({erros:this.erros});
+            return;
+        }
+        const resultado_questoes = await providerListarQuestoes.getQuestoes();
+        this.setState({ questoes: resultado_questoes.data.questoes});
     }
 
     async componentDidMount() {
         const resultado_questoes = await providerListarQuestoes.getQuestoes();
         let categorias_formatado = jsonutil.mutationArrayJson(resultado_questoes.data.categorias, ['_id', 'nome'], ['value', 'label']);
-        this.setState({ 
-            questoes: resultado_questoes.data.questoes, 
+        this.setState({
+            questoes: resultado_questoes.data.questoes,
             categorias: categorias_formatado
         });
         console.log(this.state.questoes);
@@ -80,11 +94,11 @@ export default class VerQuestoesScreen extends Component {
                                                     />
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="offset-lg-2 col-lg-8">
-                                                <div className="form-group">
-                                                    <hr />
+                                            <div className="row">
+                                                <div className="offset-lg-2 col-lg-8">
+                                                    <div className="form-group">
+                                                        <hr />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -103,19 +117,19 @@ export default class VerQuestoesScreen extends Component {
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-
-                                                                {this.state.questoes.map((q,index) =>
+                                                                <Erros erros={this.state.erros}/>
+                                                                {this.state.questoes.map((q, index) =>
                                                                     <tr key={index}>
                                                                         <td style={{ maxWidth: '100px' }}>
                                                                             {q.enunciado}
                                                                         </td>
 
                                                                         <td>{q.categoria.nome}</td>
-                                                                        <td>{q.usuario}</td>
+                                                                        <td>{q.usuario.email}</td>
 
                                                                         <td><center><button className="btn btn-primary" type="button" id={q._id}>editar</button></center></td>
 
-                                                                        <td><center><button className="btn btn-danger" type="button" id={q._id} onClick={this.handleClickDelete}>apagar</button></center></td>
+                                                                        <td><center><button onClick={this.handleClickDelete} className="btn btn-danger" type="button" id={q._id}>apagar</button></center></td>
                                                                     </tr>
                                                                 )}
 
