@@ -4,7 +4,7 @@ import axios from 'axios';
 const realizarCadastro = async (data) => {
     let dataResponse;
     try{
-        dataResponse = await axios.post(`${variables.urlApi}/administrador/questoes/adicionar`, {...data});
+        dataResponse = await axios.post(`${variables.urlApi}/administrador/questoes`, {...data});
     }catch(error){
         dataResponse = error.response.data;
     }

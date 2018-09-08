@@ -9,11 +9,6 @@ import providerDeleteQuestoes from "../../../../providers/administrador/questoes
 import jsonutil from "../../../../util/jsonFormat";
 import Erros from '../../../../ui/components/erros';
 
-const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }
-];
 export default class VerQuestoesScreen extends Component {
 
     constructor() {
@@ -60,7 +55,7 @@ export default class VerQuestoesScreen extends Component {
             questoes: resultado_questoes.data.questoes,
             categorias: categorias_formatado
         });
-        console.log(this.state.questoes);
+        
         document.title = "Ver questões - Tela de administração de$cifre."
     }
 
@@ -118,6 +113,7 @@ export default class VerQuestoesScreen extends Component {
                                                             </thead>
                                                             <tbody>
                                                                 <Erros erros={this.state.erros}/>
+
                                                                 {this.state.questoes.map((q, index) =>
                                                                     <tr key={index}>
                                                                         <td style={{ maxWidth: '100px' }}>

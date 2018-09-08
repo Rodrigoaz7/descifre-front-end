@@ -6,18 +6,19 @@ import Select from 'react-select';
 import toastr from "toastr";
 import Linha from '../../../../ui/components/linha';
 import providerCadastro from '../../../../providers/administrador/questoes/cadastroQuestao';
+import utilLocalStorage from '../../../../util/localStorage';
+import providerListarQuestoes from "../../../../providers/administrador/questoes/listarQuestoes";
+import jsonutil from "../../../../util/jsonFormat";
+import Erros from '../../../../ui/components/erros';
 
-// Mock inicial para alternativas substituir por um state.
-const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }
-];
 
 export default class NovaQuestaoScreen extends Component {
 
     constructor() {
         super();
+        this.start();
+    }
+    start = () => {
         this.state = {
             // Alternativas da questão.
             alternativas:[{
@@ -30,12 +31,37 @@ export default class NovaQuestaoScreen extends Component {
             pontuacao: '',
             dataCriacao: '',
             estadoCategoria: false, // Estado para select ou input de categoria.
-            erros: []
+            erros: [],
+            categorias: []
         };
         this.erros = [];
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
     }
+    async componentDidMount(){
+        // Get em categorias.
+        const resultado_questoes = await providerListarQuestoes.getQuestoes();
+        let categorias_formatado = jsonutil.mutationArrayJson(resultado_questoes.data.categorias, ['_id', 'nome'], ['value', 'label']);
 
-    componentDidMount() {
+        // Setando o elas para o select.
+        this.setState({
+            categorias: categorias_formatado
+        });
         document.title = "Adicionar nova questão - Tela de administração de$cifre."
     }
 
@@ -51,23 +77,42 @@ export default class NovaQuestaoScreen extends Component {
             await this.setState({selectedOption: new_json});
         }
 
-        await this.setState({enunciado: this.enunciado.value, correta: this.correta.value, pontuacao: this.pontuacao.value, dataCriacao: Date.now(), erros:[]});
+        // Setando estado para envio;
+        await this.setState({
+            enunciado: this.enunciado.value, 
+            correta: this.correta.value, 
+            pontuacao: this.pontuacao.value, 
+            dataCriacao: Date.now(), 
+            erros:[]
+        });
 
-        const data = {
-            enunciado: this.state.enunciado, 
-            correta: this.state.correta, 
-            categoria: this.state.selectedOption.label, 
-            pontuacao: this.state.pontuacao, 
-            alternativas: this.state.alternativas, 
-            dataCriacao: this.state.dataCriacao,
-            usuario: "5b8c585be1a8182a1887040c" //teste = meu usuario
-        };
-
-        console.log(data);
-
+        let usuario = utilLocalStorage.getUser()
+        let data;
+        
+        if(this.state.selectedOption!==null){
+            data = {
+                enunciado: this.state.enunciado, 
+                correta: this.state.correta, 
+                categoria: this.state.selectedOption.label, 
+                pontuacao: this.state.pontuacao, 
+                alternativas: this.state.alternativas, 
+                dataCriacao: this.state.dataCriacao,
+                usuario: usuario._id,
+                token: utilLocalStorage.getToken() 
+            };
+        }
+        
+        
         let postCadastro = await providerCadastro.realizarCadastro(data);
-        console.log(postCadastro);
-        this.erros = [];
+
+        if(!postCadastro.status){
+            this.setState({erros:postCadastro.erros});
+        }else {
+            toastr.success("Questão adicionada com sucesso.", "Sucesso!");
+            this.start();
+            window.scrollTo(0, 0);
+        }
+        
     }
 
     /*
@@ -119,27 +164,8 @@ export default class NovaQuestaoScreen extends Component {
             let alternativas = [...that.alternativas];
             await this.setState({alternativas: alternativas});
         }else{
-            toastr.options = {
-                "closeButton": true,
-                "debug": false,
-                "newestOnTop": false,
-                "progressBar": false,
-                "positionClass": "toast-top-right",
-                "preventDuplicates": false,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            };
-            toastr.error("Você tem que ter pelo menos um campo para descrição de alternativas", "Erro de remoção");
-            
+            toastr.error("Você tem que ter pelo menos um campo para descrição de alternativas", "Erro de remoção");  
         }
-       
     }
 
     /*
@@ -172,6 +198,11 @@ export default class NovaQuestaoScreen extends Component {
                                         <form onSubmit={this.handleSubmit}>
                                             <div className="row">
                                                 <div className="col-lg-10 offset-lg-1">
+                                                    <Erros erros={this.state.erros}/>
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-lg-10 offset-lg-1">
                                                     <div className="form-group">
                                                         <input type="text" className="form-control form-control-lg form-control-alternative"  placeholder="Enunciado da questão" ref={input => this.enunciado = input}/>
                                                     </div>
@@ -183,7 +214,7 @@ export default class NovaQuestaoScreen extends Component {
                                                         {!this.state.estadoCategoria && <Select
                                                             value={selectedOption}
                                                             onChange={this.handleChange}
-                                                            options={options}
+                                                            options={this.state.categorias}
                                                             placeholder="Selecione uma categoria"
                                                         />}
                                                         {this.state.estadoCategoria && 

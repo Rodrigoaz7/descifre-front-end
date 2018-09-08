@@ -1,11 +1,12 @@
 import variables from '../../../variables';
 import axios from 'axios';
+import utilLocalStorage from '../../../util/localStorage';
 
 const DeleteQuestoes = async (id) => {
     let dataResponse;
-    console.log(id);
+    let token = utilLocalStorage.getToken();
     try{
-        dataResponse = await axios.delete(`${variables.urlApi}/administrador/questoes/deletar`, {data: {id: id}});
+        dataResponse = await axios.delete(`${variables.urlApi}/administrador/questoes`, {data: {id: id, token: token}});
     }catch(error){
         dataResponse = error.response.data;
     }
