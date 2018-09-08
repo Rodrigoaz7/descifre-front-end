@@ -1,11 +1,11 @@
 /*
-*   Autor: Marcus Dantas
+*   Autor: Rodrigo Azevedo
 */
 import React, { Component } from "react";
 import Select from 'react-select';
 import toastr from "toastr";
 import Linha from '../../../../ui/components/linha';
-import providerCadastro from '../../../../providers/administrador/questoes/cadastroQuestao';
+import providerCadastro from '../../../../providers/administrador/questoes/updateQuestao';
 import utilLocalStorage from '../../../../util/localStorage';
 import providerListarQuestoes from "../../../../providers/administrador/questoes/listarQuestoes";
 import jsonutil from "../../../../util/jsonFormat";
@@ -22,9 +22,10 @@ export default class NovaQuestaoScreen extends Component {
     start = () => {
         this.state = {
             // Alternativas da questão.
-            alternativas:[{
+            alternativas: [{
                 descricao: ""
             }],
+            id: '',
             selectedOption: null, // Select da categoria
             new_categoria: '',
             enunciado: '',
@@ -55,69 +56,83 @@ export default class NovaQuestaoScreen extends Component {
             "hideMethod": "fadeOut"
         };
     }
-    async componentDidMount(){
+    async componentDidMount() {
+        const questao = JSON.parse(localStorage.getItem('questao2edit'));
+        if(!questao){
+            browserHistory.push('/administrador/questoes/ver')
+            window.location.reload()
+        }
+
         // Get em categorias.
         const resultado_questoes = await providerListarQuestoes.getQuestoes();
         let categorias_formatado = jsonutil.mutationArrayJson(resultado_questoes.data.categorias, ['_id', 'nome'], ['value', 'label']);
-
+        
         // Setando o elas para o select.
         this.setState({
+            id: questao._id,
+            selectedOption: questao.categoria._id,
+            enunciado: questao.enunciado,
+            correta: questao.correta,
+            pontuacao: questao.pontuacao,
+            alternativas: questao.alternativas,
             categorias: categorias_formatado
         });
+
         document.title = "Adicionar nova questão - Tela de administração de$cifre."
     }
 
     handleSubmit = async (e) => {
         e.preventDefault();
-        this.setState({loading: !this.state.loading});
+        this.setState({ loading: !this.state.loading });
 
         //Se o usuario nao tiver selecionado uma categoria, entao pego o input digitado
-        if(this.state.selectedOption == null && this.new_categoria != null) {
+        if (this.state.selectedOption == null && this.new_categoria != null) {
             const new_json = {
                 'value': this.new_categoria.value,
                 'label': this.new_categoria.value
             }
-            await this.setState({selectedOption: new_json});
+            await this.setState({ selectedOption: new_json });
         }
 
         // Setando estado para envio;
         await this.setState({
-            enunciado: this.enunciado.value, 
-            correta: this.correta.value, 
-            pontuacao: this.pontuacao.value, 
-            dataCriacao: Date.now(), 
-            erros:[]
+            enunciado: this.enunciado.value,
+            correta: this.correta.value,
+            pontuacao: this.pontuacao.value,
+            dataCriacao: Date.now(),
+            erros: []
         });
 
         let usuario = utilLocalStorage.getUser()
         let data = {
             token: utilLocalStorage.getToken()
         };
-        
-        if(this.state.selectedOption!==null){
+
+        if (this.state.selectedOption !== null) {
             data = {
-                enunciado: this.state.enunciado, 
-                correta: this.state.correta, 
-                categoria: this.state.selectedOption.label, 
-                pontuacao: this.state.pontuacao, 
-                alternativas: this.state.alternativas, 
+                id: this.state.id,
+                enunciado: this.state.enunciado,
+                correta: this.state.correta,
+                categoria: this.state.selectedOption.label,
+                pontuacao: this.state.pontuacao,
+                alternativas: this.state.alternativas,
                 dataCriacao: this.state.dataCriacao,
                 usuario: usuario._id,
-                token: utilLocalStorage.getToken() 
+                token: utilLocalStorage.getToken()
             };
         }
-         
-        let postCadastro = await providerCadastro.realizarCadastro(data);
-        
-        this.setState({loading: !this.state.loading});
 
-        if(!postCadastro.status){
-            this.setState({erros:postCadastro.erros});
-        }else {
-            toastr.success("Questão adicionada com sucesso.", "Sucesso!");
+        let postCadastro = await providerCadastro.realizarAtualizacao(data);
+
+        this.setState({ loading: !this.state.loading });
+
+        if (!postCadastro.status) {
+            console.log(postCadastro)
+            this.setState({ erros: postCadastro.erros });
+        } else {
             this.setState({
                 // Alternativas da questão.
-                alternativas:[{
+                alternativas: [{
                     descricao: ""
                 }],
                 selectedOption: null, // Select da categoria
@@ -130,9 +145,11 @@ export default class NovaQuestaoScreen extends Component {
                 erros: [],
                 categorias: []
             });
-            window.scrollTo(0, 0);
+            localStorage.removeItem('questao2edit');
+            browserHistory.push('/administrador/questoes/ver')
+            window.location.reload()
         }
-        
+
     }
 
     /*
@@ -148,12 +165,12 @@ export default class NovaQuestaoScreen extends Component {
     *   HandleChange para  mudar o valor da descrição da alternativa.
     *   Autor: Marcus Dantas
     */
-    handleInputChange = async (input, index)=>{
+    handleInputChange = async (input, index) => {
         let that = this.state;
         let alternativas = that.alternativas;
 
         alternativas[index].descricao = input.target.value;
-        this.setState({alternativas: alternativas});
+        this.setState({ alternativas: alternativas });
     }
 
     /*
@@ -166,9 +183,9 @@ export default class NovaQuestaoScreen extends Component {
         const novaAlternativa = {
             descricao: ""
         };
-        
+
         let alternativas = [...that.alternativas, novaAlternativa];
-        await this.setState({alternativas: alternativas});
+        await this.setState({ alternativas: alternativas });
     }
 
     /*
@@ -177,14 +194,14 @@ export default class NovaQuestaoScreen extends Component {
     */
     removerAlternativa = async () => {
         let that = this.state;
-        if(!that.alternativas) return;
-        if(that.alternativas.length>1){
-            that.alternativas.splice(that.alternativas.length-1,1);
-        
+        if (!that.alternativas) return;
+        if (that.alternativas.length > 1) {
+            that.alternativas.splice(that.alternativas.length - 1, 1);
+
             let alternativas = [...that.alternativas];
-            await this.setState({alternativas: alternativas});
-        }else{
-            toastr.error("Você tem que ter pelo menos um campo para descrição de alternativas", "Erro de remoção");  
+            await this.setState({ alternativas: alternativas });
+        } else {
+            toastr.error("Você tem que ter pelo menos um campo para descrição de alternativas", "Erro de remoção");
         }
     }
 
@@ -192,12 +209,27 @@ export default class NovaQuestaoScreen extends Component {
     *   Função alterar o state da varivel que exibe o select ou adição de categoria.
     *   Autor: Marcus Dantas
     */
-    mudarEstadoSelect = async () =>{
-        await this.setState({estadoCategoria: !this.state.estadoCategoria});
+    mudarEstadoSelect = async () => {
+        await this.setState({ estadoCategoria: !this.state.estadoCategoria });
         //Resetando select quando escolher criar nova categoria
-        await this.setState({selectedOption: null});
+        await this.setState({ selectedOption: null });
     }
 
+    /*
+    * Funções de onchange para os campos de update.
+    * Autor: Rodrigo Azevedo
+    */
+    handleEnunciadoChange = async (e) => {
+        this.setState({ enunciado: e.target.value });
+    }
+
+    handlePontuacaoChange = async (e) => {
+        this.setState({ pontuacao: e.target.value });
+    }
+
+    handleCorretaChange = async (e) => {
+        this.setState({ correta: e.target.value });
+    }
     render() {
         const { selectedOption } = this.state;
         return (
@@ -212,19 +244,19 @@ export default class NovaQuestaoScreen extends Component {
                                 <div className="card bg-secondary shadow border-0">
                                     <div className="card-body px-lg-5 py-lg-5">
                                         <div className="col-lg-1 col-lg-10">
-                                            <h3 style={{color: '#212121'}}>Adicionar uma nova questão</h3>
+                                            <h3 style={{ color: '#212121' }}>Editar questão</h3>
                                         </div>
                                         <hr />
                                         <form onSubmit={this.handleSubmit}>
                                             <div className="row">
                                                 <div className="col-lg-10 offset-lg-1">
-                                                    <Erros erros={this.state.erros}/>
+                                                    <Erros erros={this.state.erros} />
                                                 </div>
                                             </div>
                                             <div className="row">
                                                 <div className="col-lg-10 offset-lg-1">
                                                     <div className="form-group">
-                                                        <input type="text" className="form-control form-control-lg form-control-alternative"  placeholder="Enunciado da questão" ref={input => this.enunciado = input}/>
+                                                        <input type="text" className="form-control form-control-lg form-control-alternative" placeholder="Enunciado da questão" value={this.state.enunciado} ref={input => this.enunciado = input} onChange={this.handleEnunciadoChange} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -237,45 +269,45 @@ export default class NovaQuestaoScreen extends Component {
                                                             options={this.state.categorias}
                                                             placeholder="Selecione uma categoria"
                                                         />}
-                                                        {this.state.estadoCategoria && 
+                                                        {this.state.estadoCategoria &&
                                                             <input type="text"
-                                                            className="form-control form-control-lg form-control-alternative"  placeholder="Digite sua nova categoria" ref={input => this.new_categoria = input}
+                                                                className="form-control form-control-lg form-control-alternative" placeholder="Digite sua nova categoria" ref={input => this.new_categoria = input}
                                                             />
                                                         }
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-2">
-                                                    {!this.state.estadoCategoria && 
-                                                        <button onClick={()=>this.mudarEstadoSelect()} type="button" className="btn btn-success btn-sm btn-block"><i style={{fontSize: '28px'}} className="fa fa-plus-square" aria-hidden="true"></i></button>
+                                                    {!this.state.estadoCategoria &&
+                                                        <button onClick={() => this.mudarEstadoSelect()} type="button" className="btn btn-success btn-sm btn-block"><i style={{ fontSize: '28px' }} className="fa fa-plus-square" aria-hidden="true"></i></button>
                                                     }
-                                                    {this.state.estadoCategoria && 
-                                                        <button onClick={()=>this.mudarEstadoSelect()} type="button" className="btn btn-primary btn-lg btn-block"><i style={{fontSize: '28px'}} className="fa fa-search" aria-hidden="true"></i></button>
+                                                    {this.state.estadoCategoria &&
+                                                        <button onClick={() => this.mudarEstadoSelect()} type="button" className="btn btn-primary btn-lg btn-block"><i style={{ fontSize: '28px' }} className="fa fa-search" aria-hidden="true"></i></button>
                                                     }
                                                 </div>
                                             </div>
-                                            
+
                                             <div className="row">
                                                 <div className="col-lg-12">
                                                     <center>
-                                                        <br/>
+                                                        <br />
                                                         <span className="dark">Digite as alternativas possiveis para sua questão</span>
                                                     </center>
                                                     <div className="row">
                                                         <div className="offset-lg-2 col-lg-8">
-                                                            <hr/>
+                                                            <hr />
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             {
-                                                this.state.alternativas.map((alternativa, index)=>{
-                                                    return(
+                                                this.state.alternativas.map((alternativa, index) => {
+                                                    return (
                                                         <div key={index} className="row">
                                                             <div className="col-lg-10 offset-lg-1">
                                                                 <div className="form-group">
                                                                     <input type="text"
-                                                                    value={this.state.alternativas[index].descricao || ''} className="form-control form-control-lg form-control-alternative"  placeholder="Digite sua alternativa"
-                                                                    onChange={input => this.handleInputChange(input, index)}  ref={input => this.alternativas = input}
+                                                                        value={this.state.alternativas[index].descricao || ''} className="form-control form-control-lg form-control-alternative" placeholder="Digite sua alternativa"
+                                                                        onChange={input => this.handleInputChange(input, index)} ref={input => this.alternativas = input}
                                                                     />
                                                                 </div>
                                                             </div>
@@ -285,14 +317,14 @@ export default class NovaQuestaoScreen extends Component {
                                             }
                                             <div className="row">
                                                 <div className="offset-lg-9 col-lg-1">
-                                                    <br/>
-                                                    <div style={{float: "right"}}>
+                                                    <br />
+                                                    <div style={{ float: "right" }}>
                                                         <button onClick={() => this.adicionarAlternativa()} type="button" className="btn btn-success">+</button>
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-1">
-                                                    <br/>
-                                                    <div style={{float: "right"}}>
+                                                    <br />
+                                                    <div style={{ float: "right" }}>
                                                         <button onClick={() => this.removerAlternativa()} type="button" className="btn btn-danger">-</button>
                                                     </div>
                                                 </div>
@@ -301,7 +333,7 @@ export default class NovaQuestaoScreen extends Component {
                                                 <div className="offset-lg-2 col-lg-8">
                                                     <div className="row">
                                                         <div className="offset-lg-2 col-lg-8">
-                                                            <hr/>
+                                                            <hr />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -317,18 +349,18 @@ export default class NovaQuestaoScreen extends Component {
                                             <div className="row">
                                                 <div className="col-lg-10 offset-lg-1">
                                                     <div className="form-group">
-                                                        <select className="form-control" ref={(input) => this.correta = input}>
+                                                        <select className="form-control" onChange={this.handleCorretaChange} ref={(input) => this.correta = input} value={this.state.correta}>
                                                             <option value="Nenhuma alternativa">Nenhuma alternativa</option>
-                                                            {this.state.alternativas.map((alternativa,index)=>{
-                                                                return(
+                                                            {this.state.alternativas.map((alternativa, index) => {
+                                                                return (
                                                                     <option value={index} key={index}>{alternativa.descricao}</option>
                                                                 )
-                                                            })}          
+                                                            })}
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <Linha tamanho={8}/>
+                                            <Linha tamanho={8} />
                                             <div className="row">
                                                 <div className="col-lg-12">
                                                     <center>
@@ -336,15 +368,15 @@ export default class NovaQuestaoScreen extends Component {
                                                     </center>
                                                 </div>
                                             </div>
-                                            <Linha tamanho={6}/>
+                                            <Linha tamanho={6} />
                                             <div className="row">
                                                 <div className="col-lg-10 offset-lg-1">
                                                     <div className="form-group">
-                                                        <input type="number" className="form-control form-control-lg form-control-alternative"  placeholder="Digite a pontuação aqui" ref={input => this.pontuacao = input}/>
+                                                        <input type="number" className="form-control form-control-lg form-control-alternative" placeholder="Digite a pontuação aqui" ref={input => this.pontuacao = input} value={this.state.pontuacao} onChange={this.handlePontuacaoChange}/>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <Linha tamanho={6}/>
+                                            <Linha tamanho={6} />
                                             <div className="row">
                                                 <div className="offset-lg-1 col-lg-10">
                                                     <div className="row">
@@ -358,11 +390,12 @@ export default class NovaQuestaoScreen extends Component {
                                                             />
                                                         </div>
                                                         <div className="col-lg-6">
-                                                            <button className="btn btn-danger btn-block" 
-                                                            onClick={(e)=>{
-                                                            e.preventDefault();
-                                                            browserHistory.push( '/administrador/')
-                                                            window.location.reload()}}
+                                                            <button className="btn btn-danger btn-block"
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    browserHistory.push('/administrador/questoes/ver')
+                                                                    window.location.reload()
+                                                                }}
                                                             >Cancelar</button>
                                                         </div>
                                                     </div>
@@ -370,12 +403,12 @@ export default class NovaQuestaoScreen extends Component {
                                             </div>
                                         </form>
                                     </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
                 </section>
             </div>
-                );
-            }
+        );
+    }
 }

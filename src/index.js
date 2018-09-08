@@ -45,6 +45,7 @@ ReactDOM.render(
             
             <Route path="/administrador/questoes/adicionar" component={Admin.Questao.NovaQuestaoScreen}></Route>
             <Route path="/administrador/questoes/ver" component={Admin.Questao.VerQuestoesScreen}></Route>
+            <Route path="/administrador/questoes/editar" component={Admin.Questao.EditarQuestaoScreen}></Route>
             
             <Route path="/administrador/patrocinador/adicionar" component={Admin.Patrocinadores.NovoPatrocinadorScreen}></Route>
             <Route path="/administrador/patrocinador" component={Admin.Patrocinadores.PatrocinadoresScreen}></Route>
