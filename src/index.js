@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Public from './screens/public/index';
 import Admin from './screens/administrador/index';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router/lib';
+import { Router, Route, IndexRoute, browserHistory, Redirect} from 'react-router/lib';
 import registerServiceWorker from './registerServiceWorker';
 
 const loggedAdministrador = () => {
@@ -18,6 +18,7 @@ const loggedAdministrador = () => {
     }
     return false;
 }
+
 const requireAdmistrador = (nextState, replace) => {
     if (!loggedAdministrador()) {
         replace({
@@ -26,17 +27,20 @@ const requireAdmistrador = (nextState, replace) => {
     }
 }
 
-
 ReactDOM.render(
     <Router history={browserHistory}>
+        {/* Rotas públicas */}
         <Route path='/' component={Public.Padrao}>
             <IndexRoute component={Public.InicialScreen}/>
             <Route path='/usuario/login' component={Public.LoginScreen}></Route>
             <Route path='/usuario/cadastro' component={Public.CadastroScreen}></Route>
             <Route path='/usuario/recuperar-senha' component={Public.RecuperarSenhaScreen}></Route>
+            <Route component={Public.Error404Screen} />
         </Route>
-
+        
+        {/* Rotas administrativas */}
         <Route path='/administrador/' component={Admin.Padrao} onEnter={requireAdmistrador}>
+        
             <IndexRoute component={Admin.HomeScreen}/>
             
             <Route path="/administrador/questoes/adicionar" component={Admin.Questao.NovaQuestaoScreen}></Route>
@@ -54,6 +58,14 @@ ReactDOM.render(
             
             <Route path="/administrador/cifras" component={Admin.Cifras.CifrasScreen}></Route>
         </Route>
+
+        {/* Rotas de erros */}
+        <Route component={Public.Padrao}>
+            <Route path='/erros/404' component={Public.Error404Screen} />
+        </Route>
+        
+        {/* Cath erros */}
+        <Redirect from="*" to='/erros/404' />
     </Router>
     , document.getElementById('root'));
 registerServiceWorker();

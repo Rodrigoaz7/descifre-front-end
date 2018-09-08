@@ -94,7 +94,7 @@ export default class LoginScreen extends Component {
                                     <div className="card-body px-lg-5 py-lg-5">
                                         <div className="text-muted text-center mb-3">
                                             <center>
-                                                <img style={{width:'25%'}} className="img-fluid" alt="User neutro" src="https://png.pngtree.com/svg/20170602/person_1058425.png"/>
+                                                <img style={{width:'25%'}} className="img-fluid" alt="User neutro" src="/img/public/person.png"/>
                                             </center>
                                         </div>
                                         <form onSubmit={this.handleSubmit}>

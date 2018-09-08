@@ -10,7 +10,8 @@ import utilLocalStorage from '../../../../util/localStorage';
 import providerListarQuestoes from "../../../../providers/administrador/questoes/listarQuestoes";
 import jsonutil from "../../../../util/jsonFormat";
 import Erros from '../../../../ui/components/erros';
-
+import { browserHistory } from "react-router";
+import BotaoLoad from '../../../../ui/components/botaoLoad';
 
 export default class NovaQuestaoScreen extends Component {
 
@@ -32,7 +33,8 @@ export default class NovaQuestaoScreen extends Component {
             dataCriacao: '',
             estadoCategoria: false, // Estado para select ou input de categoria.
             erros: [],
-            categorias: []
+            categorias: [],
+            loading: false
         };
         this.erros = [];
         toastr.options = {
@@ -67,6 +69,7 @@ export default class NovaQuestaoScreen extends Component {
 
     handleSubmit = async (e) => {
         e.preventDefault();
+        this.setState({loading: !this.state.loading});
 
         //Se o usuario nao tiver selecionado uma categoria, entao pego o input digitado
         if(this.state.selectedOption == null && this.new_categoria != null) {
@@ -87,7 +90,9 @@ export default class NovaQuestaoScreen extends Component {
         });
 
         let usuario = utilLocalStorage.getUser()
-        let data;
+        let data = {
+            token: utilLocalStorage.getToken()
+        };
         
         if(this.state.selectedOption!==null){
             data = {
@@ -104,12 +109,28 @@ export default class NovaQuestaoScreen extends Component {
         
         
         let postCadastro = await providerCadastro.realizarCadastro(data);
+        
+        this.setState({loading: !this.state.loading});
 
         if(!postCadastro.status){
             this.setState({erros:postCadastro.erros});
         }else {
             toastr.success("Questão adicionada com sucesso.", "Sucesso!");
-            this.start();
+            this.setState({
+                // Alternativas da questão.
+                alternativas:[{
+                    descricao: ""
+                }],
+                selectedOption: null, // Select da categoria
+                new_categoria: '',
+                enunciado: '',
+                correta: '',
+                pontuacao: '',
+                dataCriacao: '',
+                estadoCategoria: false, // Estado para select ou input de categoria.
+                erros: [],
+                categorias: []
+            });
             window.scrollTo(0, 0);
         }
         
@@ -329,10 +350,21 @@ export default class NovaQuestaoScreen extends Component {
                                                 <div className="offset-lg-1 col-lg-10">
                                                     <div className="row">
                                                         <div className="col-lg-6">
-                                                            <button className="btn btn-primary btn-block" type="submit">Cadastrar</button>
+                                                            <BotaoLoad
+                                                                classeBotao="btn btn-primary btn-block"
+                                                                tipo="submit"
+                                                                carregando={this.state.loading}
+                                                                nome="Cadastrar"
+                                                                nomeCarregando="Carregando"
+                                                            />
                                                         </div>
                                                         <div className="col-lg-6">
-                                                            <button className="btn btn-danger btn-block" type="submit">Cancelar</button>
+                                                            <button className="btn btn-danger btn-block" 
+                                                            onClick={(e)=>{
+                                                            e.preventDefault();
+                                                            browserHistory.push( '/administrador/')
+                                                            window.location.reload()}}
+                                                            >Cancelar</button>
                                                         </div>
                                                     </div>
                                                 </div>
