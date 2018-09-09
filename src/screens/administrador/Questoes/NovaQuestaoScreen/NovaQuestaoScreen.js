@@ -17,9 +17,6 @@ export default class NovaQuestaoScreen extends Component {
 
     constructor() {
         super();
-        this.start();
-    }
-    start = () => {
         this.state = {
             // Alternativas da questão.
             alternativas:[{
@@ -54,6 +51,25 @@ export default class NovaQuestaoScreen extends Component {
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut"
         };
+    }
+    start = () => {
+        this.setState({
+            // Alternativas da questão.
+            alternativas:[{
+                descricao: ""
+            }],
+            selectedOption: null, // Select da categoria
+            new_categoria: '',
+            enunciado: '',
+            correta: '',
+            pontuacao: '',
+            dataCriacao: '',
+            estadoCategoria: false, // Estado para select ou input de categoria.
+            erros: [],
+            categorias: [],
+            loading: false
+        });
+        this.erros = [];
     }
     async componentDidMount(){
         // Get em categorias.

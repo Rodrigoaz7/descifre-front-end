@@ -3,6 +3,10 @@
 */
 import React, { Component } from "react";
 import Linha from "../../../../ui/components/linha";
+import providerCadastrarRodada from '../../../../providers/administrador/rodadas/cadastroRodada';
+import utilLocalStorage from '../../../../util/localStorage';
+import Erros from '../../../../ui/components/erros';
+import toastr from "toastr";
 
 const adicionarPremicao = (numeroParaPremiar) => {
     let usuariosPremiados = [];
@@ -16,12 +20,49 @@ export default class NovaRodadaScreen extends Component {
         super();
         this.state = {
             tempoParaResposta: 10, // Tempo para usuários responderem.
-            quantidadeUsuariosPremiados: []  // Quantidade de usuários premiados.
+            quantidadeUsuariosPremiados: [],  // Quantidade de usuários premiados.
+            tituloRodada: '', // Titulo da rodada
+            dataAbertura: '',
+            dataFinalizacao: '',
+            premiacao: '',
+            erros: []
         };
         this.numeroPremiados = null; // Variavel para ajudar na adição dos inputs.
         this.usuariosPremiados = []; // Array de usuários premiados.
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
     }
-
+    clearForm = () =>{
+        this.setState({
+            tempoParaResposta: 10, // Tempo para usuários responderem.
+            quantidadeUsuariosPremiados: [],  // Quantidade de usuários premiados.
+            tituloRodada: '', // Titulo da rodada
+            dataAbertura: '',
+            dataFinalizacao: '',
+            premiacao: '',
+            erros: []  
+        });
+        this.titulo.value = "";
+        this.dataAbertura.value = "";
+        this.dataFinalizacao.value = "";
+        this.premiacao.value = 0;
+        this.numeroPremiados = null;
+    }
     componentDidMount() {
         document.title = "Adicionar nova rodada - Tela de administração de$cifre.";
         
@@ -53,7 +94,37 @@ export default class NovaRodadaScreen extends Component {
         this.setState({quantidadeUsuariosPremiados: premiados});
         
     }
+    handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        await this.setState({
+            tituloRodada: String(this.titulo.value),
+            dataAbertura: new Date(this.dataAbertura.value),
+            dataFinalizacao: new Date(this.dataFinalizacao.value),
+            premiacao: parseFloat(this.premiacao.value)
+        });
 
+        let data = {
+            titulo: this.state.tituloRodada,
+            dataAbertura: new Date(this.state.dataAbertura),
+            dataFinalizacao: new Date(this.state.dataFinalizacao),
+            duracao: this.state.tempoParaResposta,
+            premiacao: this.state.premiacao,
+            jogadores: [],
+            ganhadores: this.state.quantidadeUsuariosPremiados.map((usuario, index)=>{return {porcentagemPremio: parseInt(usuario.porcentagemPremio, 10)}}),
+            token: utilLocalStorage.getToken()
+        };
+        let response = await providerCadastrarRodada.realizarCadastro(data);
+        if(!response.status){
+            await this.setState({erros:[]});
+            await this.setState({erros:response.erros});
+            window.scrollTo(0, 0);
+            return;
+        }
+        toastr.success("Rodada criada com sucesso.", "Rodada cadastrada");
+        this.clearForm();
+        window.scrollTo(0, 0);
+    }
     render() {
         return (
             <div className="position-relative alt">
@@ -69,13 +140,16 @@ export default class NovaRodadaScreen extends Component {
                                             <h3 style={{color: '#212121'}}>Nova rodada</h3>
                                         </div>
                                         <hr />
-                                        <form>
+                                        <form onSubmit={this.handleSubmit}>
                                             <div className="row">
                                                 <div className="col-lg-10 offset-lg-1">
+                                                    <Erros erros={this.state.erros}/>
+                                    
                                                     <div className="row">
                                                         <div className="col-lg-12">
                                                             <div className="form-group">
-                                                                <input type="text" className="form-control form-control-lg form-control-alternative"  placeholder="Titulo da rodada"/>
+                                                                <input type="text" className="form-control form-control-lg form-control-alternative"  placeholder="Titulo da rodada"
+                                                                ref={input => this.titulo = input}/>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -97,7 +171,9 @@ export default class NovaRodadaScreen extends Component {
                                                                     <div className="input-group-prepend">
                                                                     <span className="input-group-text"><i className="ni ni-calendar-grid-58"></i></span>
                                                                     </div>
-                                                                    <input className="form-control datepicker" placeholder="Select date" type="datetime-local"/>
+                                                                    <input className="form-control" placeholder="Select date" type="datetime-local"
+                                                                    ref={input => this.dataAbertura = input}
+                                                                    />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -109,7 +185,9 @@ export default class NovaRodadaScreen extends Component {
                                                                     <div className="input-group-prepend">
                                                                     <span className="input-group-text"><i className="ni ni-calendar-grid-58"></i></span>
                                                                     </div>
-                                                                    <input className="form-control datepicker" placeholder="Select date" type="datetime-local"/>
+                                                                    <input className="form-control" placeholder="Select date" type="datetime-local"
+                                                                    ref={input => this.dataFinalizacao = input}
+                                                                    />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -146,7 +224,9 @@ export default class NovaRodadaScreen extends Component {
                                                    
                                                         <div className="col-lg-6">
                                                             <small className="d-block text-uppercase font-weight-bold mb-3">Prêmiação: </small>
-                                                            <input className="form-control " placeholder="Digite o valor do prêmio em cifras" type="number"/>  
+                                                            <input className="form-control " placeholder="Digite o valor do prêmio em cifras" type="number"
+                                                            step="0.01"
+                                                            ref={input => this.premiacao = input}/>  
                                                         </div>
                                                     </div>
                                                     <br/>
@@ -194,7 +274,7 @@ export default class NovaRodadaScreen extends Component {
                                                     <br/>
                                                     <div className="row">
                                                         <div className="col-lg-6">
-                                                            <button className="btn btn-success btn-block" type="button">Cadastrar </button>
+                                                            <button type="submit" className="btn btn-success btn-block">Cadastrar </button>
                                                         </div>
                                                         <div className="col-lg-6">
                                                             <button className="btn btn-danger btn-block" type="button">Cancelar</button>

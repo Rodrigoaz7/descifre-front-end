@@ -12,14 +12,12 @@ import jsonutil from "../../../../util/jsonFormat";
 import Erros from '../../../../ui/components/erros';
 import { browserHistory } from "react-router";
 import BotaoLoad from '../../../../ui/components/botaoLoad';
+import swal from 'sweetalert2';
 
 export default class NovaQuestaoScreen extends Component {
 
     constructor() {
         super();
-        this.start();
-    }
-    start = () => {
         this.state = {
             // Alternativas da questão.
             alternativas: [{
@@ -37,6 +35,44 @@ export default class NovaQuestaoScreen extends Component {
             categorias: [],
             loading: false
         };
+        this.erros = [];
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+    }
+    start = () => {
+        this.setState({
+            // Alternativas da questão.
+            alternativas: [{
+                descricao: ""
+            }],
+            id: '',
+            selectedOption: null, // Select da categoria
+            new_categoria: '',
+            enunciado: '',
+            correta: '',
+            pontuacao: '',
+            dataCriacao: '',
+            estadoCategoria: false, // Estado para select ou input de categoria.
+            erros: [],
+            categorias: [],
+            loading: false
+        });
+        
         this.erros = [];
         toastr.options = {
             "closeButton": true,
@@ -127,29 +163,34 @@ export default class NovaQuestaoScreen extends Component {
         this.setState({ loading: !this.state.loading });
 
         if (!postCadastro.status) {
-            console.log(postCadastro)
             this.setState({ erros: postCadastro.erros });
         } else {
-            this.setState({
-                // Alternativas da questão.
-                alternativas: [{
-                    descricao: ""
-                }],
-                selectedOption: null, // Select da categoria
-                new_categoria: '',
-                enunciado: '',
-                correta: '',
-                pontuacao: '',
-                dataCriacao: '',
-                estadoCategoria: false, // Estado para select ou input de categoria.
-                erros: [],
-                categorias: []
-            });
-            localStorage.removeItem('questao2edit');
-            browserHistory.push('/administrador/questoes/ver')
-            window.location.reload()
+            swal(
+                'Questão editada!',
+                'Sua questão foi editada com sucesso.',
+                'success'
+            ).then(()=>{
+                this.setState({
+                    // Alternativas da questão.
+                    alternativas: [{
+                        descricao: ""
+                    }],
+                    selectedOption: null, // Select da categoria
+                    new_categoria: '',
+                    enunciado: '',
+                    correta: '',
+                    pontuacao: '',
+                    dataCriacao: '',
+                    estadoCategoria: false, // Estado para select ou input de categoria.
+                    erros: [],
+                    categorias: []
+                });
+                localStorage.removeItem('questao2edit');
+                window.scrollTo(0, 0);
+                browserHistory.push('/administrador/questoes/ver');
+                window.location.reload();
+            });            
         }
-
     }
 
     /*
@@ -158,7 +199,6 @@ export default class NovaQuestaoScreen extends Component {
     */
     handleChange = (selectedOption) => {
         this.setState({ selectedOption });
-        console.log(`Option selected:`, selectedOption);
     }
 
     /*

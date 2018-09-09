@@ -3,9 +3,6 @@
 */
 import React, { Component } from "react";
 export default class Error404Screen extends Component {
-    constructor() {
-        super();
-    }
     
     componentDidMount() {
         document.title = "Error 404 - Página não encontrada."

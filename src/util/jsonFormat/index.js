@@ -35,6 +35,7 @@ const mutationJson = (jsonOriginal, arrayChavesOriginal, arrayChavesMutacao) =>{
     
     arrayChavesOriginal.map((chaveOriginal, index)=>{
         jsonMutation[arrayChavesMutacao[index]] = jsonOriginal[chaveOriginal];
+        return null;
     });
     return jsonMutation;
 }
@@ -44,6 +45,7 @@ const mutationArrayJson = (arrayJson, arrayChavesOriginal, arrayChavesMutacao) =
     arrayJson.map((obj,index)=>{
         let jsonObj = mutationJson(obj, arrayChavesOriginal, arrayChavesMutacao);
         arrayRetorno.push(jsonObj);
+        return null;
     });
     return arrayRetorno;
 };

@@ -74,7 +74,7 @@ export default class VerQuestoesScreen extends Component {
         const id_obj = e.target.id;
         let questao = null;
         for(var i=0; i<this.state.questoes.length; i++){
-            if(this.state.questoes[i]._id == id_obj) questao = this.state.questoes[i];
+            if(String(this.state.questoes[i]._id) === String(id_obj)) questao = this.state.questoes[i];
         }
         localStorage.setItem('questao2edit', JSON.stringify(questao));
         window.location.href = "/administrador/questoes/editar";
@@ -110,7 +110,7 @@ export default class VerQuestoesScreen extends Component {
                                             <h3 style={{ color: '#212121' }}>Pesquisar questões</h3>
                                         </div>
                                         <hr />
-                                        {this.state.questoes.length == 0
+                                        {this.state.questoes.length === 0
                                             &&
                                             <div className="row">
                                                 <div className="col-lg-12">
