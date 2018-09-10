@@ -2,11 +2,19 @@
 *   Autor: Rodrigo Azevedo
 */
 import React, { Component } from "react";
-
+import providerListarUsuarios from '../../../../providers/administrador/usuarios/listarUsuarios';
 export default class VerQuestoesScreen extends Component {
-
-    componentDidMount() {
-        document.title = "Usuarios - Tela de administração de$cifre."
+    constructor(){
+        super();
+        this.state = {
+            usuarios: []
+        }
+    }
+    async componentDidMount() {
+        const responsePost = await providerListarUsuarios.getUsuarios();
+        await this.setState({usuarios: responsePost.data.usuarios});
+        
+        document.title = "Usuarios - Tela de administração de$cifre.";
     }
 
     render() {
@@ -33,7 +41,7 @@ export default class VerQuestoesScreen extends Component {
                                             <div className="col-lg-1">
                                                 <div className="form-group">
                                                     <button className="btn btn-success btn-sm btn-block form-control form-control-alternative" type="button">
-                                                        <i className="fa fa-search" ariaHidden="true"></i>
+                                                        <i className="fa fa-search" arialhidden="true"></i>
                                                     </button>
                                                 </div>
                                             </div>
@@ -54,18 +62,20 @@ export default class VerQuestoesScreen extends Component {
                                                                 <tr>
                                                                     <th>Nome</th>
                                                                     <th>Email</th>
-                                                                    <th>Cifras</th>
                                                                     <th>Dados</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <tr>
-                                                                    <td style={{ maxWidth: '100px' }}>Fulano de tal</td>
-                                                                    <td>fulano@cicrano.com</td>
-                                                                    <td>$ 50</td>
-
-                                                                    <td><center><button className="btn btn-primary" type="button">Ver</button></center></td>
-                                                                </tr>
+                                                                {
+                                                                    this.state.usuarios.map((usuario, index)=>{
+                                                                        return (<tr key={index}>
+                                                                            <td style={{ maxWidth: '100px' }}>{usuario.pessoa.nome}</td>
+                                                                            <td>{usuario.pessoa.email}</td>
+                                                                            <td><center><button className="btn btn-primary" type="button">Ver</button></center></td>
+                                                                        </tr>)
+                                                                    })
+                                                                }
+                                                                
                                                             </tbody>
                                                         </table>
                                                     </div>
