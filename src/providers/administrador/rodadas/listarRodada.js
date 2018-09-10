@@ -2,7 +2,7 @@ import variables from '../../../variables';
 import axios from 'axios';
 import utilLocalStorage from '../../../util/localStorage';
 
-const listarRodadas = async (data) => {
+const listarRodadas = async () => {
     let dataResponse;
     let token = utilLocalStorage.getToken();
     try{

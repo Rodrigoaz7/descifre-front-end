@@ -6,7 +6,7 @@ const removerRodada = async (data) => {
     let dataResponse;
     let token = utilLocalStorage.getToken();
     try{
-        dataResponse = await axios.delete(`${variables.urlApi}/administrador/rodadas`, {data: {id: id, token: token}});
+        dataResponse = await axios.delete(`${variables.urlApi}/administrador/rodadas`, {data: {id: data, token: token}});
     }catch(error){
         dataResponse = error.response.data;
     }
