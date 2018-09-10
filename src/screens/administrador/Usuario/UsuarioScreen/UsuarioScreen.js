@@ -11,7 +11,7 @@ export default class VerQuestoesScreen extends Component {
         }
     }
     async componentDidMount() {
-        const responsePost = await providerListarUsuarios.getUsuarios();
+        const responsePost = await providerListarUsuarios.getUsuarios(10);
         await this.setState({usuarios: responsePost.data.usuarios});
         
         document.title = "Usuarios - Tela de administração de$cifre.";
