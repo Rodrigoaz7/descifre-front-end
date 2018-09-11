@@ -422,10 +422,10 @@ export default class NovaQuestaoScreen extends Component {
                                                     <div className="row">
                                                         <div className="col-lg-6">
                                                             <BotaoLoad
-                                                                classeBotao="btn btn-primary btn-block"
+                                                                classeBotao="btn btn-success btn-block"
                                                                 tipo="submit"
                                                                 carregando={this.state.loading}
-                                                                nome="Cadastrar"
+                                                                nome="Concluir edição"
                                                                 nomeCarregando="Carregando"
                                                             />
                                                         </div>
