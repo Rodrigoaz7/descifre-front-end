@@ -4,15 +4,21 @@
 import React, { Component } from "react";
 import Infor from "./componentes/Info";
 import Chart from "./componentes/Chart";
+import providerListarUsuarios from '../../../providers/administrador/usuarios/listarUsuarios';
+
 export default class HomeScreen extends Component {
     constructor() {
         super();
         this.state = {
-
+            usuarios: []
         }
     }
-    componentDidMount() {
-        document.title = "Administrador - Tela de administração de$cifre."
+    async componentDidMount() {
+        document.title = "Administrador - Tela de administração de$cifre.";
+        const responsePost = await providerListarUsuarios.getUsuarios(5);
+        if(responsePost.data.status) await this.setState({ usuarios: responsePost.data.usuarios });
+        
+        
     }
 
     render() {
@@ -26,7 +32,7 @@ export default class HomeScreen extends Component {
                             <div className="col-lg-12">
                                 <div className="card bg-secondary shadow border-0">
                                     <div className="card-body px-lg-5 py-lg-5">
-                                        <Infor />
+                                        <Infor/>
                                         <hr />
                                         <div className="row">
                                             <div className="offset-lg-1 col-lg-10">
@@ -41,29 +47,26 @@ export default class HomeScreen extends Component {
                                         </div>
                                         <div className="row">
                                             <div className="col-lg-12">
-                                                <br/><br/>
+                                                <br /><br />
                                                 <table className="table table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col"><center>Nome</center></th>
-                                                            <th scope="col"><center>E-mail</center></th>
-                                                            <th scope="col"><center>Telefone</center></th>
-                                                            <th scope="col"><center>Data cadastro</center></th>
+                                                            <th>Nome</th>
+                                                            <th>Email</th>
+                                                            <th>Dados</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <th scope="row">1</th>
-                                                            <td>Mark</td>
-                                                            <td>Otto</td>
-                                                            <td>@mdo</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">2</th>
-                                                            <td>Jacob</td>
-                                                            <td>Thornton</td>
-                                                            <td>@fat</td>
-                                                        </tr>
+                                                        {
+                                                            this.state.usuarios.map((usuario, index) => {
+                                                                return (<tr key={index}>
+                                                                    <td style={{ maxWidth: '100px' }}>{usuario.pessoa.nome}</td>
+                                                                    <td>{usuario.pessoa.email}</td>
+                                                                    <td><center><button className="btn btn-primary" type="button">Ver</button></center></td>
+                                                                </tr>)
+                                                            })
+                                                        }
+
                                                     </tbody>
                                                 </table>
                                             </div>
