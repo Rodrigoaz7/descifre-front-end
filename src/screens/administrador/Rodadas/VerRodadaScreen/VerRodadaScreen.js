@@ -6,6 +6,7 @@ import ProviderListarRodadas from "../../../../providers/administrador/rodadas/l
 import ProviderDeleteRodada from "../../../../providers/administrador/rodadas/deleteRodada";
 import Erros from '../../../../ui/components/erros';
 import swal from 'sweetalert2';
+import { browserHistory } from "react-router";
 
 export default class VerRodadaScreen extends Component {
 
@@ -56,6 +57,21 @@ export default class VerRodadaScreen extends Component {
                 )
             }
         });
+    }
+
+    handleClickEdit = async (e) => {
+        //Armazenando questao clicada em localStorage
+        const id_obj = e.target.id;
+        let rodada = null;
+        for(var i=0; i<this.state.rodadas.length; i++){
+            if(String(this.state.rodadas[i]._id) === String(id_obj)) rodada = this.state.rodadas[i];
+        }
+        
+        browserHistory.push({
+            pathname: '/administrador/rodada/editar',
+            state: { data: rodada }
+        })
+        window.location.reload()
     }
 
     async componentDidMount() {
@@ -172,7 +188,7 @@ export default class VerRodadaScreen extends Component {
 
                                                                                         <td>{r.premiacao}</td>
 
-                                                                                        <td><center><button className="btn btn-primary" type="button" id={r._id}    >editar</button></center></td>
+                                                                                        <td><center><button className="btn btn-primary" type="button" id={r._id} onClick={this.handleClickEdit}    >editar</button></center></td>
                                                                                         <td><center><button className="btn btn-danger" type="button" id={r._id} onClick={this.handleClickDelete} >apagar</button></center></td>
                                                                                     </tr>
                                                                                 )}

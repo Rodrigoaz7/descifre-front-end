@@ -27,9 +27,14 @@ export default class VerQuestoesScreen extends Component {
     *   Função para alterar o valor do select de categorias.
     *   Autor: Marcus Dantas
     */
-    handleChange = (selectedOption) => {
+    handleChange = async (selectedOption) => {
         this.setState({ selectedOption });
-        console.log(`Option selected:`, selectedOption);
+        const resultado_questoes = await providerListarQuestoes.getQuestoes(selectedOption.value);
+        console.log(`Option selected:`, resultado_questoes.data.questoes);
+        //if(resultado_questoes.data.questoes.length > 0){
+        this.setState({ questoes: resultado_questoes.data.questoes });
+        //}
+        console.log(this.state.categorias)
     }
 
     handleClickDelete = async (e) => {
@@ -73,15 +78,15 @@ export default class VerQuestoesScreen extends Component {
         //Armazenando questao clicada em localStorage
         const id_obj = e.target.id;
         let questao = null;
-        for(var i=0; i<this.state.questoes.length; i++){
-            if(String(this.state.questoes[i]._id) === String(id_obj)) questao = this.state.questoes[i];
+        for (var i = 0; i < this.state.questoes.length; i++) {
+            if (String(this.state.questoes[i]._id) === String(id_obj)) questao = this.state.questoes[i];
         }
         localStorage.setItem('questao2edit', JSON.stringify(questao));
         window.location.href = "/administrador/questoes/editar";
     }
 
     async componentDidMount() {
-        const resultado_questoes = await providerListarQuestoes.getQuestoes();
+        const resultado_questoes = await providerListarQuestoes.getQuestoes("");
         let categorias_formatado = jsonutil.mutationArrayJson(resultado_questoes.data.categorias, ['_id', 'nome'], ['value', 'label']);
         this.setState({
             questoes: resultado_questoes.data.questoes,
@@ -110,6 +115,27 @@ export default class VerQuestoesScreen extends Component {
                                             <h3 style={{ color: '#212121' }}>Pesquisar questões</h3>
                                         </div>
                                         <hr />
+
+                                        <div className="row">
+                                            <div className="col-lg-12">
+                                                <div className="form-group" style={{ zIndex: '10000'}}>
+                                                    <Select
+                                                        value={selectedOption}
+                                                        onChange={this.handleChange}
+                                                        options={this.state.categorias}
+                                                        placeholder="Selecione uma categoria"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="offset-lg-2 col-lg-8">
+                                                    <div className="form-group">
+                                                        <hr />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         {this.state.questoes.length === 0
                                             &&
                                             <div className="row">
@@ -117,33 +143,14 @@ export default class VerQuestoesScreen extends Component {
                                                     <center>
                                                         <h1 style={{ color: '#212121', fontSize: '15px' }}>
                                                             Não existem questões cadastradas.
-                                                    </h1>
+                                                        </h1>
                                                     </center>
                                                 </div>
                                             </div>
                                         }
+
                                         {this.state.questoes.length > 0 &&
                                             <div>
-                                                <div className="row">
-                                                    <div className="col-lg-12">
-                                                        <div className="form-group">
-                                                            <Select
-                                                                value={selectedOption}
-                                                                onChange={this.handleChange}
-                                                                options={this.state.categorias}
-                                                                placeholder="Selecione uma categoria"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="row">
-                                                        <div className="offset-lg-2 col-lg-8">
-                                                            <div className="form-group">
-                                                                <hr />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
                                                 <div className="row">
                                                     <div className="col-lg-12">
                                                         <div className="form-group">

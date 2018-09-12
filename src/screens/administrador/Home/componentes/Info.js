@@ -14,6 +14,7 @@ export default class Info extends Component {
     }
     async componentDidMount(){
         const responseGetNumeros = await providerContadorHome.getNumerosHome();
+
         
         if(responseGetNumeros.data.status) await this.setState({ numeros: responseGetNumeros.data.numeros});
     }

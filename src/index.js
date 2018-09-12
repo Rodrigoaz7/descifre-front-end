@@ -52,6 +52,7 @@ ReactDOM.render(
 
             <Route path="/administrador/rodada/adicionar" component={Admin.Rodadas.NovaRodadaScreen}></Route>
             <Route path="/administrador/rodada/ver" component={Admin.Rodadas.VerRodadaScreen}></Route>
+            <Route path="/administrador/rodada/editar" component={Admin.Rodadas.EditarRodadaScreen}></Route>
             
             <Route path="/administrador/perfil" component={Admin.Perfil.PerfilScreen}></Route>
             
