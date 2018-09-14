@@ -118,7 +118,7 @@ export default class VerQuestoesScreen extends Component {
 
                                         <div className="row">
                                             <div className="col-lg-12">
-                                                <div className="form-group" style={{ zIndex: '10000'}}>
+                                                <div className="form-group" style={{height: '40vh'}}>
                                                     <Select
                                                         value={selectedOption}
                                                         onChange={this.handleChange}
@@ -150,7 +150,7 @@ export default class VerQuestoesScreen extends Component {
                                         }
 
                                         {this.state.questoes.length > 0 &&
-                                            <div>
+                                            <div style={{height: '60vh', marginTop: '-200px'}}>
                                                 <div className="row">
                                                     <div className="col-lg-12">
                                                         <div className="form-group">
