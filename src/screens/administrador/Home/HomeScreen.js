@@ -5,6 +5,7 @@ import React, { Component } from "react";
 import Infor from "./componentes/Info";
 import Chart from "./componentes/Chart";
 import providerListarUsuarios from '../../../providers/administrador/usuarios/listarUsuarios';
+import { browserHistory } from "react-router";
 
 export default class HomeScreen extends Component {
     constructor() {
@@ -15,10 +16,23 @@ export default class HomeScreen extends Component {
     }
     async componentDidMount() {
         document.title = "Administrador - Tela de administração de$cifre.";
-        const responsePost = await providerListarUsuarios.getUsuarios(5);
+        const responsePost = await providerListarUsuarios.getUsuarios(5, "");
         if(responsePost.data.status) await this.setState({ usuarios: responsePost.data.usuarios });
-        
-        
+    }
+
+    redirect = async (e) => {
+        const id_obj = e.target.id;
+        let user = null;
+
+        for(var i=0; i<this.state.usuarios.length; i++){
+            if(String(this.state.usuarios[i]._id) === String(id_obj)) user = this.state.usuarios[i];
+        }
+
+        browserHistory.push({
+            pathname: '/administrador/usuario/ver',
+            state: { data: user }
+        })
+        window.location.reload()
     }
 
     render() {
@@ -62,7 +76,7 @@ export default class HomeScreen extends Component {
                                                                 return (<tr key={index}>
                                                                     <td style={{ maxWidth: '100px' }}>{usuario.pessoa.nome}</td>
                                                                     <td>{usuario.pessoa.email}</td>
-                                                                    <td><center><button className="btn btn-primary" type="button">Ver</button></center></td>
+                                                                    <td><center><button className="btn btn-primary" type="button" id={usuario._id} onClick={this.redirect}>Ver</button></center></td>
                                                                 </tr>)
                                                             })
                                                         }

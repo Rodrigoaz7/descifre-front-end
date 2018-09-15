@@ -57,6 +57,7 @@ ReactDOM.render(
             <Route path="/administrador/perfil" component={Admin.Perfil.PerfilScreen}></Route>
             
             <Route path="/administrador/usuarios" component={Admin.Usuario.UsuarioScreen}></Route>
+            <Route path="/administrador/usuario/ver" component={Admin.Usuario.VerUsuarioScreen}></Route>
             
             <Route path="/administrador/cifras" component={Admin.Cifras.CifrasScreen}></Route>
         </Route>

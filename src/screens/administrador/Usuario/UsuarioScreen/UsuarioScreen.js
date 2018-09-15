@@ -3,18 +3,44 @@
 */
 import React, { Component } from "react";
 import providerListarUsuarios from '../../../../providers/administrador/usuarios/listarUsuarios';
+import { browserHistory } from "react-router";
+
 export default class VerQuestoesScreen extends Component {
     constructor(){
         super();
         this.state = {
-            usuarios: []
+            usuarios: [],
+            filtro: ""
         }
     }
     async componentDidMount() {
-        const responsePost = await providerListarUsuarios.getUsuarios(10);
+        const responsePost = await providerListarUsuarios.getUsuarios(10, "");
         await this.setState({usuarios: responsePost.data.usuarios});
         
         document.title = "Usuarios - Tela de administração de$cifre.";
+    }
+
+    handlerFiltro = async(e) => {
+        this.setState({filtro: e.target.value})
+    }
+
+    handleSubmit = async (e) => {
+        const responsePost = await providerListarUsuarios.getUsuarios(10, this.state.filtro);
+        await this.setState({usuarios: responsePost.data.usuarios});
+    }
+
+    redirect = async(e) => {
+        const id_obj = e.target.id;
+        let user = null;
+        for(var i=0; i<this.state.usuarios.length; i++){
+            if(String(this.state.usuarios[i]._id) === String(id_obj)) user = this.state.usuarios[i];
+        }
+        
+        browserHistory.push({
+            pathname: '/administrador/usuario/ver',
+            state: { data: user }
+        })
+        window.location.reload()
     }
 
     render() {
@@ -35,12 +61,12 @@ export default class VerQuestoesScreen extends Component {
                                         <div className="row justify-content-center">
                                             <div className="col-lg-8">
                                                 <div className="form-group">
-                                                    <input type="text" className="form-control form-control-alternative" placeholder="Pesquisa por nome ou email" />
+                                                    <input type="text" className="form-control form-control-alternative" placeholder="Pesquisa por nome ou email" value={this.state.filtro} onChange={this.handlerFiltro}/>
                                                 </div>
                                             </div>
                                             <div className="col-lg-1">
                                                 <div className="form-group">
-                                                    <button className="btn btn-success btn-sm btn-block form-control form-control-alternative" type="button">
+                                                    <button className="btn btn-success btn-sm btn-block form-control form-control-alternative" type="button"onClick={this.handleSubmit}>
                                                         <i className="fa fa-search" arialhidden="true"></i>
                                                     </button>
                                                 </div>
@@ -71,7 +97,7 @@ export default class VerQuestoesScreen extends Component {
                                                                         return (<tr key={index}>
                                                                             <td style={{ maxWidth: '100px' }}>{usuario.pessoa.nome}</td>
                                                                             <td>{usuario.pessoa.email}</td>
-                                                                            <td><center><button className="btn btn-primary" type="button">Ver</button></center></td>
+                                                                            <td><center><button className="btn btn-primary" type="button" id={usuario._id} onClick={this.redirect}>Ver</button></center></td>
                                                                         </tr>)
                                                                     })
                                                                 }
