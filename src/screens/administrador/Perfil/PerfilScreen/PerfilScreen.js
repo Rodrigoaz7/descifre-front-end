@@ -103,10 +103,12 @@ export default class PerfilScreen extends Component {
                 'Seu perfil foi editada com sucesso.',
                 'success'
             ).then(()=>{
-                // Falta atualizar o token de usuário depois de atualizar seus dados!
                 window.scrollTo(0, 0);
+                localStorage.setItem('descifre_tokenUsuario', JSON.stringify(postCadastro.data.token));
+                localStorage.setItem('descifre_userData', JSON.stringify(postCadastro.data.userInfor));
+
                 browserHistory.push('/administrador/perfil');
-                window.location.reload();
+                
             });            
         }
     }
@@ -164,11 +166,11 @@ export default class PerfilScreen extends Component {
                                                     <div className="row">
                                                         <div className="col-lg-9">
                                                             <center><small className="d-block text-uppercase font-weight-bold mb-3">Conta bancária</small></center>
-                                                            <input type="text" className="form-control form-control-alternative" value={this.state.conta} onChange={this.handlerContaChange}/>
+                                                            <input type="text" className="form-control form-control-alternative" value={this.state.conta==null ? "":this.state.conta} onChange={this.handlerContaChange}/>
                                                         </div>
                                                         <div className="col-lg-3">
                                                             <center><small className="d-block text-uppercase font-weight-bold mb-3">Agência</small></center>
-                                                            <input type="text" className="form-control form-control-alternative" value={this.state.agencia} onChange={this.handlerAgenciaChange} />
+                                                            <input type="text" className="form-control form-control-alternative" value={this.state.agencia==null ? "":this.state.agencia} onChange={this.handlerAgenciaChange} />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -176,7 +178,7 @@ export default class PerfilScreen extends Component {
                                             <div className="col-lg-5">
                                                 <div className="form-group">
                                                     <center><small className="d-block text-uppercase font-weight-bold mb-3">Telefone</small></center>
-                                                    <input type="text" className="form-control form-control-alternative" value={this.state.telefone} onChange={this.handlerTelefoneChange}/>
+                                                    <input type="text" className="form-control form-control-alternative" value={this.state.telefone==null ? "":this.state.telefone} onChange={this.handlerTelefoneChange}/>
                                                 </div>
                                             </div>
                                         </div>
