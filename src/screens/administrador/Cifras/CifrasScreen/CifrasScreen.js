@@ -3,11 +3,59 @@
 */
 import React, { Component } from "react";
 import Linha from '../../../../ui/components/linha';
+import providerCifras from '../../../../providers/administrador/transacoes/listarTransacoes';
+import { browserHistory } from "react-router";
+import Erros from '../../../../ui/components/erros';
 
 export default class CifrasScreen extends Component {
 
-    componentDidMount() {
+    constructor() {
+        super();
+        this.state = {
+            transacoes: [],
+            erros: [],
+            radio: "",
+            data: "",
+            user: ""
+        }
+    }
+
+    async componentDidMount() {
+        const response = await providerCifras.getTransacoes(10, "", "", "");
+        await this.setState({ transacoes: response.data.transacoes });
+
         document.title = "Cifras - Tela de administração de$cifre.";
+    }
+
+    handlerRadio = async (e) => {
+        await this.setState({radio: e.target.value})
+    }
+
+    handlerData = async (e) => {
+        await this.setState({data: e.target.value})
+    }
+
+    handlerUser = async (e) => {
+        await this.setState({user: e.target.value})
+    }
+
+    handlerSubmit = async () => {
+        const response = await providerCifras.getTransacoes(10, this.state.radio, this.state.data, this.state.user);
+        await this.setState({transacoes: response.data.transacoes})
+    }
+
+    handlerRedirect = async(e) => {
+        const id_obj = e.target.id;
+        let transacao = null;
+        for (var i = 0; i < this.state.transacoes.length; i++) {
+            if (String(this.state.transacoes[i]._id) === String(id_obj)) transacao = this.state.transacoes[i];
+        }
+
+        browserHistory.push({
+            pathname: '/administrador/cifras/ver',
+            state: { data: transacao }
+        })
+        window.location.reload()
     }
 
     render() {
@@ -26,17 +74,21 @@ export default class CifrasScreen extends Component {
                                         </div>
                                         <hr />
                                         <div className="row justify-content-center">
-                                            <div className="col-lg-1">
+                                            <div className="col-lg-2">
                                                 <center><small className="text-uppercase font-weight-bold        mb-3">Saque</small></center>
-                                                <center><input type="radio" id="Saque" name="tt" value="Saque" /></center>
+                                                <center><input type="radio" id="Saque" name="tt" value="saque" onClick={this.handlerRadio} /></center>
                                             </div>
-                                            <div className="col-lg-1">
+                                            <div className="col-lg-2">
                                                 <center><small className="text-uppercase font-weight-bold        mb-3">Compra</small></center>
-                                                <center><input type="radio" id="Compra" name="tt" value="Compra" /></center>
+                                                <center><input type="radio" id="Compra" name="tt" value="compra" onClick={this.handlerRadio} /></center>
                                             </div>
-                                            
+                                            <div className="col-lg-2">
+                                                <center><small className="text-uppercase font-weight-bold        mb-3">Transferência</small></center>
+                                                <center><input type="radio" id="Transferencia" name="tt" value="transferencia" onClick={this.handlerRadio} /></center>
+                                            </div>
+
                                         </div>
-                                        <Linha tamanho={10}/>
+                                        <Linha tamanho={10} />
                                         <div className="row justify-content-center">
                                             <div className="col-lg-4">
                                                 <center><small className="d-block text-uppercase font-weight-bold mb-3">Data de transação</small></center>
@@ -45,41 +97,52 @@ export default class CifrasScreen extends Component {
                                                         <div className="input-group-prepend">
                                                             <span className="input-group-text"><i className="ni ni-calendar-grid-58"></i></span>
                                                         </div>
-                                                        <input className="form-control datepicker" placeholder="Select date" type="datetime-local" />
+                                                        <input className="form-control datepicker" placeholder="Select date" type="datetime-local" onChange={this.handlerData} />
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="col-lg-4">
                                                 <center><small className="d-block text-uppercase font-weight-bold mb-3">Pesquisa por usuário</small></center>
                                                 <div className="form-group">
-                                                    <input type="text" className="form-control form-control-alternative" placeholder="Pesquisa por usuário" />
+                                                    <input type="text" className="form-control form-control-alternative" placeholder="Pesquisa por usuário" onChange={this.handlerUser} />
                                                 </div>
                                             </div>
                                         </div>
-                                        <Linha tamanho={12}/>
-                                        <center><h3>Resultado</h3></center>
+                                        <br />
+                                        <div className="row justify-content-center">
+                                            <div className="col-lg-2">
+                                                <button className="btn btn-success btn-sm btn-block form-control form-control-alternative" onClick={this.handlerSubmit}><i className="fa fa-search" arialhidden="true"> Pesquisar</i></button>
+                                            </div>
+                                        </div>
+                                        <Linha tamanho={12} />
+                                        <center><h3>Resultados</h3></center>
                                         <div className="row">
                                             <div className="col-lg-12">
                                                 <div className="form-group">
                                                     <div className="table-responsive">
+                                                        <Erros erros={this.state.erros} />
                                                         <table className="table table-bordered">
                                                             <thead>
+
                                                                 <tr>
-                                                                    <th>Usuário</th>
+                                                                    <th>Usuário Recepitário</th>
                                                                     <th>Tipo de transação</th>
                                                                     <th>Quantidade de cifras</th>
                                                                     <th>Data de transação</th>
                                                                     <th>Dados</th>
                                                                 </tr>
+
                                                             </thead>
                                                             <tbody>
-                                                                <tr>
-                                                                    <td style={{ maxWidth: '100px' }}>Fulano de tal</td>
-                                                                    <td>Compra ou saque</td>
-                                                                    <td>$ 50</td>
-                                                                    <td>30/08/2018</td>
-                                                                    <td><center><button className="btn btn-primary" type="button">Ver</button></center></td>
-                                                                </tr>
+                                                                {this.state.transacoes.map((tr, index) =>
+                                                                    <tr key={index}>
+                                                                        <td>{tr.recebido_por.email}</td>
+                                                                        <td>{tr.tipo}</td>
+                                                                        <td>C$ {tr.quantia_transferida}</td>
+                                                                        <td>{tr.data_transferencia.substr(0, 10)}</td>
+                                                                        <td><center><button className="btn btn-primary" type="button" id={tr._id} onClick={this.handlerRedirect}>Ver</button></center></td>
+                                                                    </tr>
+                                                                )}
                                                             </tbody>
                                                         </table>
                                                     </div>

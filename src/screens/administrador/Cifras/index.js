@@ -1,3 +1,4 @@
 import CifrasScreen from "./CifrasScreen/CifrasScreen";
+import VerTransacaoScreen from "./CifrasScreen/VerTransacao";
 
-export default {CifrasScreen};
+export default {CifrasScreen, VerTransacaoScreen};

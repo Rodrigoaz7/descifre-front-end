@@ -14,7 +14,11 @@ export default class VerRodadaScreen extends Component {
         super();
         this.state = {
             rodadas: [],
-            erros: []
+            erros: [],
+            titulo: "",
+            situacao: "",
+            data_inicio: "",
+            data_fim: ""
         };
         this.numeroPremiados = null; // Variavel para ajudar na adição dos inputs.
         this.usuariosPremiados = []; // Array de usuários premiados.
@@ -23,7 +27,7 @@ export default class VerRodadaScreen extends Component {
     handleClickDelete = async (e) => {
         // Faltando ainda modal para confirmação da remoção
         const id = e.target.id;
-        
+
         swal({
             title: 'Você tem certeza?',
             text: "Se você clicar em sim irá apagar permanentemente essa rodada e terá que cadastrá-la novamente.",
@@ -63,10 +67,10 @@ export default class VerRodadaScreen extends Component {
         //Armazenando questao clicada em localStorage
         const id_obj = e.target.id;
         let rodada = null;
-        for(var i=0; i<this.state.rodadas.length; i++){
-            if(String(this.state.rodadas[i]._id) === String(id_obj)) rodada = this.state.rodadas[i];
+        for (var i = 0; i < this.state.rodadas.length; i++) {
+            if (String(this.state.rodadas[i]._id) === String(id_obj)) rodada = this.state.rodadas[i];
         }
-        
+
         browserHistory.push({
             pathname: '/administrador/rodada/editar',
             state: { data: rodada }
@@ -76,12 +80,33 @@ export default class VerRodadaScreen extends Component {
 
     async componentDidMount() {
         document.title = "Adicionar nova rodada - Tela de administração de$cifre.";
-        const resultado_rodadas = await ProviderListarRodadas.listarRodadas();
+        const resultado_rodadas = await ProviderListarRodadas.listarRodadas("", "", "", "");
         this.setState({
             rodadas: resultado_rodadas.data.rodadas
         });
         console.log(this.state.rodadas)
 
+    }
+
+    handlerTitulo = async(e) => {
+        await this.setState({titulo: e.target.value})
+    }
+
+    handlerSituacao = async(e) => {
+        await this.setState({situacao: e.target.value})
+    }
+
+    handlerDataInicio = async(e) => {
+        await this.setState({data_inicio: e.target.value})
+    }
+
+    handlerDataFim = async(e) => {
+        await this.setState({data_fim: e.target.value})
+    }
+
+    handlerSubmit = async() => {
+        const response = await ProviderListarRodadas.listarRodadas(this.state.titulo, this.state.situacao, this.state.data_inicio, this.state.data_fim);
+        await this.setState({rodadas: response.data.rodadas})
     }
 
     render() {
@@ -91,7 +116,7 @@ export default class VerRodadaScreen extends Component {
         const status_aberto = (rodada) => {
             let data_atual = new Date();
             let data_finalizacao = new Date(rodada.dataFinalizacao);
-            if(data_finalizacao.getTime() - data_atual.getTime() < 0){
+            if (data_finalizacao.getTime() - data_atual.getTime() < 0) {
                 return (
                     "Fechado"
                 )
@@ -123,18 +148,18 @@ export default class VerRodadaScreen extends Component {
                                                     <div className="form-group">
                                                         <div className="row">
                                                             <div className="col-lg-12">
-                                                                <center><input type="text" className="form-control form-control-lg form-control-alternative" placeholder="Titulo da rodada" /></center>
+                                                                <center><input type="text" className="form-control form-control-lg form-control-alternative" placeholder="Titulo da rodada" onChange={this.handlerTitulo}/></center>
                                                             </div>
                                                         </div>
                                                         <hr />
                                                         <div className="row">
                                                             <div className="col-lg-2">
                                                                 <center><small className="d-block text-uppercase font-weight-bold mb-3">Fechado</small></center>
-                                                                <center><input type="radio" id="Fechado" name="fr" value="Fechado" /></center>
+                                                                <center><input type="radio" id="Fechado" name="fr" value="Fechado" onClick={this.handlerSituacao}/></center>
                                                             </div>
                                                             <div className="col-lg-2">
                                                                 <center><small className="d-block text-uppercase font-weight-bold mb-3">Aberto</small></center>
-                                                                <center><input type="radio" id="Aberto" name="fr" value="Aberto" /></center>
+                                                                <center><input type="radio" id="Aberto" name="fr" value="Aberto" onClick={this.handlerSituacao} /></center>
                                                             </div>
                                                             <div className="col-lg-4">
                                                                 <small className="d-block text-uppercase font-weight-bold mb-3">Data de abertura da rodada</small>
@@ -143,7 +168,7 @@ export default class VerRodadaScreen extends Component {
                                                                         <div className="input-group-prepend">
                                                                             <span className="input-group-text"><i className="ni ni-calendar-grid-58"></i></span>
                                                                         </div>
-                                                                        <input className="form-control datepicker" placeholder="Select date" type="datetime-local" />
+                                                                        <input className="form-control datepicker" placeholder="Select date" type="datetime-local" onChange={this.handlerDataInicio}/>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -154,13 +179,18 @@ export default class VerRodadaScreen extends Component {
                                                                         <div className="input-group-prepend">
                                                                             <span className="input-group-text"><i className="ni ni-calendar-grid-58"></i></span>
                                                                         </div>
-                                                                        <input className="form-control datepicker" placeholder="Select date" type="datetime-local" />
+                                                                        <input className="form-control datepicker" placeholder="Select date" type="datetime-local" onChange={this.handlerDataFim}/>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <hr />
-
+                                                        <div className="row justify-content-center">
+                                                            <div className="col-lg-2">
+                                                                <button className="btn btn-success btn-sm btn-block form-control form-control-alternative" onClick={this.handlerSubmit}><i className="fa fa-search" arialhidden="true"> Pesquisar</i></button>
+                                                            </div>
+                                                        </div>
+                                                        <hr />
                                                         <div className="row">
                                                             <div className="col-lg-12">
                                                                 <div className="form-group">
@@ -192,9 +222,8 @@ export default class VerRodadaScreen extends Component {
                                                                                         <td><center><button className="btn btn-danger" type="button" id={r._id} onClick={this.handleClickDelete} >apagar</button></center></td>
                                                                                     </tr>
                                                                                 )}
-                                                                                </tbody>
-                                                                            </table>
-                                                                        </div>
+                                                                            </tbody>
+                                                                        </table>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -207,8 +236,9 @@ export default class VerRodadaScreen extends Component {
                                 </div>
                             </div>
                         </div>
+                    </div>
                 </section>
             </div>
-                );
-            }
+        );
+    }
 }
