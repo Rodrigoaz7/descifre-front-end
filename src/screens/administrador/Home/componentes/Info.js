@@ -3,20 +3,23 @@ import providerContadorHome from '../../../../providers/administrador/contadores
 
 export default class Info extends Component {
     constructor(){
+        
         super();
         this.state = {
             numeros:{
                 qntdUsuarios: 0,
                 qntdQuestao: 0,
-                qntdRodada: 0
+                qntdRodada: 0,
+                qntdTransacoes: 0
             }
         }
     }
     async componentDidMount(){
         const responseGetNumeros = await providerContadorHome.getNumerosHome();
 
-        
-        if(responseGetNumeros.data.status) await this.setState({ numeros: responseGetNumeros.data.numeros});
+        if(responseGetNumeros.data.status) {
+            await this.setState({ numeros: responseGetNumeros.data.numeros});
+        }
     }
     render() {
         return (
@@ -47,7 +50,9 @@ export default class Info extends Component {
                 </div>
                 <div className="col-lg-3 col-md-3">
                     <center>
-                        <h4 style={{ color: '#212121' }} className="display-1 mb-0">3</h4>
+                        <h4 style={{ color: '#212121' }} className="display-1 mb-0">
+                            {this.state.numeros.qntdTransacoes}
+                        </h4>
                         <h4 style={{ color: '#212121' }}>Cifras</h4>
                     </center>
                 </div>

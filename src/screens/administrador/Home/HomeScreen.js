@@ -5,6 +5,7 @@ import React, { Component } from "react";
 import Infor from "./componentes/Info";
 import Chart from "./componentes/Chart";
 import providerListarUsuarios from '../../../providers/administrador/usuarios/listarUsuarios';
+// import providerContadorHome from '../../../providers/administrador/contadores/contadorHome';
 import { browserHistory } from "react-router";
 
 export default class HomeScreen extends Component {
@@ -16,8 +17,10 @@ export default class HomeScreen extends Component {
     }
     async componentDidMount() {
         document.title = "Administrador - Tela de administração de$cifre.";
+
         const responsePost = await providerListarUsuarios.getUsuarios(5, "");
         if(responsePost.data.status) await this.setState({ usuarios: responsePost.data.usuarios });
+
     }
 
     redirect = async (e) => {
@@ -46,11 +49,11 @@ export default class HomeScreen extends Component {
                             <div className="col-lg-12">
                                 <div className="card bg-secondary shadow border-0">
                                     <div className="card-body px-lg-5 py-lg-5">
-                                        <Infor/>
+                                            <Infor/>
                                         <hr />
                                         <div className="row">
                                             <div className="offset-lg-1 col-lg-10">
-                                                <Chart props={"kkkkk"} />
+                                                <Chart />
                                             </div>
                                         </div>
                                         <hr />
