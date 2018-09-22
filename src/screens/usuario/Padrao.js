@@ -3,7 +3,7 @@
 *   Autor: Marcus Dantas
 */
 import React, { Component } from "react";
-import MenuNavAdmin from '../../ui/Menus/MenuAdmin';
+import MenuUsuario from '../../ui/Menus/MenuUsuario';
 import Footer from '../../ui/Footer/Footer';
 import { Link } from "react-router";
 export default class Padrao extends Component{
@@ -24,7 +24,7 @@ export default class Padrao extends Component{
                                 <div className="row">
                                 <div className="col-6 collapse-brand">
                                     <Link to='/usuario/' className="navbar-brand mr-lg-5">
-                                        <img alt="Nav" src="/img/brand/blue.png"/>
+                                        <h2 style={{textTransform: 'capitalize'}}>Saldo: 40,55<span style={{fontSize:'15px', textTransform: 'capitalize'}}> cifras</span></h2>
                                     </Link>
                                 </div>
                                 <div className="col-6 collapse-close">
@@ -35,7 +35,7 @@ export default class Padrao extends Component{
                                 </div>
                                 </div>
                             </div>
-                
+                            <MenuUsuario/>
                         </div>
                     </div>
                     </nav>

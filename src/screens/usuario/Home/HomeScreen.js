@@ -18,7 +18,23 @@ export default class HomeScreen extends Component {
         return (
             <div className="position-relative alt">
                 <section className="section section-shaped section-lg my-0">
-                    <div className="shape shape-style-1 bg-gradient-dark">
+                    <div className="shape shape-style-1 bg-gradient-default">
+                        <span className="span-150"></span>
+                        <span className="span-50"></span>
+                        <span className="span-50"></span>
+                        <span className="span-75"></span>
+                        <span className="span-100"></span>
+                        <span className="span-75"></span>
+                        <span className="span-50"></span>
+                        <span className="span-100"></span>
+                        <span className="span-50"></span>
+                        <span className="span-100"></span>
+                        <span className="span-75"></span>
+                        <span className="span-100"></span>
+                        <span className="span-75"></span>
+                        <span className="span-50"></span>
+                        <span className="span-100"></span>
+                        <span className="span-50"></span>
                     </div>
                     <div className="container-fluid pt-lg-md">
                         <div className="row justify-content-center">
