@@ -78,7 +78,7 @@ export default class LoginScreen extends Component {
             return false;
         });
 
-        browserHistory.push(`publico/`);
+        browserHistory.push(`/usuario/`);
     }
 
     render() {

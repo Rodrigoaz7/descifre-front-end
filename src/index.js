@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Public from './screens/public/index';
 import Admin from './screens/administrador/index';
+import Usuario from './screens/usuario/index';
 import { Router, Route, IndexRoute, browserHistory, Redirect} from 'react-router/lib';
 import registerServiceWorker from './registerServiceWorker';
 
@@ -17,6 +18,27 @@ const loggedAdministrador = () => {
         return false;
     }
     return false;
+}
+
+const loggedUsuario = () => {
+    if(localStorage.getItem('descifre_userData')!==null && localStorage.getItem('descifre_tokenUsuario')!==null){
+        let data = JSON.parse(localStorage.getItem('descifre_userData'));
+        let admin = false;
+        data.permissoes.map((permissao, index) =>{
+            if(permissao==="Public") admin = true;
+            return null;
+        });
+        if(admin) return true;
+        return false;
+    }
+    return false;
+}
+const requireUsuario = (nextState, replace) => {
+    if (!loggedUsuario()) {
+        replace({
+            pathname: '/usuario/login'
+        });
+    }
 }
 
 const requireAdmistrador = (nextState, replace) => {
@@ -60,6 +82,11 @@ ReactDOM.render(
             <Route path="/administrador/usuario/ver" component={Admin.Usuario.VerUsuarioScreen}></Route>
             
             <Route path="/administrador/cifras" component={Admin.Cifras.CifrasScreen}></Route>
+        </Route>
+        
+        {/*Rotas usuário comum*/}
+        <Route path='/usuario/' component={Usuario.Padrao} onEnter={requireUsuario}>
+            <IndexRoute component={Usuario.HomeScreen}/>
         </Route>
 
         {/* Rotas de erros */}
