@@ -82,6 +82,7 @@ ReactDOM.render(
             <Route path="/administrador/usuario/ver" component={Admin.Usuario.VerUsuarioScreen}></Route>
             
             <Route path="/administrador/cifras" component={Admin.Cifras.CifrasScreen}></Route>
+            <Route path="/administrador/cifras/ver" component={Admin.Cifras.VerTransacaoScreen}></Route>
         </Route>
         
         {/*Rotas usuário comum*/}
