@@ -93,16 +93,17 @@ export default class NovaQuestaoScreen extends Component {
         };
     }
     async componentDidMount() {
-        const questao = JSON.parse(localStorage.getItem('questao2edit'));
+        const questao = this.props.location.state.data;
+        console.log(questao)
         if(!questao){
             browserHistory.push('/administrador/questoes/ver')
             window.location.reload()
         }
 
         // Get em categorias.
-        const resultado_questoes = await providerListarQuestoes.getQuestoes();
+        const resultado_questoes = await providerListarQuestoes.getQuestoes("");
         let categorias_formatado = jsonutil.mutationArrayJson(resultado_questoes.data.categorias, ['_id', 'nome'], ['value', 'label']);
-        
+        console.log(categorias_formatado)
         // Setando o elas para o select.
         this.setState({
             id: questao._id,

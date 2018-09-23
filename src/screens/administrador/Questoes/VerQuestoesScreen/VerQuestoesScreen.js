@@ -9,6 +9,7 @@ import providerDeleteQuestoes from "../../../../providers/administrador/questoes
 import jsonutil from "../../../../util/jsonFormat";
 import Erros from '../../../../ui/components/erros';
 import swal from 'sweetalert2';
+import { browserHistory } from "react-router";
 
 export default class VerQuestoesScreen extends Component {
 
@@ -81,8 +82,11 @@ export default class VerQuestoesScreen extends Component {
         for (var i = 0; i < this.state.questoes.length; i++) {
             if (String(this.state.questoes[i]._id) === String(id_obj)) questao = this.state.questoes[i];
         }
-        localStorage.setItem('questao2edit', JSON.stringify(questao));
-        window.location.href = "/administrador/questoes/editar";
+        browserHistory.push({
+            pathname: '/administrador/questoes/editar',
+            state: { data: questao }
+        })
+        window.location.reload()
     }
 
     async componentDidMount() {
