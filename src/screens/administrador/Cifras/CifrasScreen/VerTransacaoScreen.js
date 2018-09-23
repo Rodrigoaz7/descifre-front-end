@@ -3,7 +3,6 @@
 */
 import React, { Component } from "react";
 import Linha from '../../../../ui/components/linha';
-import providerCifras from '../../../../providers/administrador/transacoes/listarTransacoes';
 import { browserHistory } from "react-router";
 
 export default class CifrasScreen extends Component {

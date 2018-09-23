@@ -7,7 +7,9 @@ import React, { Component } from "react";
 export default class HomeScreen extends Component {
     constructor() {
         super();
-        
+        this.state = {
+            
+        }
     }
     componentDidMount() {
         document.title = "Home usuário - Bem vindo ao De$cifre.";
