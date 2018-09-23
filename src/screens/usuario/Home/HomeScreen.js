@@ -41,9 +41,37 @@ export default class HomeScreen extends Component {
                             <div className="col-lg-12">
                                 <div className="card bg-secondary shadow border-0">
                                     <div className="card-body px-lg-5 py-lg-5">
-                                        {/*Conteúdo do site*/}
+                                        <div className="row">
+                                            <div className="col-lg-12">
+                                                <center>
+                                                    <h4>
+                                                        {"Rodada de abertura".toUpperCase()}
+                                                    </h4>
+                                                </center>
+                                                <center>
+                                                    Abertura: 12/06 às 15:00<br/>
+                                                    Finalização: 15/06 às 15:00
+                                                </center>
+                                                <hr/>
+                                                <center>
+                                                    <h4 style={{color:'green'}}>
+                                                        {"500 cifras".toUpperCase()}
+                                                    </h4>
+                                                </center>
+                                                <hr/>
+                                                <button type="button" className="btn btn-success btn-block">
+                                                    Jogar agora<br/>
+                                                    (GRÁTIS)
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
                                     </div>
                                 </div>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
                             </div>
                         </div>
                     </div>
