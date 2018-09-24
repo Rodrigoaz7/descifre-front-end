@@ -13,6 +13,8 @@ import Erros from '../../../../ui/components/erros';
 import { browserHistory } from "react-router";
 import BotaoLoad from '../../../../ui/components/botaoLoad';
 import swal from 'sweetalert2';
+import providerListarCategorias from '../../../../providers/administrador/questoes/obterCategorias';
+
 
 export default class NovaQuestaoScreen extends Component {
 
@@ -101,11 +103,11 @@ export default class NovaQuestaoScreen extends Component {
         }
 
         // Get em categorias.
-        const resultado_questoes = await providerListarQuestoes.getQuestoes("");
-        let categorias_formatado = jsonutil.mutationArrayJson(resultado_questoes.data.categorias, ['_id', 'nome'], ['value', 'label']);
-        console.log(categorias_formatado)
+        const categorias = await providerListarCategorias.getCategorias();
+        let categorias_formatado = jsonutil.mutationArrayJson(categorias.data.categorias, ['_id', 'nome'], ['value', 'label']);
+        
         // Setando o elas para o select.
-        this.setState({
+        await this.setState({
             id: questao._id,
             selectedOption: questao.categoria._id,
             enunciado: questao.enunciado,

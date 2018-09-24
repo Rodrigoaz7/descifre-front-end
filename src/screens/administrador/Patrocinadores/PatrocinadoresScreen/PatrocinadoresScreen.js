@@ -32,6 +32,29 @@ export default class NovoPatrocinadorScreen extends Component {
         this.setState({filtro: e.target.value})
     }
 
+    handlerRedirect = async(e) => {
+        e.preventDefault();
+
+        const id_obj = e.target.id;
+        let patrocinador = null;
+        for (var i = 0; i < this.state.patrocinadores.length; i++) {
+            if (String(this.state.patrocinadores[i]._id) === String(id_obj)) patrocinador = this.state.patrocinadores[i];
+        }
+        browserHistory.push({
+            pathname: '/administrador/patrocinador/ver',
+            state: { data: patrocinador }
+        })
+        window.location.reload()
+    }
+
+    handlerSubmit = async(e) => {
+        e.preventDefault();
+        let resultado = await providerGetPatrocinadores.listarPatrocinadores(this.state.filtro);
+        this.setState({
+            patrocinadores: resultado.data.patrocinadores
+        });
+    }
+
     handlerSubmit = async(e) => {
         e.preventDefault();
         let resultado = await providerGetPatrocinadores.listarPatrocinadores(this.state.filtro);
@@ -96,7 +119,7 @@ export default class NovoPatrocinadorScreen extends Component {
                                                                             <td>{p.tipo_patrocinador}</td>
                                                                             <td>{p.email}</td>
                                                                             <td>R$ {p.quantia_paga}</td>
-                                                                            <td><center><button className="btn btn-primary" type="button">Ver</button></center></td>
+                                                                            <td><center><button className="btn btn-primary" type="button" id={p._id} onClick={this.handlerRedirect}>Ver</button></center></td>
                                                                         </tr>
                                                                     )}
                                                                 </tbody>

@@ -9,8 +9,12 @@ import providerDeleteQuestoes from "../../../../providers/administrador/questoes
 import jsonutil from "../../../../util/jsonFormat";
 import Erros from '../../../../ui/components/erros';
 import swal from 'sweetalert2';
+<<<<<<< HEAD
 import { browserHistory } from "react-router";
 
+=======
+import providerListarCategorias from '../../../../providers/administrador/questoes/obterCategorias';
+>>>>>>> febc7cef9b5b7988d855858589fe31576fe49317
 export default class VerQuestoesScreen extends Component {
 
     constructor() {
@@ -91,8 +95,11 @@ export default class VerQuestoesScreen extends Component {
 
     async componentDidMount() {
         const resultado_questoes = await providerListarQuestoes.getQuestoes("");
-        let categorias_formatado = jsonutil.mutationArrayJson(resultado_questoes.data.categorias, ['_id', 'nome'], ['value', 'label']);
-        this.setState({
+        const categorias = await providerListarCategorias.getCategorias();
+
+        let categorias_formatado = jsonutil.mutationArrayJson(categorias.data.categorias, ['_id', 'nome'], ['value', 'label']);
+        
+        await this.setState({
             questoes: resultado_questoes.data.questoes,
             categorias: categorias_formatado
         });
@@ -152,9 +159,9 @@ export default class VerQuestoesScreen extends Component {
                                                 </div>
                                             </div>
                                         }
-
+                                        
                                         {this.state.questoes.length > 0 &&
-                                            <div style={{height: '60vh', marginTop: '-200px'}}>
+                                            <div style={{marginTop: '-200px'}}>
                                                 <div className="row">
                                                     <div className="col-lg-12">
                                                         <div className="form-group">
