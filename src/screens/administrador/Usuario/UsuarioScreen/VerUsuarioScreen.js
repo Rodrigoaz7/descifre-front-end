@@ -2,13 +2,8 @@
 *   Autor: Rodrigo Azevedo
 */
 import React, { Component } from "react";
-import Linha from '../../../../ui/components/linha';
 import { Link } from "react-router";
-import utilLocalStorage from '../../../../util/localStorage';
-import providerPerfil from '../../../../providers/administrador/perfil/atualizarPerfil';
-import swal from 'sweetalert2';
 import { browserHistory } from "react-router";
-import Erros from '../../../../ui/components/erros';
 
 export default class PerfilScreen extends Component {
     constructor() {

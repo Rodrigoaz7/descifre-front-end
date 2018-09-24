@@ -34,7 +34,7 @@ export default class SimpleLineChart extends Component {
         await this.setState({ 
             data:
             [
-                {name: 'Domingo', usuarios: parseInt(this.state.contadorUsuariosSemana[0]), cifras: this.state.contadorCifrasSemana[0], amt: 2400},
+                {name: 'Domingo', usuarios: parseInt(this.state.contadorUsuariosSemana[0],10), cifras: this.state.contadorCifrasSemana[0], amt: 2400},
                 {name: 'Segunda', usuarios: this.state.contadorUsuariosSemana[1], cifras: this.state.contadorCifrasSemana[1], amt: 2210},
                 {name: 'Terça', usuarios: this.state.contadorUsuariosSemana[2], cifras: this.state.contadorCifrasSemana[2], amt: 2290},
                 {name: 'Quarta', usuarios: this.state.contadorUsuariosSemana[3], cifras: this.state.contadorCifrasSemana[3], amt: 2000},

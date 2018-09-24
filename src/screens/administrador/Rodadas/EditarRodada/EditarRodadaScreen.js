@@ -145,7 +145,7 @@ export default class NovaRodadaScreen extends Component {
     handleSubmit = async (e) => {
         e.preventDefault();
 
-        let usuario = utilLocalStorage.getUser();
+        //let usuario = utilLocalStorage.getUser();
 
         let data = {
             id: this.state.id,
