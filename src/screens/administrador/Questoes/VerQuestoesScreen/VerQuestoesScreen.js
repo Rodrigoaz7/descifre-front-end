@@ -9,12 +9,9 @@ import providerDeleteQuestoes from "../../../../providers/administrador/questoes
 import jsonutil from "../../../../util/jsonFormat";
 import Erros from '../../../../ui/components/erros';
 import swal from 'sweetalert2';
-<<<<<<< HEAD
+import providerListarCategorias from '../../../../providers/administrador/questoes/obterCategorias';
 import { browserHistory } from "react-router";
 
-=======
-import providerListarCategorias from '../../../../providers/administrador/questoes/obterCategorias';
->>>>>>> febc7cef9b5b7988d855858589fe31576fe49317
 export default class VerQuestoesScreen extends Component {
 
     constructor() {
@@ -98,7 +95,7 @@ export default class VerQuestoesScreen extends Component {
         const categorias = await providerListarCategorias.getCategorias();
 
         let categorias_formatado = jsonutil.mutationArrayJson(categorias.data.categorias, ['_id', 'nome'], ['value', 'label']);
-        
+
         await this.setState({
             questoes: resultado_questoes.data.questoes,
             categorias: categorias_formatado

@@ -34,7 +34,7 @@ export default class NovoPatrocinadorScreen extends Component {
     }
 
     handleChange = (e) => {
-        this.setState({ FileInputValue: e.target.files[0].name })
+        this.setState({ FileInputValue: e.target.files[0].name,  logomarca: e.target.files[0]})
     }
 
     handlerSubmit = async (e) => {
@@ -56,6 +56,7 @@ export default class NovoPatrocinadorScreen extends Component {
             tipo_patrocinador: this.state.tipo_patrocinador,
             quantia_paga: this.state.quantia_paga,
             rodadas_patrocinadas: this.state.rodadas_patrocinadas,
+            logomarca: this.state.logomarca,
             token: utilLocalStorage.getToken()
         };
 

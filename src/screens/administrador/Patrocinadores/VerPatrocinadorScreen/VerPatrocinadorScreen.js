@@ -161,7 +161,7 @@ export default class NovoPatrocinadorScreen extends Component {
                                                                 </span>
                                                             </label>
 
-                                                            <input type="text" className="form-control" value={this.state.FileInputValue} value={this.state.logomarca} readOnly />
+                                                            <input type="text" className="form-control" value={this.state.FileInputValue} value={this.state.logomarca} />
                                                         </div>
                                                     </div>
                                                 </div>
