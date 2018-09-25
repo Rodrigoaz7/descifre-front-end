@@ -2,17 +2,22 @@
 *   Autor: Marcus Dantas
 */
 import React, { Component } from "react";
-
+import providerListarRodadasAbertas from '../../../providers/usuario/rodadas/obterRodadasInicio';
 
 export default class HomeScreen extends Component {
     constructor() {
         super();
         this.state = {
-            
+            rodadas: []
         }
     }
-    componentDidMount() {
+    async componentDidMount() {
         document.title = "Home usuário - Bem vindo ao De$cifre.";
+        const rodadasPost = await providerListarRodadasAbertas.listarRodadas();
+        const rodadas = rodadasPost.data.rodadas;
+        await this.setState({
+            rodadas: rodadas
+        });
     }
 
 
@@ -42,6 +47,8 @@ export default class HomeScreen extends Component {
                         <div className="row justify-content-center">
                             <div className="col-lg-12">
                                 <div className="card bg-secondary shadow border-0">
+                                    {
+                                    this.state.rodadas.length>0 &&
                                     <div className="card-body px-lg-5 py-lg-5">
                                         <div className="row">
                                             <div className="col-lg-12">
@@ -67,8 +74,21 @@ export default class HomeScreen extends Component {
                                                 </button>
                                             </div>
                                         </div>
-                                        
-                                    </div>
+                                    </div>}
+                                    {
+                                    this.state.rodadas.length==0 &&
+                                    <div className="card-body px-lg-5 py-lg-5">
+                                        <div className="row">
+                                            <div className="col-lg-12">
+                                                <center>
+                                                    <img class="img-fluid" alt="Responsive image" src="/img/public/menino-triste.gif"/>
+                                                    <h4 style={{color: '#212121'}}><br/>
+                                                        Não exite nenhuma rodada aberta.
+                                                    </h4>
+                                                </center>
+                                            </div>
+                                        </div>
+                                    </div>}
                                 </div>
                                 <br/>
                                 <br/>

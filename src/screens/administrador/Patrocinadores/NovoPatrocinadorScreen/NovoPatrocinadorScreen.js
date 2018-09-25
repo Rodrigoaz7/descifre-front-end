@@ -89,7 +89,7 @@ export default class NovoPatrocinadorScreen extends Component {
                                                 </div>
                                                 <div className="col-lg-5">
                                                     <div className="form-group">
-                                                        <input type="email" className="form-control form-control-md form-control-alternative" placeholder="Quantia paga" />
+                                                        <input type="number" className="form-control form-control-md form-control-alternative" placeholder="Quantia paga" />
                                                     </div>
                                                 </div>
                                             </div>
