@@ -7,7 +7,6 @@ import toastr from "toastr";
 import Linha from '../../../../ui/components/linha';
 import providerCadastro from '../../../../providers/administrador/questoes/updateQuestao';
 import utilLocalStorage from '../../../../util/localStorage';
-import providerListarQuestoes from "../../../../providers/administrador/questoes/listarQuestoes";
 import jsonutil from "../../../../util/jsonFormat";
 import Erros from '../../../../ui/components/erros';
 import { browserHistory } from "react-router";

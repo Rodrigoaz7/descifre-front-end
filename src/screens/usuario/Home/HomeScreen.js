@@ -76,12 +76,12 @@ export default class HomeScreen extends Component {
                                         </div>
                                     </div>}
                                     {
-                                    this.state.rodadas.length==0 &&
+                                    this.state.rodadas.length===0 &&
                                     <div className="card-body px-lg-5 py-lg-5">
                                         <div className="row">
                                             <div className="col-lg-12">
                                                 <center>
-                                                    <img class="img-fluid" alt="Responsive image" src="/img/public/menino-triste.gif"/>
+                                                    <img class="img-fluid" alt="Menino triste" src="/img/public/menino-triste.gif"/>
                                                     <h4 style={{color: '#212121'}}><br/>
                                                         Não exite nenhuma rodada aberta.
                                                     </h4>

@@ -7,7 +7,6 @@ import toastr from "toastr";
 import providerCadastro from '../../../../providers/administrador/patrocinadores/cadastroPatrocinador';
 import providerListarRodadas from '../../../../providers/administrador/rodadas/listarRodada';
 import Erros from '../../../../ui/components/erros';
-import { browserHistory } from "react-router";
 import utilLocalStorage from '../../../../util/localStorage';
 
 export default class NovoPatrocinadorScreen extends Component {
@@ -23,7 +22,8 @@ export default class NovoPatrocinadorScreen extends Component {
             telefone: '',
             tipo_patrocinador: '',
             rodadas_patrocinadas: [],
-            quantia_paga: 0
+            quantia_paga: 0,
+            erros:[]
         };
     }
 
@@ -48,7 +48,7 @@ export default class NovoPatrocinadorScreen extends Component {
         }
         await this.setState({rodadas_patrocinadas: rodadas_a_patrocinar})
 
-        let usuario = utilLocalStorage.getUser()
+        //let usuario = utilLocalStorage.getUser()
         let data = {
             nome: this.state.nome,
             email: this.state.email,
@@ -63,7 +63,12 @@ export default class NovoPatrocinadorScreen extends Component {
         let postCadastro = await providerCadastro.realizarCadastro(data);
         console.log(postCadastro)
         if (!postCadastro.status) {
-            this.setState({ erros: postCadastro.erros });
+            if(postCadastro.erros!==undefined){
+                this.setState({ erros: postCadastro.erros });
+            }else{
+                this.setState({ erros: [{msg:postCadastro.msg},{msg:postCadastro.mensagemErro}] });
+            }
+            
         } else {
             toastr.success("Patrocinador adicionado com sucesso.", "Sucesso!");
             this.setState({
@@ -116,7 +121,8 @@ export default class NovoPatrocinadorScreen extends Component {
                                             <h3 style={{ color: '#212121' }}>Adicionar um novo patrocinador</h3>
                                         </div>
                                         <Linha tamanho={10} />
-                                        <form>
+                                        <form>  
+                                            <Erros erros={this.state.erros}/>
                                             <div className="row">
                                                 <div className="col-lg-10 offset-lg-1">
                                                     <div className="form-group">
@@ -170,11 +176,6 @@ export default class NovoPatrocinadorScreen extends Component {
                                             <br />
                                             <div className="row justify-content-center">
                                                 <div className="col-lg-5">
-<<<<<<< HEAD
-                                                    <div className="form-group">
-                                                        <input type="number" className="form-control form-control-md form-control-alternative" placeholder="Quantia paga" />
-                                                    </div>
-=======
                                                     
                                                     <table className="table table-striped">
                                                         <tbody className="">
@@ -190,7 +191,6 @@ export default class NovoPatrocinadorScreen extends Component {
                                                             })}
                                                         </tbody>
                                                     </table>
->>>>>>> 3a561f90b38c089069690f04cdb94911abcdd4ed
                                                 </div>
                                             </div>
                                             <Linha tamanho={10} />

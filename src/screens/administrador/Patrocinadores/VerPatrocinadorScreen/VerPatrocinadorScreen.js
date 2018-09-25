@@ -6,7 +6,6 @@ import Linha from '../../../../ui/components/linha';
 import toastr from "toastr";
 import providerCadastro from '../../../../providers/administrador/patrocinadores/atualizarPatrocinador';
 import providerListarRodadas from '../../../../providers/administrador/rodadas/listarRodada';
-import Erros from '../../../../ui/components/erros';
 import { browserHistory } from "react-router";
 import utilLocalStorage from '../../../../util/localStorage';
 
@@ -80,7 +79,7 @@ export default class NovoPatrocinadorScreen extends Component {
         }
         await this.setState({ rodadas_patrocinadas: rodadas_a_patrocinar })
 
-        let usuario = utilLocalStorage.getUser()
+        //let usuario = utilLocalStorage.getUser()
         let data = {
             id: this.state.id,
             nome: this.state.nome,
@@ -161,7 +160,7 @@ export default class NovoPatrocinadorScreen extends Component {
                                                                 </span>
                                                             </label>
 
-                                                            <input type="text" className="form-control" value={this.state.FileInputValue} value={this.state.logomarca} />
+                                                            <input type="text" className="form-control" value={this.state.FileInputValue}/>
                                                         </div>
                                                     </div>
                                                 </div>

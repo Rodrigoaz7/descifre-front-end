@@ -5,7 +5,6 @@ import React, { Component } from "react";
 import Linha from '../../../../ui/components/linha';
 import providerGetPatrocinadores from '../../../../providers/administrador/patrocinadores/listarPatrocinador';
 import Erros from '../../../../ui/components/erros';
-import swal from 'sweetalert2';
 import { browserHistory } from "react-router";
 
 export default class NovoPatrocinadorScreen extends Component {
