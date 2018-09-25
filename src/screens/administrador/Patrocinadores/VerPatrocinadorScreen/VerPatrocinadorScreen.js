@@ -4,7 +4,7 @@
 import React, { Component } from "react";
 import Linha from '../../../../ui/components/linha';
 import toastr from "toastr";
-import providerCadastro from '../../../../providers/administrador/patrocinadores/cadastroPatrocinador';
+import providerCadastro from '../../../../providers/administrador/patrocinadores/atualizarPatrocinador';
 import providerListarRodadas from '../../../../providers/administrador/rodadas/listarRodada';
 import Erros from '../../../../ui/components/erros';
 import { browserHistory } from "react-router";
@@ -29,76 +29,97 @@ export default class NovoPatrocinadorScreen extends Component {
 
     async componentDidMount() {
         document.title = "Adicionar novo patrocinador - Tela de administração de$cifre."
-        let rodadas = await providerListarRodadas.listarRodadas("", "Aberto", "", "");
-        await this.setState({ rodadas: rodadas.data.rodadas })
+        const patrocinador = this.props.location.state.data;
+
+        if (!patrocinador) {
+            browserHistory.push('/administrador/patrocinador')
+            window.location.reload()
+        }
+
+        // Get em rodadas.
+        const resultado_rodadas = await providerListarRodadas.listarRodadas("", "Aberto", "", "");
+        console.log(resultado_rodadas.data.rodadas)
+        // Setando o elas para o select.
+        this.setState({
+            id: patrocinador._id,
+            rodadas: resultado_rodadas.data.rodadas,
+            nome: patrocinador.nome,
+            email: patrocinador.email,
+            telefone: patrocinador.telefone,
+            logomarca: patrocinador.logomarca,
+            rodadas_patrocinadas: patrocinador.rodadas_patrocinadas,
+            tipo_patrocinador: patrocinador.tipo_patrocinador,
+            quantia_paga: patrocinador.quantia_paga
+        });
+
+        // Verificar rodadas ja patrocinadas anteriormente
+        let inputs_rodada = document.getElementsByName("rodadas");
+
+        for (let i = 0; i < inputs_rodada.length; i++) {
+            for (let j = 0; j < this.state.rodadas_patrocinadas.length; j++) {
+                if (inputs_rodada[i].id === this.state.rodadas_patrocinadas[j]._id) {
+                    inputs_rodada[i].checked = true;
+                    break;
+                }
+            }
+        }
     }
 
     handleChange = (e) => {
-        this.setState({ FileInputValue: e.target.files[0].name,  logomarca: e.target.files[0]})
+        this.setState({ FileInputValue: e.target.files[0].name })
     }
 
     handlerSubmit = async (e) => {
         e.preventDefault();
         let rodadas_a_patrocinar = [];
         let inputs_rodada = document.getElementsByName("rodadas");
-        for(let i=0; i<inputs_rodada.length;i++){
-            if (inputs_rodada[i].checked){
+        for (let i = 0; i < inputs_rodada.length; i++) {
+            if (inputs_rodada[i].checked) {
                 rodadas_a_patrocinar.push(inputs_rodada[i].id);
             }
         }
-        await this.setState({rodadas_patrocinadas: rodadas_a_patrocinar})
+        await this.setState({ rodadas_patrocinadas: rodadas_a_patrocinar })
 
         let usuario = utilLocalStorage.getUser()
         let data = {
+            id: this.state.id,
             nome: this.state.nome,
             email: this.state.email,
             telefone: this.state.telefone,
             tipo_patrocinador: this.state.tipo_patrocinador,
             quantia_paga: this.state.quantia_paga,
             rodadas_patrocinadas: this.state.rodadas_patrocinadas,
-            logomarca: this.state.logomarca,
             token: utilLocalStorage.getToken()
         };
 
-        let postCadastro = await providerCadastro.realizarCadastro(data);
+        let postCadastro = await providerCadastro.realizarAtualizacao(data);
         console.log(postCadastro)
         if (!postCadastro.status) {
             this.setState({ erros: postCadastro.erros });
         } else {
-            toastr.success("Patrocinador adicionado com sucesso.", "Sucesso!");
-            this.setState({
-                // Alternativas da questão.
-                FileInputValue: '',
-                logomarca: '',
-                nome: '',
-                email: '',
-                telefone: '',
-                tipo_patrocinador: '',
-                rodadas_patrocinadas: [],
-                quantia_paga: 0
-            });
+            toastr.success("Patrocinador atualizado com sucesso.", "Sucesso!");
             window.scrollTo(0, 0);
         }
     }
 
-    handlerNome = async(e) => {
-        await this.setState({nome: e.target.value})
+    handlerNome = async (e) => {
+        await this.setState({ nome: e.target.value })
     }
 
-    handlerEmail = async(e) => {
-        await this.setState({email: e.target.value})
+    handlerEmail = async (e) => {
+        await this.setState({ email: e.target.value })
     }
 
-    handlerTelefone = async(e) => {
-        await this.setState({telefone: e.target.value})
+    handlerTelefone = async (e) => {
+        await this.setState({ telefone: e.target.value })
     }
 
-    handlerQuantia = async(e) => {
-        await this.setState({quantia_paga: e.target.value})
+    handlerQuantia = async (e) => {
+        await this.setState({ quantia_paga: e.target.value })
     }
 
-    handlerTipo = async(e) => {
-        await this.setState({tipo_patrocinador: e.target.value})
+    handlerTipo = async (e) => {
+        await this.setState({ tipo_patrocinador: e.target.value })
     }
 
     render() {
@@ -120,14 +141,14 @@ export default class NovoPatrocinadorScreen extends Component {
                                             <div className="row">
                                                 <div className="col-lg-10 offset-lg-1">
                                                     <div className="form-group">
-                                                        <input type="text" className="form-control form-control-md form-control-alternative" placeholder="Nome do patrocinador" onChange={this.handlerNome}/>
+                                                        <input type="text" className="form-control form-control-md form-control-alternative" placeholder="Nome do patrocinador" value={this.state.nome} onChange={this.handlerNome} />
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="row">
                                                 <div className="col-lg-5 offset-lg-1">
                                                     <div className="form-group">
-                                                        <input type="text" className="form-control form-control-md form-control-alternative" placeholder="Tipo de patrocinador" onChange={this.handlerTipo} />
+                                                        <input type="text" className="form-control form-control-md form-control-alternative" placeholder="Tipo de patrocinador" onChange={this.handlerTipo} value={this.state.tipo_patrocinador} />
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-5">
@@ -140,7 +161,7 @@ export default class NovoPatrocinadorScreen extends Component {
                                                                 </span>
                                                             </label>
 
-                                                            <input type="text" className="form-control" value={this.state.FileInputValue} readOnly />
+                                                            <input type="text" className="form-control" value={this.state.FileInputValue} value={this.state.logomarca} />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -151,17 +172,17 @@ export default class NovoPatrocinadorScreen extends Component {
                                             <div className="row">
                                                 <div className="col-lg-3 offset-lg-1">
                                                     <div className="form-group">
-                                                        <input type="text" className="form-control form-control-md form-control-alternative" placeholder="Telefone de contato" onChange={this.handlerTelefone}/>
+                                                        <input type="text" className="form-control form-control-md form-control-alternative" placeholder="Telefone de contato" onChange={this.handlerTelefone} value={this.state.telefone} />
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-4">
                                                     <div className="form-group">
-                                                        <input type="email" className="form-control form-control-md form-control-alternative" placeholder="Email de contato" onChange={this.handlerEmail}/>
+                                                        <input type="email" className="form-control form-control-md form-control-alternative" placeholder="Email de contato" onChange={this.handlerEmail} value={this.state.email} />
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-3">
                                                     <div className="form-group">
-                                                        <input type="number" className="form-control form-control-md form-control-alternative" placeholder="Quantia paga" step="100" onChange={this.handlerQuantia}/>
+                                                        <input type="number" className="form-control form-control-md form-control-alternative" placeholder="Quantia paga" step="100" onChange={this.handlerQuantia} value={this.state.quantia_paga} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -170,12 +191,7 @@ export default class NovoPatrocinadorScreen extends Component {
                                             <br />
                                             <div className="row justify-content-center">
                                                 <div className="col-lg-5">
-<<<<<<< HEAD
-                                                    <div className="form-group">
-                                                        <input type="number" className="form-control form-control-md form-control-alternative" placeholder="Quantia paga" />
-                                                    </div>
-=======
-                                                    
+
                                                     <table className="table table-striped">
                                                         <tbody className="">
                                                             {this.state.rodadas.map((rodada, index) => {
@@ -183,14 +199,13 @@ export default class NovoPatrocinadorScreen extends Component {
                                                                     <tr value={index} key={index}>
                                                                         <td>{rodada.titulo} ( Premiação de {rodada.premiacao} cifras)</td>
                                                                         <td>
-                                                                            <input type="checkbox" name="rodadas" className="form-control" id={rodada._id}/>
+                                                                            <input type="checkbox" name="rodadas" className="form-control" id={rodada._id} />
                                                                         </td>
                                                                     </tr>
                                                                 )
                                                             })}
                                                         </tbody>
                                                     </table>
->>>>>>> 3a561f90b38c089069690f04cdb94911abcdd4ed
                                                 </div>
                                             </div>
                                             <Linha tamanho={10} />
@@ -198,7 +213,7 @@ export default class NovoPatrocinadorScreen extends Component {
                                                 <div className="offset-lg-1 col-lg-10">
                                                     <div className="row">
                                                         <div className="col-lg-6">
-                                                            <button className="btn btn-primary btn-block" type="submit" onClick={this.handlerSubmit}>Cadastrar</button>
+                                                            <button className="btn btn-primary btn-block" type="button" onClick={this.handlerSubmit}>Atualizar</button>
                                                         </div>
                                                         <div className="col-lg-6">
                                                             <button className="btn btn-danger btn-block" type="submit">Cancelar</button>

@@ -10,6 +10,8 @@ import jsonutil from "../../../../util/jsonFormat";
 import Erros from '../../../../ui/components/erros';
 import swal from 'sweetalert2';
 import providerListarCategorias from '../../../../providers/administrador/questoes/obterCategorias';
+import { browserHistory } from "react-router";
+
 export default class VerQuestoesScreen extends Component {
 
     constructor() {
@@ -81,8 +83,11 @@ export default class VerQuestoesScreen extends Component {
         for (var i = 0; i < this.state.questoes.length; i++) {
             if (String(this.state.questoes[i]._id) === String(id_obj)) questao = this.state.questoes[i];
         }
-        localStorage.setItem('questao2edit', JSON.stringify(questao));
-        window.location.href = "/administrador/questoes/editar";
+        browserHistory.push({
+            pathname: '/administrador/questoes/editar',
+            state: { data: questao }
+        })
+        window.location.reload()
     }
 
     async componentDidMount() {
@@ -90,7 +95,7 @@ export default class VerQuestoesScreen extends Component {
         const categorias = await providerListarCategorias.getCategorias();
 
         let categorias_formatado = jsonutil.mutationArrayJson(categorias.data.categorias, ['_id', 'nome'], ['value', 'label']);
-        
+
         await this.setState({
             questoes: resultado_questoes.data.questoes,
             categorias: categorias_formatado

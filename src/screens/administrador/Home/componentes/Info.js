@@ -53,7 +53,7 @@ export default class Info extends Component {
                         <h4 style={{ color: '#212121' }} className="display-1 mb-0">
                             {this.state.numeros.qntdTransacoes}
                         </h4>
-                        <h4 style={{ color: '#212121' }}>Cifras</h4>
+                        <h4 style={{ color: '#212121' }}>Transações de cifras</h4>
                     </center>
                 </div>
             </div>

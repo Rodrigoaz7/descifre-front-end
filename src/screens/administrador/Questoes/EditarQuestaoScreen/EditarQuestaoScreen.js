@@ -15,6 +15,7 @@ import BotaoLoad from '../../../../ui/components/botaoLoad';
 import swal from 'sweetalert2';
 import providerListarCategorias from '../../../../providers/administrador/questoes/obterCategorias';
 
+
 export default class NovaQuestaoScreen extends Component {
 
     constructor() {
@@ -94,7 +95,8 @@ export default class NovaQuestaoScreen extends Component {
         };
     }
     async componentDidMount() {
-        const questao = JSON.parse(localStorage.getItem('questao2edit'));
+        const questao = this.props.location.state.data;
+        console.log(questao)
         if(!questao){
             browserHistory.push('/administrador/questoes/ver')
             window.location.reload()

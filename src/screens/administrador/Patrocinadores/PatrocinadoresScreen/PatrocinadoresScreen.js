@@ -3,24 +3,68 @@
 */
 import React, { Component } from "react";
 import Linha from '../../../../ui/components/linha';
-
+import providerGetPatrocinadores from '../../../../providers/administrador/patrocinadores/listarPatrocinador';
+import Erros from '../../../../ui/components/erros';
+import swal from 'sweetalert2';
+import { browserHistory } from "react-router";
 
 export default class NovoPatrocinadorScreen extends Component {
 
     constructor() {
         super();
         this.state = {
-
+            patrocinadores: [],
+            erros: [],
+            filtro: ""
         };
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         document.title = "Pesquisa de patrocinadores - Tela de administração de$cifre."
+        const resultado = await providerGetPatrocinadores.listarPatrocinadores("");
+        console.log(resultado)
+        this.setState({
+            patrocinadores: resultado.data.patrocinadores
+        });
     }
 
-   
+    handlerChange = (e) => {
+        this.setState({filtro: e.target.value})
+    }
+
+    handlerRedirect = async(e) => {
+        e.preventDefault();
+
+        const id_obj = e.target.id;
+        let patrocinador = null;
+        for (var i = 0; i < this.state.patrocinadores.length; i++) {
+            if (String(this.state.patrocinadores[i]._id) === String(id_obj)) patrocinador = this.state.patrocinadores[i];
+        }
+        browserHistory.push({
+            pathname: '/administrador/patrocinador/ver',
+            state: { data: patrocinador }
+        })
+        window.location.reload()
+    }
+
+    handlerSubmit = async(e) => {
+        e.preventDefault();
+        let resultado = await providerGetPatrocinadores.listarPatrocinadores(this.state.filtro);
+        this.setState({
+            patrocinadores: resultado.data.patrocinadores
+        });
+    }
+
+    handlerSubmit = async(e) => {
+        e.preventDefault();
+        let resultado = await providerGetPatrocinadores.listarPatrocinadores(this.state.filtro);
+        this.setState({
+            patrocinadores: resultado.data.patrocinadores
+        });
+    }
+
     render() {
-    
+
         return (
             <div className="position-relative alt">
                 <section className="section section-shaped section-lg my-0">
@@ -37,26 +81,19 @@ export default class NovoPatrocinadorScreen extends Component {
                                         <Linha tamanho={10} />
                                         <form>
                                             <div className="row">
-                                                <div className="col-lg-10 offset-lg-1">
+                                                <div className="col-lg-9 offset-lg-1">
                                                     <div className="form-group">
-                                                        <input type="text" className="form-control form-control-md form-control-alternative" placeholder="Nome do patrocinador" />
+                                                        <input type="text" className="form-control form-control-md form-control-alternative" placeholder="Nome do patrocinador" onChange={this.handlerChange}/>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-lg-5 offset-lg-1">
+                                                <div className="col-lg-1">
                                                     <div className="form-group">
-                                                        <input type="email" className="form-control form-control-md form-control-alternative" placeholder="Email do patrocinador" />
-                                                    </div>
-                                                </div>
-                                                <div className="col-lg-5">
-                                                    <div className="form-group">
-                                                        <input type="text" className="form-control form-control-md form-control-alternative" placeholder="Tipo de patrocínio" />
+                                                        <button className="btn btn-success btn-sm btn-block form-control form-control-alternative" onClick={this.handlerSubmit}><i className="fa fa-search" arialhidden="true"></i></button>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <Linha tamanho={10}/>
+                                            <Linha tamanho={10} />
                                             <center><h3>Resultado</h3></center>
                                             <br />
                                             <div className="row">
@@ -68,19 +105,23 @@ export default class NovoPatrocinadorScreen extends Component {
                                                                     <tr>
                                                                         <th>Nome</th>
                                                                         <th>Tipo de patrocinador</th>
-                                                                        <th>Tipo de patrocínio</th>
-                                                                        <th>Quantia</th>
+                                                                        <th>Email</th>
+                                                                        <th>Quantia paga</th>
                                                                         <th>Dados</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    <tr>
-                                                                        <td style={{ maxWidth: '100px' }}>Nordestão</td>
-                                                                        <td>Rede alimentícia</td>
-                                                                        <td>Rodada #33</td>
-                                                                        <td>R$ 1.000,00</td>
-                                                                        <td><center><button className="btn btn-primary" type="button">Ver</button></center></td>
-                                                                    </tr>
+                                                                    <Erros erros={this.state.erros} />
+
+                                                                    {this.state.patrocinadores.map((p, index) =>
+                                                                        <tr key={index}>
+                                                                            <td style={{ maxWidth: '100px' }}>{p.nome}</td>
+                                                                            <td>{p.tipo_patrocinador}</td>
+                                                                            <td>{p.email}</td>
+                                                                            <td>R$ {p.quantia_paga}</td>
+                                                                            <td><center><button className="btn btn-primary" type="button" id={p._id} onClick={this.handlerRedirect}>Ver</button></center></td>
+                                                                        </tr>
+                                                                    )}
                                                                 </tbody>
                                                             </table>
                                                         </div>

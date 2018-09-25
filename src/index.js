@@ -71,6 +71,7 @@ ReactDOM.render(
             
             <Route path="/administrador/patrocinador/adicionar" component={Admin.Patrocinadores.NovoPatrocinadorScreen}></Route>
             <Route path="/administrador/patrocinador" component={Admin.Patrocinadores.PatrocinadoresScreen}></Route>
+            <Route path="/administrador/patrocinador/ver" component={Admin.Patrocinadores.VerPatrocinadorScreen}></Route>
 
             <Route path="/administrador/rodada/adicionar" component={Admin.Rodadas.NovaRodadaScreen}></Route>
             <Route path="/administrador/rodada/ver" component={Admin.Rodadas.VerRodadaScreen}></Route>
