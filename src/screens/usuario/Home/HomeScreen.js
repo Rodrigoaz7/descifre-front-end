@@ -3,6 +3,7 @@
 */
 import React, { Component } from "react";
 import providerListarRodadasAbertas from '../../../providers/usuario/rodadas/obterRodadasInicio';
+import utilUser from '../../../util/localStorage';
 
 export default class HomeScreen extends Component {
     constructor() {
@@ -18,9 +19,15 @@ export default class HomeScreen extends Component {
         await this.setState({
             rodadas: rodadas
         });
+        console.log(rodadas)
     }
-
-
+    handleClick = (e) => {
+        e.preventDefault();
+        const idRodada = e.target.value;
+        const usuario = utilUser.getUser();
+        
+        /* Chamar provider de criação de jogo */
+    }
     render() {
         return (
             <div className="position-relative alt">
@@ -49,39 +56,47 @@ export default class HomeScreen extends Component {
                                 <div className="card bg-secondary shadow border-0">
                                     {
                                     this.state.rodadas.length>0 &&
-                                    <div className="card-body px-lg-5 py-lg-5">
-                                        <div className="row">
-                                            <div className="col-lg-12">
-                                                <center>
-                                                    <h4>
-                                                        {"Rodada de abertura".toUpperCase()}
-                                                    </h4>
-                                                </center>
-                                                <center>
-                                                    Abertura: 12/06 às 15:00<br/>
-                                                    Finalização: 15/06 às 15:00
-                                                </center>
-                                                <hr/>
-                                                <center>
-                                                    <h4 style={{color:'green'}}>
-                                                        {"500 cifras".toUpperCase()}
-                                                    </h4>
-                                                </center>
-                                                <hr/>
-                                                <button type="button" className="btn btn-success btn-block">
-                                                    Jogar agora<br/>
-                                                    (GRÁTIS)
-                                                </button>
+                                    this.state.rodadas.map((rodada, index)=>{
+                                        const dataAbertura = new Date(rodada.dataAbertura);
+                                        const dataFinalizacao = new Date(rodada.dataFinalizacao);
+                                        return(
+                                            <div key={index} className="card-body px-lg-5 py-lg-5">
+                                                <div className="row">
+                                                    <div className="col-lg-12">
+                                                        <center>
+                                                            <h4>
+                                                                {rodada.titulo.toUpperCase()}
+                                                            </h4>
+                                                        </center>
+                                                        <center>
+                                                            Abertura: {dataAbertura.toLocaleString()}<br/>
+                                                            Finalização: {dataFinalizacao.toLocaleString()}
+                                                        </center>
+                                                        <hr/>
+                                                        <center>
+                                                            <h4 style={{color:'green'}}>
+                                                                {rodada.premiacao} CIFRAS
+                                                            </h4>
+                                                        </center>
+                                                        <hr/>
+                                                        <button value={rodada._id} onClick={e=>this.handleClick(e)} type="button" className="btn btn-success btn-block">
+                                                            Jogar agora<br/>
+                                                            {rodada.taxa_entrada===0 && <span>(Grátis)</span>}
+                                                            {rodada.taxa_entrada>0 && <span>({rodada.taxa_entrada} Cifras)</span>}
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>}
+                                        )
+                                    })
+                                    }
                                     {
                                     this.state.rodadas.length===0 &&
                                     <div className="card-body px-lg-5 py-lg-5">
                                         <div className="row">
                                             <div className="col-lg-12">
                                                 <center>
-                                                    <img class="img-fluid" alt="Menino triste" src="/img/public/menino-triste.gif"/>
+                                                    <img className="img-fluid" alt="Menino triste" src="/img/public/menino-triste.gif"/>
                                                     <h4 style={{color: '#212121'}}><br/>
                                                         Não exite nenhuma rodada aberta.
                                                     </h4>
