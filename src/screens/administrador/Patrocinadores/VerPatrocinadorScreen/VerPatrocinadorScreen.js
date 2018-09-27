@@ -6,8 +6,10 @@ import Linha from '../../../../ui/components/linha';
 import toastr from "toastr";
 import providerCadastro from '../../../../providers/administrador/patrocinadores/atualizarPatrocinador';
 import providerListarRodadas from '../../../../providers/administrador/rodadas/listarRodada';
+import providerImagem from '../../../../providers/public/imagem/providerImagem';
 import { browserHistory } from "react-router";
 import utilLocalStorage from '../../../../util/localStorage';
+import ImageLoader from 'react-image-file';
 
 export default class NovoPatrocinadorScreen extends Component {
 
@@ -45,11 +47,15 @@ export default class NovoPatrocinadorScreen extends Component {
             nome: patrocinador.nome,
             email: patrocinador.email,
             telefone: patrocinador.telefone,
-            logomarca: patrocinador.logomarca,
             rodadas_patrocinadas: patrocinador.rodadas_patrocinadas,
             tipo_patrocinador: patrocinador.tipo_patrocinador,
             quantia_paga: patrocinador.quantia_paga
         });
+
+        const get_logomarca = await providerImagem.capturarImagem("patrocinador", this.state.id);
+        console.log(get_logomarca.data)
+
+        this.setState({logomarca: get_logomarca.data})
 
         // Verificar rodadas ja patrocinadas anteriormente
         let inputs_rodada = document.getElementsByName("rodadas");
@@ -137,6 +143,8 @@ export default class NovoPatrocinadorScreen extends Component {
                                         </div>
                                         <Linha tamanho={10} />
                                         <form>
+                                            <ImageLoader file={this.state.logomarca} alt='some text'/>
+                                            <img src={this.state.logomarca} name="logomarca"/>
                                             <div className="row">
                                                 <div className="col-lg-10 offset-lg-1">
                                                     <div className="form-group">
