@@ -6,7 +6,22 @@ import React, { Component } from "react";
 import MenuUsuario from '../../ui/Menus/MenuUsuario';
 import Footer from '../../ui/Footer/Footer';
 import { Link } from "react-router";
+import utilUser from "../../util/localStorage";
+
 export default class Padrao extends Component{
+    constructor(){
+        super();
+        this.state ={
+            saldo: 0
+        }
+    }
+    componentWillMount(){
+        let usuario = utilUser.getUser();
+        this.setState({
+            saldo: usuario.quantidade_cifras
+        })
+        
+    }
     render(){
         return(
             <div>
@@ -24,7 +39,7 @@ export default class Padrao extends Component{
                                 <div className="row">
                                 <div className="col-6 collapse-brand">
                                     <Link to='/usuario/' className="navbar-brand mr-lg-5">
-                                        <h2 style={{textTransform: 'capitalize'}}>Saldo: 40,55<span style={{fontSize:'15px', textTransform: 'capitalize'}}> cifras</span></h2>
+                                        <h2 style={{textTransform: 'capitalize'}}>Saldo: {this.state.saldo}<span style={{fontSize:'15px', textTransform: 'capitalize'}}> cifras</span></h2>
                                     </Link>
                                 </div>
                                 <div className="col-6 collapse-close">
