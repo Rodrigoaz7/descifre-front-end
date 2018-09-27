@@ -89,6 +89,7 @@ ReactDOM.render(
         {/*Rotas usuário comum*/}
         <Route path='/usuario/' component={Usuario.Padrao} onEnter={requireUsuario}>
             <IndexRoute component={Usuario.HomeScreen}/>
+            <Route path="/usuario/jogo" component={Usuario.JogoScreen}></Route>
         </Route>
 
         {/* Rotas de erros */}
