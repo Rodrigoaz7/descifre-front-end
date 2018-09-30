@@ -6,8 +6,10 @@ import Linha from '../../../../ui/components/linha';
 import toastr from "toastr";
 import providerCadastro from '../../../../providers/administrador/patrocinadores/atualizarPatrocinador';
 import providerListarRodadas from '../../../../providers/administrador/rodadas/listarRodada';
+import providerImagem from '../../../../providers/public/imagem/providerImagem';
 import { browserHistory } from "react-router";
 import utilLocalStorage from '../../../../util/localStorage';
+import variables from '../../../../variables';
 
 export default class NovoPatrocinadorScreen extends Component {
 
@@ -21,6 +23,7 @@ export default class NovoPatrocinadorScreen extends Component {
             email: '',
             telefone: '',
             tipo_patrocinador: '',
+            logoInicial: '',
             rodadas_patrocinadas: [],
             quantia_paga: 0
         };
@@ -45,11 +48,14 @@ export default class NovoPatrocinadorScreen extends Component {
             nome: patrocinador.nome,
             email: patrocinador.email,
             telefone: patrocinador.telefone,
-            logomarca: patrocinador.logomarca,
             rodadas_patrocinadas: patrocinador.rodadas_patrocinadas,
             tipo_patrocinador: patrocinador.tipo_patrocinador,
-            quantia_paga: patrocinador.quantia_paga
+            quantia_paga: patrocinador.quantia_paga,
+            logoInicial: patrocinador.logomarca
         });
+
+        // const get_logomarca = await providerImagem.capturarImagem("patrocinador", this.state.id);  
+        // this.setState({logomarca: get_logomarca.data})
 
         // Verificar rodadas ja patrocinadas anteriormente
         let inputs_rodada = document.getElementsByName("rodadas");
@@ -65,7 +71,7 @@ export default class NovoPatrocinadorScreen extends Component {
     }
 
     handleChange = (e) => {
-        this.setState({ FileInputValue: e.target.files[0].name })
+        this.setState({ FileInputValue: e.target.files[0].name, logomarca: e.target.files[0] })
     }
 
     handlerSubmit = async (e) => {
@@ -88,6 +94,7 @@ export default class NovoPatrocinadorScreen extends Component {
             tipo_patrocinador: this.state.tipo_patrocinador,
             quantia_paga: this.state.quantia_paga,
             rodadas_patrocinadas: this.state.rodadas_patrocinadas,
+            logomarca: this.state.logomarca,
             token: utilLocalStorage.getToken()
         };
 
@@ -137,20 +144,22 @@ export default class NovoPatrocinadorScreen extends Component {
                                         </div>
                                         <Linha tamanho={10} />
                                         <form>
+                                           
                                             <div className="row">
-                                                <div className="col-lg-10 offset-lg-1">
+                                                <div className="col-lg-5 offset-lg-1">
                                                     <div className="form-group">
                                                         <input type="text" className="form-control form-control-md form-control-alternative" placeholder="Nome do patrocinador" value={this.state.nome} onChange={this.handlerNome} />
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-lg-5 offset-lg-1">
+                                                 <div className="col-lg-5">
                                                     <div className="form-group">
                                                         <input type="text" className="form-control form-control-md form-control-alternative" placeholder="Tipo de patrocinador" onChange={this.handlerTipo} value={this.state.tipo_patrocinador} />
                                                     </div>
                                                 </div>
-                                                <div className="col-lg-5">
+                                            </div>
+                                            <div className="row justify-content-center">
+                                               
+                                                <div className="col-lg-6">
                                                     <div className="form-group">
                                                         <div className="input-group">
 
@@ -161,6 +170,19 @@ export default class NovoPatrocinadorScreen extends Component {
                                                             </label>
 
                                                             <input type="text" className="form-control" value={this.state.FileInputValue}/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row justify-content-center">
+                                                <div className="col-lg-5">
+                                                    <div className="row">
+                                                        <div className="column">
+                                                            {this.state.logoInicial !== '' ? ( 
+                                                                <a href={`${variables.host}${variables.urlApi}/imagem/${utilLocalStorage.getToken()}?tipo=`+'patrocinador'+'&id='+this.state.id}>
+                                                                    <img src={`${variables.host}${variables.urlApi}/imagem/${utilLocalStorage.getToken()}?tipo=`+'patrocinador'+'&id='+this.state.id} name="logomarca" className="img-fluid"/>
+                                                                </a>
+                                                            ): null}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -189,7 +211,7 @@ export default class NovoPatrocinadorScreen extends Component {
                                             <center><h4>Rodadas Abertas</h4></center>
                                             <br />
                                             <div className="row justify-content-center">
-                                                <div className="col-lg-5">
+                                                <div className="col-lg-7">
 
                                                     <table className="table table-striped">
                                                         <tbody className="">

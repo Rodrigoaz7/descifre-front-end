@@ -3,7 +3,6 @@ import axios from 'axios';
 
 const realizarCadastro = async (data) => {
     let dataResponse;
-    console.log(data)
     let data_formatada = new FormData();
     data_formatada.append('nome', data.nome);
     data_formatada.append('email', data.email);
@@ -13,6 +12,7 @@ const realizarCadastro = async (data) => {
     data_formatada.append('quantia_paga', data.quantia_paga);
     data_formatada.append('logomarca', data.logomarca);
     data_formatada.append('token', data.token);
+    
     try {
         dataResponse = await axios.post(`${variables.urlApi}/administrador/patrocinadores`, data_formatada, {
             headers: {
