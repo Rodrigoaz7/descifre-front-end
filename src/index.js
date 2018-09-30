@@ -92,6 +92,7 @@ ReactDOM.render(
             <Route path="/usuario/jogo" component={Usuario.JogoScreen}></Route>
             <Route path="/usuario/resultados" component={Usuario.ResultadoScreen}></Route>
             <Route path="/usuario/classificacao/:idRodada" component={Usuario.ClassificacaoScreen}></Route>
+            <Route path="/usuario/historico/" component={Usuario.HistoricoScreen}></Route>
         </Route>
 
         {/* Rotas de erros */}

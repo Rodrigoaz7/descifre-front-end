@@ -8,7 +8,10 @@ export default class MenuUsuario extends Component{
                     <Link to='/usuario/' className="nav-link">Início</Link>
                 </li>
                 <li className="nav-item">
-                    <Link to='/' className="nav-link">Histórico de rodadas</Link>
+                    <Link to='/usuario/treino/' className="nav-link">Treino</Link>
+                </li>
+                <li className="nav-item">
+                    <Link to='/usuario/historico/' className="nav-link">Histórico de rodadas</Link>
                 </li>
                 <li className="nav-item">
                     <Link to='/usuario/comprar' className="nav-link">Comprar cifras</Link>

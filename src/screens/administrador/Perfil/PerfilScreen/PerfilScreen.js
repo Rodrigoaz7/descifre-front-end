@@ -3,7 +3,6 @@
 */
 import React, { Component } from "react";
 import Linha from '../../../../ui/components/linha';
-import { Link } from "react-router";
 import utilLocalStorage from '../../../../util/localStorage';
 import providerPerfil from '../../../../providers/administrador/perfil/atualizarPerfil';
 import swal from 'sweetalert2';
@@ -148,8 +147,8 @@ export default class PerfilScreen extends Component {
                                         <div className="offset-lg-4 order-lg-1 col-lg-3 order-lg-2">
                                             <div className="card-profile-image">
                                                 {this.state.fotoInicial !== '' && this.state.fotoInicial !== undefined  ? (
-                                                    <a href={`${variables.host}${variables.urlApi}/imagem/${utilLocalStorage.getToken()}?tipo=` + 'usuario' + '&id=' + this.state.idPessoa}>
-                                                        <img src={`${variables.host}${variables.urlApi}/imagem/${utilLocalStorage.getToken()}?tipo=` + 'usuario' + '&id=' + this.state.idPessoa} name="logomarca" className="img-fluid rounded-circle" style={{ width: '100%', marginTop: '-15%', boxShadow: '0 4px 10px 0' }} alt="imagem-perfil" />
+                                                    <a href={`${variables.host}${variables.urlApi}/imagem/${utilLocalStorage.getToken()}?tipo=usuario&id=${this.state.idPessoa}`}>
+                                                        <img src={`${variables.host}${variables.urlApi}/imagem/${utilLocalStorage.getToken()}?tipo=usuario&id=${this.state.idPessoa}`} name="logomarca" className="img-fluid rounded-circle" style={{ width: '100%', marginTop: '-15%', boxShadow: '0 4px 10px 0' }} alt="imagem-perfil" />
                                                     </a>
                                                 ) :
                                                     <img src="/img/public/person.png" className="rounded-circle" style={{ width: '100%', marginTop: '-15%', boxShadow: '0 4px 10px 0' }} alt="imagem-perfil" />

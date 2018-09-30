@@ -6,7 +6,6 @@ import Linha from '../../../../ui/components/linha';
 import toastr from "toastr";
 import providerCadastro from '../../../../providers/administrador/patrocinadores/atualizarPatrocinador';
 import providerListarRodadas from '../../../../providers/administrador/rodadas/listarRodada';
-import providerImagem from '../../../../providers/public/imagem/providerImagem';
 import { browserHistory } from "react-router";
 import utilLocalStorage from '../../../../util/localStorage';
 import variables from '../../../../variables';
@@ -179,8 +178,8 @@ export default class NovoPatrocinadorScreen extends Component {
                                                     <div className="row">
                                                         <div className="column">
                                                             {this.state.logoInicial !== '' ? ( 
-                                                                <a href={`${variables.host}${variables.urlApi}/imagem/${utilLocalStorage.getToken()}?tipo=`+'patrocinador'+'&id='+this.state.id}>
-                                                                    <img src={`${variables.host}${variables.urlApi}/imagem/${utilLocalStorage.getToken()}?tipo=`+'patrocinador'+'&id='+this.state.id} name="logomarca" className="img-fluid"/>
+                                                                <a href={`${variables.host}${variables.urlApi}/imagem/${utilLocalStorage.getToken()}?tipo=patrocinador&id=${this.state.id}`}>
+                                                                <img alt="Imagem perfil" src={`${variables.host}${variables.urlApi}/imagem/${utilLocalStorage.getToken()}?tipo=patrocinador&id=${this.state.id}`} name="logomarca" className="img-fluid"/>
                                                                 </a>
                                                             ): null}
                                                         </div>

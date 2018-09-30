@@ -98,7 +98,7 @@ export default class ResultadoScreen extends Component {
                                         <hr/>
                                         <div className="row">
                                             <div className="col-lg-12">
-                                                <div class="table-responsive">
+                                                <div className="table-responsive">
                                                     <table className="table">
                                                         <thead>
                                                             <tr>

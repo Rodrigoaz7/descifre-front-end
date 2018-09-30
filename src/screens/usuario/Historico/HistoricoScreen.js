@@ -2,61 +2,38 @@
 *   Autor: Marcus Dantas
 */
 import React, { Component } from "react";
-import providerListarRodadasAbertas from '../../../providers/usuario/rodadas/obterRodadasInicio';
 import utilUser from '../../../util/localStorage';
-import providerCriarQuiz from '../../../providers/usuario/quiz/criarQuiz';
 import {browserHistory} from "react-router/lib";
-import Swal from 'sweetalert2';
+import providerBuscarRodadasEmQuiz from '../../../providers/usuario/quiz/buscarRodadasEmQuiz';
 
 export default class HomeScreen extends Component {
     constructor() {
         super();
         this.state = {
             rodadas: [],
-            idUsuario: ''
+            quizzes: []
         }
     }
     async componentDidMount() {
-        document.title = "Home usuário - Bem vindo ao De$cifre.";
-        const rodadasPost = await providerListarRodadasAbertas.listarRodadas();
-        const rodadas = rodadasPost.data.rodadas;
+        document.title = "Histórico de rodadas - Todas as rodadas que você já jogou.";
         let usuario = utilUser.getUser();
+        const responseQuiz = await providerBuscarRodadasEmQuiz.obterQuizzes(usuario._id);
+        let rodadas = responseQuiz.data.quizzes.map(quiz=>{return quiz.idRodada});
         
         await this.setState({
             rodadas: rodadas,
-            idUsuario: usuario._id
+            quizzes: responseQuiz.data.quizzes
         });
     }
     handleClick = async (e) => {
         e.preventDefault();
-        const idRodada = e.target.value;
-        const usuario = utilUser.getUser();
-        const requestCriarQuiz = await providerCriarQuiz.criarQuiz({idRodada: idRodada, idUsuario: usuario._id});
-        if(requestCriarQuiz.data!==undefined && requestCriarQuiz.data.status && !requestCriarQuiz.data.resultados){
-            localStorage.setItem('idQuizAtivo', requestCriarQuiz.data.idQuiz);
-
-            if(requestCriarQuiz.data.valorTransacao!==undefined){
-                usuario.quantidade_cifras = parseFloat(usuario.quantidade_cifras) - parseFloat(requestCriarQuiz.data.valorTransacao);
-                localStorage.setItem('descifre_userData', JSON.stringify(usuario));
-            }
-            console.log(usuario.quantidade_cifras)
-            if(localStorage.getItem('jogoDescifre')!== null) localStorage.removeItem('jogoDescifre');
-            browserHistory.push('/usuario/jogo');
-            window.scroll(0,-1);
-        } else if(requestCriarQuiz.data!==undefined && requestCriarQuiz.data.status && requestCriarQuiz.data.resultados){
-            localStorage.setItem('resultadoQuiz',JSON.stringify(requestCriarQuiz.data.quiz.jogadas));
-            localStorage.setItem('idRodadaEntrar', idRodada);
-            browserHistory.push('/usuario/resultados');
-        }else{
-            Swal({
-                type: 'error',
-                title: 'Oops...',
-                text: `${requestCriarQuiz.msg}`,
-                footer: '<a href>Voltar para tela de rodadas</a>'
-            });
-            return;
-        }
-        /* Chamar provider de criação de jogo */
+        let idRodada = e.target.value;
+        let index = this.state.quizzes.findIndex(x=>x.idRodada._id===idRodada);
+        let jogadas = this.state.quizzes[index].jogadas;
+        localStorage.setItem('resultadoQuiz',JSON.stringify(jogadas));
+        localStorage.setItem('idRodadaEntrar', idRodada);
+        browserHistory.push('/usuario/resultados');
+        window.location.reload();
     }
     render() {
         return (
@@ -90,9 +67,8 @@ export default class HomeScreen extends Component {
                                             <div className="row">
                                                 <div className="col-lg-12">
                                                     <center>
-                                                        <img className="img-fluid" alt="Menino triste" src="/img/public/menino-triste.gif"/>
                                                         <h4 style={{color: '#212121'}}><br/>
-                                                            Não exite nenhuma rodada aberta.
+                                                            Você ainda não jogou nenhuma rodada
                                                         </h4>
                                                     </center>
                                                 </div>
@@ -103,8 +79,6 @@ export default class HomeScreen extends Component {
                                     
                                     this.state.rodadas.length>0 &&
                                     this.state.rodadas.map((rodada, index)=>{
-                                        const dataAbertura = new Date(rodada.dataAbertura);
-                                        const dataFinalizacao = new Date(rodada.dataFinalizacao);
                                         return(
                                             <div key={index}>
                                                 <div className="card bg-secondary shadow border-0">
@@ -116,10 +90,6 @@ export default class HomeScreen extends Component {
                                                                         {rodada.titulo.toUpperCase()}
                                                                     </h4>
                                                                 </center>
-                                                                <center>
-                                                                    Abertura: {dataAbertura.toLocaleString()}<br/>
-                                                                    Finalização: {dataFinalizacao.toLocaleString()}
-                                                                </center>
                                                                 <hr/>
                                                                 <center>
                                                                     <h4 style={{color:'green'}}>
@@ -127,10 +97,8 @@ export default class HomeScreen extends Component {
                                                                     </h4>
                                                                 </center>
                                                                 <hr/>
-                                                                <button value={rodada._id} onClick={e=>this.handleClick(e)} type="button" className="btn btn-success btn-block">
-                                                                    Jogar agora<br/>
-                                                                    {rodada.taxa_entrada===0 && <span>(Grátis)</span>}
-                                                                    {rodada.taxa_entrada>0 && <span>({rodada.taxa_entrada} Cifras)</span>}
+                                                                <button value={rodada._id} onClick={e=>this.handleClick(e)} type="button" className="btn btn-default btn-block">
+                                                                    Ver respostas
                                                                 </button>
                                                             </div>
                                                         </div>
