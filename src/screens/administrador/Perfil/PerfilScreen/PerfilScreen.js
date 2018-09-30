@@ -112,7 +112,12 @@ export default class PerfilScreen extends Component {
             });            
         }
     }
-
+    handlePermissao = (e) =>{
+        e.preventDefault();
+        let permissao = e.target.value==="Public" ? "usuario":e.target.value;
+        browserHistory.push(`/${permissao}/`);
+        window.location.reload();
+    }
     render() {
         return (
             <div className="position-relative">
@@ -135,7 +140,7 @@ export default class PerfilScreen extends Component {
                                             <div className="card-profile-actions py-4 mt-lg-0">
                                                 {
                                                     this.state.permissoes.map((permissao, index) => {
-                                                        return (<button key={index} className="btn btn-sm btn-default mr-4 float-right">{permissao}</button>)
+                                                        return (<button onClick={this.handlePermissao} key={index} value={permissao} className="btn btn-sm btn-default mr-4 float-right">{permissao}</button>)
                                                     })
                                                 }
                                             </div>
