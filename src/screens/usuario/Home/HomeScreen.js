@@ -12,27 +12,41 @@ export default class HomeScreen extends Component {
     constructor() {
         super();
         this.state = {
-            rodadas: []
+            rodadas: [],
+            idUsuario: '',
+            carregando: false
         }
     }
     async componentDidMount() {
         document.title = "Home usuário - Bem vindo ao De$cifre.";
         const rodadasPost = await providerListarRodadasAbertas.listarRodadas();
         const rodadas = rodadasPost.data.rodadas;
+        let usuario = utilUser.getUser();
+        
         await this.setState({
-            rodadas: rodadas
+            rodadas: rodadas,
+            idUsuario: usuario._id
+        });
+        await this.setState({
+            carregando: true
         });
     }
     handleClick = async (e) => {
         e.preventDefault();
         const idRodada = e.target.value;
         const usuario = utilUser.getUser();
+        console.log(usuario)
         const requestCriarQuiz = await providerCriarQuiz.criarQuiz({idRodada: idRodada, idUsuario: usuario._id});
-        if(requestCriarQuiz.data!==undefined && requestCriarQuiz.data.status){
+       
+        if(requestCriarQuiz.data!==undefined && requestCriarQuiz.data.status && !requestCriarQuiz.data.resultados){
             localStorage.setItem('idQuizAtivo', requestCriarQuiz.data.idQuiz);
             if(localStorage.getItem('jogoDescifre')!== null) localStorage.removeItem('jogoDescifre');
             browserHistory.push('/usuario/jogo');
             window.scroll(0,-1);
+        } else if(requestCriarQuiz.data!==undefined && requestCriarQuiz.data.status && requestCriarQuiz.data.resultados){
+            localStorage.setItem('resultadoQuiz',JSON.stringify(requestCriarQuiz.data.quiz.jogadas));
+            localStorage.setItem('idRodadaEntrar', idRodada);
+            browserHistory.push('/usuario/resultados');
         }else{
             Swal({
                 type: 'error',
@@ -69,8 +83,23 @@ export default class HomeScreen extends Component {
                     <div className="container-fluid pt-lg-md">
                         <div className="row justify-content-center">
                             <div className="col-lg-12">
-                                
+                                {
+                                    !this.state.carregando &&
+                                    this.state.rodadas.length===0 &&
+                                    <div className="card-body px-lg-5 py-lg-5">
+                                        <div className="row">
+                                            <div className="col-lg-12">
+                                                <center>
+                                                    <img className="img-fluid" alt="Menino triste" src="/img/public/menino-triste.gif"/>
+                                                    <h4 style={{color: '#212121'}}><br/>
+                                                        Não exite nenhuma rodada aberta.
+                                                    </h4>
+                                                </center>
+                                            </div>
+                                        </div>
+                                    </div>}
                                     {
+                                    
                                     this.state.rodadas.length>0 &&
                                     this.state.rodadas.map((rodada, index)=>{
                                         const dataAbertura = new Date(rodada.dataAbertura);
@@ -111,20 +140,7 @@ export default class HomeScreen extends Component {
                                         )
                                     })
                                     }
-                                    {
-                                    this.state.rodadas.length===0 &&
-                                    <div className="card-body px-lg-5 py-lg-5">
-                                        <div className="row">
-                                            <div className="col-lg-12">
-                                                <center>
-                                                    <img className="img-fluid" alt="Menino triste" src="/img/public/menino-triste.gif"/>
-                                                    <h4 style={{color: '#212121'}}><br/>
-                                                        Não exite nenhuma rodada aberta.
-                                                    </h4>
-                                                </center>
-                                            </div>
-                                        </div>
-                                    </div>}
+                                    
                                 </div>
                                 <br/>
                                 <br/>

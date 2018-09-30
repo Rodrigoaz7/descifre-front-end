@@ -8,13 +8,14 @@ import Slide from "./Componentes/Slide";
 
 export default class TelaInicial extends Component {
     constructor() {
+        document.title = "De$cifre - Ganhe cifras que podem ser trocadas por dinheiro";
         super();
         this.state = {
             
         }
     }
     componentDidMount() {
-        document.title = "De$cifre - Ganhe cifras que podem ser trocadas por dinheiro";
+        
         
     }
     render() {

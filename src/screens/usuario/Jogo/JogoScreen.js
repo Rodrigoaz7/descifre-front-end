@@ -5,7 +5,10 @@ import React, { Component } from "react";
 import utilUser from '../../../util/localStorage';
 import ReactCountdownClock from 'react-countdown-clock';
 import providerQuestaoAleatoria from '../../../providers/usuario/questao/providerQuestaoAleatoria';
+import providerProcessarQuiz from '../../../providers/usuario/quiz/processarQuiz';
 import Swal from 'sweetalert2';
+import { browserHistory } from "react-router";
+
 export default class JogoScreen extends Component {
     constructor() {
         super();
@@ -22,14 +25,20 @@ export default class JogoScreen extends Component {
         if(localStorage.getItem('idQuizAtivo')!==undefined) idQuiz = localStorage.getItem('idQuizAtivo');
         let usuario = utilUser.getUser();
         let requestQuestao = await providerQuestaoAleatoria.questaoAleatoria({idQuiz: idQuiz, idUsuario: usuario._id});
-        if(requestQuestao.data!==undefined && requestQuestao.data.status){
+        if(requestQuestao.data!==undefined && requestQuestao.data.status && !requestQuestao.data.finalizado){
             await this.setState({
                 questao:[
                     requestQuestao.data.questao
                 ]
             });
         }else if(requestQuestao.finalizado){
-            // Direcionar para tela de pontuação e fazer requisição
+            let questoes = [];
+            if(localStorage.getItem('jogoDescifre')!==null) questoes = JSON.parse(localStorage.getItem('jogoDescifre'));
+            
+            const requestProcessarQuiz = await providerProcessarQuiz.processarQuiz({questoes, idQuiz});
+            localStorage.setItem('resultadoQuiz',JSON.stringify(requestProcessarQuiz.data.resultado));
+            browserHistory.push('/usuario/resultados');
+            window.location.reload();
         }
     }
 
@@ -51,6 +60,7 @@ export default class JogoScreen extends Component {
     }
     handleClick = async (e) => {
         e.preventDefault();
+        // Caso nenhum questão selecionada.
         if(this.state.respostaSelecionada===null || this.state.respostaSelecionada===""){
             Swal({
                 type: 'error',
@@ -60,6 +70,7 @@ export default class JogoScreen extends Component {
             });
             return;
         }
+        // Array de jogadas
         let jogadas = [];
         if(localStorage.getItem('jogoDescifre')!==null) jogadas = JSON.parse(localStorage.getItem('jogoDescifre'));
         
@@ -68,18 +79,19 @@ export default class JogoScreen extends Component {
             alternativa: this.state.respostaSelecionada
         }
         
-
-        jogadas.push(item);
-        localStorage.setItem('jogoDescifre', JSON.stringify(jogadas));
-        await this.setState({
-            respostaSelecionada:null,
-            perguntasRespondidas: jogadas.length
-        });
+        if(!jogadas.find(x => x.idQuestao === this.state.questao[0]._id)){
+            jogadas.push(item);
+            localStorage.setItem('jogoDescifre', JSON.stringify(jogadas));
+            await this.setState({
+                respostaSelecionada:null,
+                perguntasRespondidas: jogadas.length
+            });
+        }
         await this.gerarNovaQuestao();
         await this.setState({
             tempoQuestao: 30,
             completions: this.state.completions + 1
-        });
+        });    
     }
     render() {
         return (

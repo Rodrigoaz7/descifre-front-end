@@ -216,7 +216,7 @@ export default class NovaRodadaScreen extends Component {
                                                                 <input id="rangeTempo" className="form-control " placeholder="Duração da rodada em min"
                                                                     value={this.state.tempoParaResposta}
                                                                     onChange={input => this.handleTempo(input)}
-                                                                    type="range" min="5" max="25" />
+                                                                    type="range" min="1" max="25" />
                                                             </div>
 
                                                             <div style={{ padding: "10px" }} className="col-lg-2">
