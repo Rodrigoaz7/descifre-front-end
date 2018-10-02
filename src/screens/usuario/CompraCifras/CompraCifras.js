@@ -10,30 +10,26 @@ export default class HomeScreen extends Component {
     constructor() {
         super();
         this.state = {
-            rodadas: [],
-            quizzes: []
+            quantidadeCifras: 0
         }
     }
     async componentDidMount() {
-        document.title = "Histórico de rodadas - Todas as rodadas que você já jogou.";
-        let usuario = utilUser.getUser();
-        const responseQuiz = await providerBuscarRodadasEmQuiz.obterQuizzes(usuario._id);
-        let rodadas = responseQuiz.data.quizzes.map(quiz => { return quiz.idRodada });
-
-        await this.setState({
-            rodadas: rodadas,
-            quizzes: responseQuiz.data.quizzes
-        });
+        document.title = "Compra de cifras - compre suas próprias cifras.";
     }
+
+    handleCalculaCifras = async (e) => {
+        let preco = e.target.value;
+        if(preco === ""){
+            this.setState({ quantidadeCifras: 0 });
+        }else {
+            //posso chamar alguma funcao do back para calcular a quantidade de cifras, p.e 10
+            this.setState({ quantidadeCifras: parseInt(parseFloat(preco)*10) });
+        }
+    }
+
     handleClick = async (e) => {
         e.preventDefault();
-        let idRodada = e.target.value;
-        let index = this.state.quizzes.findIndex(x => x.idRodada._id === idRodada);
-        let jogadas = this.state.quizzes[index].jogadas;
-        localStorage.setItem('resultadoQuiz', JSON.stringify(jogadas));
-        localStorage.setItem('idRodadaEntrar', idRodada);
-        browserHistory.push('/usuario/resultados');
-        window.location.reload();
+        // Aqui sera redirecionado para o pagseguro
     }
     render() {
         return (
@@ -83,15 +79,16 @@ export default class HomeScreen extends Component {
                                                 </select>
                                             </div>
                                             <div className="col-lg-6">
-                                                Escolha o valor da compra em R$
-                                                <select className="form-control">
-                                                    <option>
-                                                        R$ 100.00 (150 cifras)
-                                                    </option>
-                                                    <option>
-                                                        R$ 250.00 (350 cifras)
-                                                    </option>
-                                                </select>
+                                                Valor da compra que você deseja pagar (em R$)
+                                                <input type="text" className="form-control" onChange={this.handleCalculaCifras} />
+                                                <br />
+                                                {
+                                                this.state.quantidadeCifras > 0 && 
+                                                    (
+                                                        <center><h6>Esta quantidade resultará em {this.state.quantidadeCifras} cifras ! </h6>
+                                                        </center>
+                                                    )
+                                                }
                                             </div>
                                         </div>
                                         <hr />
