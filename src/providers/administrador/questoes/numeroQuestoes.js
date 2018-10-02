@@ -2,12 +2,11 @@ import variables from '../../../variables';
 import axios from 'axios';
 import utilLocalStorage from '../../../util/localStorage';
 
-const getQuestoes = async (categoria, limite) => {
+const numeroQuestoes = async (categoria) => {
     let dataResponse;
     let token = utilLocalStorage.getToken();
     try{
-
-        dataResponse = await axios.get(`${variables.urlApi}/administrador/questoes/${token}?categoria=`+categoria+'&limite='+limite);
+        dataResponse = await axios.get(`${variables.urlApi}/administrador/contadores/questao/${token}?categoria=`+categoria);
     }catch(error){
         dataResponse = error.response.data;
     }
@@ -15,4 +14,4 @@ const getQuestoes = async (categoria, limite) => {
     return dataResponse;
 }
 
-export default { getQuestoes };
+export default { numeroQuestoes };

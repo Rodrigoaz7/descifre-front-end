@@ -10,7 +10,9 @@ import jsonutil from "../../../../util/jsonFormat";
 import Erros from '../../../../ui/components/erros';
 import swal from 'sweetalert2';
 import providerListarCategorias from '../../../../providers/administrador/questoes/obterCategorias';
+import providerQuantidadeQuestoes from '../../../../providers/administrador/questoes/numeroQuestoes';
 import { browserHistory } from "react-router";
+import Pagination from "react-ultimate-pagination-bootstrap-4";
 
 export default class VerQuestoesScreen extends Component {
 
@@ -18,10 +20,12 @@ export default class VerQuestoesScreen extends Component {
         super();
 
         this.state = {
-            selectedOption: null,
+            selectedOption: "",
             questoes: [],
             categorias: [],
-            erros: []
+            erros: [],
+            pagina: 1,
+            total: 0
         };
     }
 
@@ -30,13 +34,11 @@ export default class VerQuestoesScreen extends Component {
     *   Autor: Marcus Dantas
     */
     handleChange = async (selectedOption) => {
-        this.setState({ selectedOption });
-        const resultado_questoes = await providerListarQuestoes.getQuestoes(selectedOption.value);
-        console.log(`Option selected:`, resultado_questoes.data.questoes);
-        //if(resultado_questoes.data.questoes.length > 0){
+        this.setState({ selectedOption, pagina: 1 });
+        const resultado_questoes = await providerListarQuestoes.getQuestoes(selectedOption.value, 1);
         this.setState({ questoes: resultado_questoes.data.questoes });
-        //}
-        console.log(this.state.categorias)
+        const quantidade_questoes = await providerQuantidadeQuestoes.numeroQuestoes(selectedOption.value);
+        this.setState({total: quantidade_questoes.data.quantidadeQuestoes})
     }
 
     handleClickDelete = async (e) => {
@@ -90,15 +92,29 @@ export default class VerQuestoesScreen extends Component {
         window.location.reload()
     }
 
-    async componentDidMount() {
-        const resultado_questoes = await providerListarQuestoes.getQuestoes("");
-        const categorias = await providerListarCategorias.getCategorias();
+    handlePageChange = async (pageNumber) => {
+        let resultado_questoes = [];
+        await this.setState({ pagina: pageNumber });
+        if (this.state.selectedOption === "") {
+            resultado_questoes = await providerListarQuestoes.getQuestoes("", this.state.pagina);
+        } else {
+            resultado_questoes = await providerListarQuestoes.getQuestoes(this.state.selectedOption.value, this.state.pagina);
+        }
+        console.log(resultado_questoes)
+        await this.setState({ questoes: resultado_questoes.data.questoes })
+    }
 
+    async componentDidMount() {
+        const resultado_questoes = await providerListarQuestoes.getQuestoes("", 1);
+        const categorias = await providerListarCategorias.getCategorias();
+        const total = await providerQuantidadeQuestoes.numeroQuestoes("");
+        console.log(total)
         let categorias_formatado = jsonutil.mutationArrayJson(categorias.data.categorias, ['_id', 'nome'], ['value', 'label']);
 
         await this.setState({
             questoes: resultado_questoes.data.questoes,
-            categorias: categorias_formatado
+            categorias: categorias_formatado,
+            total: total.data.quantidadeQuestoes
         });
 
         document.title = "Ver questões - Tela de administração de$cifre."
@@ -126,7 +142,7 @@ export default class VerQuestoesScreen extends Component {
 
                                         <div className="row">
                                             <div className="col-lg-12">
-                                                <div className="form-group" style={{height: '40vh'}}>
+                                                <div className="form-group" style={{ height: '40vh' }}>
                                                     <Select
                                                         value={selectedOption}
                                                         onChange={this.handleChange}
@@ -156,9 +172,9 @@ export default class VerQuestoesScreen extends Component {
                                                 </div>
                                             </div>
                                         }
-                                        
+
                                         {this.state.questoes.length > 0 &&
-                                            <div style={{marginTop: '-200px'}}>
+                                            <div style={{ marginTop: '-200px' }}>
                                                 <div className="row">
                                                     <div className="col-lg-12">
                                                         <div className="form-group">
@@ -193,6 +209,14 @@ export default class VerQuestoesScreen extends Component {
 
                                                                     </tbody>
                                                                 </table>
+                                                                <div className="row justify-content-center">
+
+                                                                    <Pagination
+                                                                        currentPage = {this.state.pagina}
+                                                                        totalPages = {this.state.total}
+                                                                        onChange={this.handlePageChange}
+                                                                    />
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
