@@ -2,13 +2,13 @@
 *   Autor: Rodrigo Azevedo
 */
 import React, { Component } from "react";
-import Linha from '../../../../ui/components/linha';
-import utilLocalStorage from '../../../../util/localStorage';
-import providerPerfil from '../../../../providers/administrador/perfil/atualizarPerfil';
+import Linha from '../../../ui/components/linha';
+import utilLocalStorage from '../../../util/localStorage';
+import providerPerfil from '../../../providers/administrador/perfil/atualizarPerfil';
 import swal from 'sweetalert2';
 import { browserHistory } from "react-router";
-import Erros from '../../../../ui/components/erros';
-import variables from '../../../../variables';
+import Erros from '../../../ui/components/erros';
+import variables from '../../../variables';
 
 export default class PerfilScreen extends Component {
     constructor() {
@@ -109,7 +109,7 @@ export default class PerfilScreen extends Component {
         };
 
         let postCadastro = await providerPerfil.realizarAtualizacao(data);
-        console.log(postCadastro)
+        console.log(data)
         if (!postCadastro.status) {
             this.setState({ erros: postCadastro.erros });
         } else {
@@ -122,22 +122,38 @@ export default class PerfilScreen extends Component {
                 localStorage.setItem('descifre_tokenUsuario', JSON.stringify(postCadastro.data.token));
                 localStorage.setItem('descifre_userData', JSON.stringify(postCadastro.data.userInfor));
 
-                browserHistory.push('/administrador/perfil');
-                window.location.reload();
+                //browserHistory.push('/usuario/perfil');
+                //window.location.reload();
             });
         }
     }
-    handlePermissao = (e) =>{
+    handlePermissao = (e) => {
         e.preventDefault();
-        let permissao = e.target.value==="Public" ? "usuario":e.target.value;
+        let permissao = e.target.value === "Public" ? "usuario" : e.target.value;
         browserHistory.push(`/${permissao}/`);
         window.location.reload();
     }
     render() {
         return (
-            <div className="position-relative">
+            <div className="position-relative alt">
                 <section className="section section-shaped section-lg my-0">
-                    <div className="shape shape-style-1 bg-gradient-dark">
+                    <div className="shape shape-style-1 bg-gradient-default">
+                        <span className="span-150"></span>
+                        <span className="span-50"></span>
+                        <span className="span-50"></span>
+                        <span className="span-75"></span>
+                        <span className="span-100"></span>
+                        <span className="span-75"></span>
+                        <span className="span-50"></span>
+                        <span className="span-100"></span>
+                        <span className="span-50"></span>
+                        <span className="span-100"></span>
+                        <span className="span-75"></span>
+                        <span className="span-100"></span>
+                        <span className="span-75"></span>
+                        <span className="span-50"></span>
+                        <span className="span-100"></span>
+                        <span className="span-50"></span>
                     </div>
                     <form>
                         <div className="container pt-lg-md" style={{ marginTop: '20%' }}>
@@ -146,9 +162,9 @@ export default class PerfilScreen extends Component {
                                     <div className="row justify-content-center">
                                         <div className="offset-lg-4 order-lg-1 col-lg-3 order-lg-2">
                                             <div className="card-profile-image">
-                                                {this.state.fotoInicial !== '' && this.state.fotoInicial !== undefined  ? (
+                                                {this.state.fotoInicial !== '' && this.state.fotoInicial !== undefined ? (
                                                     <a href={`${variables.host}${variables.urlApi}/imagem/${utilLocalStorage.getToken()}?tipo=usuario&id=${this.state.idPessoa}`}>
-                                                        <img src={`${variables.host}${variables.urlApi}/imagem/${utilLocalStorage.getToken()}?tipo=usuario&id=${this.state.idPessoa}`} name="logomarca" className="img-fluid rounded-circle" style={{ width: '100%', marginTop: '-15%', boxShadow: '0 4px 10px 0' }} alt="imagem-perfil" />
+                                                        <img src={`${variables.host}${variables.urlApi}/imagem/${utilLocalStorage.getToken()}?tipo=usuario&id=${this.state.idPessoa}`} name="logomarca" className="img-fluid rounded-circle" style={{ maxHeight: '250px', width: '100%', marginTop: '-15%', boxShadow: '0 4px 10px 0' }} alt="imagem-perfil" />
                                                     </a>
                                                 ) :
                                                     <img src="/img/public/person.png" className="img-fluid rounded-circle" style={{ width: '100%', marginTop: '-15%', boxShadow: '0 4px 10px 0' }} alt="imagem-perfil" />
