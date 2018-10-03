@@ -34,8 +34,8 @@ export default class JogoScreen extends Component {
         }else if(requestQuestao.finalizado){
             let questoes = [];
             if(localStorage.getItem('jogoDescifre')!==null) questoes = JSON.parse(localStorage.getItem('jogoDescifre'));
-            
             const requestProcessarQuiz = await providerProcessarQuiz.processarQuiz({questoes, idQuiz});
+            localStorage.setItem('idRodadaEntrar', requestProcessarQuiz.data.idRodada);
             localStorage.setItem('resultadoQuiz',JSON.stringify(requestProcessarQuiz.data.resultado));
             browserHistory.push('/usuario/resultados');
             window.location.reload();

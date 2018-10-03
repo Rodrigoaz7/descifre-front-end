@@ -39,7 +39,6 @@ export default class HomeScreen extends Component {
                 usuario.quantidade_cifras = parseFloat(usuario.quantidade_cifras) - parseFloat(requestCriarQuiz.data.valorTransacao);
                 localStorage.setItem('descifre_userData', JSON.stringify(usuario));
             }
-            console.log(usuario.quantidade_cifras)
             if(localStorage.getItem('jogoDescifre')!== null) localStorage.removeItem('jogoDescifre');
             browserHistory.push('/usuario/jogo');
             window.scroll(0,-1);
