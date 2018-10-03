@@ -21,7 +21,7 @@ const realizarAtualizacao = async (data) => {
     data_formatada.append('token', data.token);
 
     try{
-        dataResponse = await axios.put(`${variables.urlApi}/administrador/perfil`, data_formatada, {
+        dataResponse = await axios.put(`${variables.urlApi}/usuario/perfil`, data_formatada, {
             headers: {
                 'accept': 'application/json',
                 'Accept-Language': 'en-US,en;q=0.8',

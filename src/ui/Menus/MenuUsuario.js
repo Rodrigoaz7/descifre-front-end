@@ -50,10 +50,10 @@ export default class MenuUsuario extends Component{
                     <Link to='/usuario/historico/' className="nav-link">Histórico de rodadas</Link>
                 </li>
                 <li className="nav-item">
-                    <Link to='/usuario/comprar' className="nav-link">Comprar cifras</Link>
+                    <Link to='/usuario/comprar/' className="nav-link">Comprar cifras</Link>
                 </li>
                 <li className="nav-item">
-                    <Link to='/usuario/Perfil' className="nav-link">Perfil</Link>
+                    <Link to='/usuario/perfil/' className="nav-link">Perfil</Link>
                 </li>
                 <li onClick={(e) => this.handleSair(e)} className="nav-item">
                     <Link to='/usuario/sair' className="nav-link">Sair</Link>
