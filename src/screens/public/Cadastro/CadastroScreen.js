@@ -84,7 +84,7 @@ export default class LoginScreen extends Component {
     render() {
         return (
             <div className="position-relative">
-                <section  className="section section-shaped section-lg my-0 altura-max">
+                <section  className="section section-shaped section-lg my-0">
                     <div  className="shape shape-style-1 bg-gradient-default">
                         <span className="span-150"></span>
                         <span className="span-50"></span>
