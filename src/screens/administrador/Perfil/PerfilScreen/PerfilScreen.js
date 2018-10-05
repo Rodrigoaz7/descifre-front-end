@@ -144,7 +144,7 @@ export default class PerfilScreen extends Component {
                             <div className="card card-profile shadow mt--300">
                                 <div className="px-4">
                                     <div className="row justify-content-center">
-                                        <div className="offset-lg-4 order-lg-1 col-lg-3 order-lg-2">
+                                        <div className="order-lg-1 col-lg-3 order-lg-2">
                                             <div className="card-profile-image">
                                                 {this.state.fotoInicial !== '' && this.state.fotoInicial !== undefined  ? (
                                                     <a href={`${variables.host}${variables.urlApi}/imagem/${utilLocalStorage.getToken()}?tipo=usuario&id=${this.state.idPessoa}`}>
@@ -162,6 +162,11 @@ export default class PerfilScreen extends Component {
                                                         return (<button onClick={this.handlePermissao} key={index} value={permissao} className="btn btn-sm btn-default mr-4 float-right">{permissao}</button>)
                                                     })
                                                 }
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-4 order-lg-1 text-lg-right align-self-lg-center">
+                                            <div className="card-profile-actions py-4 mt-lg-0" style={{float: 'left'}}>
+                                                <button type="button" className="btn btn-sm btn-default mr-4 float-right">Você possui {utilLocalStorage.getUser().quantidade_cifras} cifras</button>
                                             </div>
                                         </div>
                                     </div>

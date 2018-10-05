@@ -3,17 +3,35 @@
 */
 import React, { Component } from "react";
 import utilUser from '../../../util/localStorage';
+<<<<<<< HEAD
 // import { browserHistory } from "react-router/lib";
 // import providerBuscarRodadasEmQuiz from '../../../providers/usuario/quiz/buscarRodadasEmQuiz';
 // import variables from '../../../variables';
 import Swal from 'sweetalert2';
+=======
+import { browserHistory } from "react-router/lib";
+import providerBuscarRodadasEmQuiz from '../../../providers/usuario/quiz/buscarRodadasEmQuiz';
+import providerSolicitarTransacao from '../../../providers/administrador/transacoes/cadastrarTransacao';
+>>>>>>> f7e88668fa86eecd107d49f58fb3bf34e7ee067e
 import providerCheckoutPagseguro from '../../../providers/usuario/pagseguro/obterCodigoCheckout';
+import utilLocalStorage from '../../../util/localStorage';
+import Erros from '../../../ui/components/erros';
+import Swal from 'sweetalert2';
 
 export default class HomeScreen extends Component {
     constructor() {
         super();
         this.state = {
-            quantidadeCifras: 0
+            quantidadeSaque: 0.0,
+            quantidadeCompra: 0,
+            quantidadeCifras: 0,
+            cifrasParaSaque: 0,
+            senhaParaCompra: '',
+            senhaParaSaque: '',
+            botaoSacarIndisponivel: true,
+            botaoComprarIndisponivel: true,
+            errosSaque: [],
+            errosCompra: []
         }
     }
     async componentDidMount() {
@@ -21,16 +39,31 @@ export default class HomeScreen extends Component {
     }
 
     handleCalculaCifras = async (e) => {
-        let preco = e.target.value;
-        if (preco === "") {
-            this.setState({ quantidadeCifras: 0 });
+        let cifras = e.target.value;
+        if (cifras === "" || parseFloat(cifras) <= 0) {
+            this.setState({ quantidadeSaque: 0 , cifrasParaSaque: 0});
         } else {
             //posso chamar alguma funcao do back para calcular a quantidade de cifras, p.e 10
-            this.setState({ quantidadeCifras: (parseFloat(preco) * 10).toFixed(2) });
+            this.setState({ quantidadeSaque: parseInt(parseFloat(cifras) * 10), cifrasParaSaque: parseInt(cifras) });
         }
     }
 
-    handleClick = async (e) => {
+    handleDinheiro = async (e) => {
+        let preco = e.target.value;
+        this.setState({ quantidadeCompra: preco });
+        this.setState({ quantidadeCifras: parseFloat(preco) * 10.0 });
+    }
+
+    handleSenhaSaque = async (e) => {
+        let senha = e.target.value;
+        if(senha !== ""){
+            this.setState({botaoSacarIndisponivel: false, senhaParaSaque: senha});
+        } else {
+            this.setState({botaoSacarIndisponivel: true, senhaParaSaque: ""});
+        }
+    }
+
+    handleSubmitCompra = async (e) => {
         e.preventDefault();
         let usuario = utilUser.getUser();
 
@@ -52,6 +85,42 @@ export default class HomeScreen extends Component {
         
         // Aqui sera redirecionado para o pagseguro
     }
+
+    handleSubmitSaque = async (e) => {
+        e.preventDefault();
+
+        let idUsuario = utilLocalStorage.getUser()._id;
+        let token = utilLocalStorage.getToken();
+
+        let data = {
+            token: token,
+            id_enviado_por: idUsuario,
+            id_recebido_por: idUsuario,
+            senha: this.state.senhaParaSaque,
+            tipo: "saque",
+            quantia_transferida: this.state.cifrasParaSaque
+        }
+
+        let response = await providerSolicitarTransacao.criarTransacoes(data);
+
+        if (!response.status) {
+            this.setState({ errosSaque: response.erros });
+        } else {
+            Swal(
+                'Solicitação de saque enviada!',
+                'Analisaremos seu pedido em breve. Aguarde ;)',
+                'success'
+            ).then(() => {
+                window.scrollTo(0, 0);
+                //localStorage.setItem('descifre_tokenUsuario', JSON.stringify(postCadastro.data.token));
+                //localStorage.setItem('descifre_userData', JSON.stringify(postCadastro.data.userInfor));
+
+                browserHistory.push('/usuario/transacoes/');
+                window.location.reload();
+            });
+        }
+    }
+
     render() {
         return (
             <div className="position-relative alt">
@@ -86,7 +155,6 @@ export default class HomeScreen extends Component {
                                                         Compre suas próprias cifras
                                                     </h4>
                                                 </center>
-
                                             </div>
                                         </div>
                                         <hr />
@@ -101,7 +169,7 @@ export default class HomeScreen extends Component {
                                             </div>
                                             <div className="col-lg-6">
                                                 Valor da compra que você deseja pagar (em R$)
-                                                <input type="text" className="form-control" onChange={this.handleCalculaCifras} />
+                                                <input type="text" className="form-control" onChange={this.handleDinheiro} />
                                                 <br />
                                                 {
                                                     this.state.quantidadeCifras > 0 &&
@@ -112,16 +180,50 @@ export default class HomeScreen extends Component {
                                                 }
                                             </div>
                                         </div>
-                                        <hr />
+                                        <br />
                                         <div className="row justify-content-center">
                                             <div className="col-lg-5">
                                                 <div className="form-group">
                                                     <button type="submit" className="btn btn-primary btn-block" onClick={this.handleClick}>Continuar compra</button>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <hr />
+                                        <div className="row">
+                                            <div className="col-lg-12">
+                                                <center>
+                                                    <h4>
+                                                        Ou solicite seu dinheiro
+                                                    </h4>
+                                                </center>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div className="row">
+                                            <div className="col-lg-6">
+                                                ATENÇÃO: Você possui {utilLocalStorage.getUser().quantidade_cifras} cifras
+                                                <input type="number" className="form-control" onChange={this.handleCalculaCifras} />
+                                            </div>
+                                            <div className="col-lg-6">
+                                                Quantidade que será recebida (em R$)
+                                                <input type="text" className="form-control" readOnly value={this.state.quantidadeSaque} />
+                                                <br />
+                                            </div>
+                                        </div>
+                                        {this.state.cifrasParaSaque > 0 &&
+                                            <div className="row justify-content-center">
+                                                <div className="col-lg-6">
+                                                    Informe sua senha, por segurança.
+                                                <input type="password" class="form-control" onChange={this.handleSenhaSaque}/>
+                                                </div>
+                                            </div>
+                                        }
+                                        <br />
+                                        <Erros erros={this.state.errosSaque} />
+                                        <div className="row justify-content-center">
                                             <div className="col-lg-5">
                                                 <div className="form-group">
-                                                    <button type="submit" className="btn btn-danger btn-block">Cancelar</button>
+                                                    <button type="submit" className="btn btn-primary btn-block" onClick={this.handleSubmitSaque} disabled={this.state.botaoSacarIndisponivel}>Solicitar saque</button>
                                                 </div>
                                             </div>
                                         </div>
