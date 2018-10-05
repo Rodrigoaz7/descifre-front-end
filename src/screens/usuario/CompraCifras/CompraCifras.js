@@ -6,9 +6,10 @@ import utilUser from '../../../util/localStorage';
 import { browserHistory } from "react-router/lib";
 import providerBuscarRodadasEmQuiz from '../../../providers/usuario/quiz/buscarRodadasEmQuiz';
 import providerSolicitarTransacao from '../../../providers/administrador/transacoes/cadastrarTransacao';
+import providerCheckoutPagseguro from '../../../providers/usuario/pagseguro/obterCodigoCheckout';
 import utilLocalStorage from '../../../util/localStorage';
 import Erros from '../../../ui/components/erros';
-import swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 
 export default class HomeScreen extends Component {
     constructor() {
@@ -98,7 +99,7 @@ export default class HomeScreen extends Component {
         if (!response.status) {
             this.setState({ errosSaque: response.erros });
         } else {
-            swal(
+            Swal(
                 'Solicitação de saque enviada!',
                 'Analisaremos seu pedido em breve. Aguarde ;)',
                 'success'
