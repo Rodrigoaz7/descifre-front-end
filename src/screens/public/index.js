@@ -7,5 +7,6 @@ import LoginScreen from './Login/LoginScreen'
 import CadastroScreen from "./Cadastro/CadastroScreen";
 import RecuperarSenhaScreen from "./RecuperarSenha/RecuperarSenhaScreen";
 import Error404Screen from './Erros/Error404Screen';
+import CadastroScreenIndicacao from '../public/Cadastro/CadastroScreenIndicacao';
 
-export default {InicialScreen, Padrao, LoginScreen, CadastroScreen, RecuperarSenhaScreen, Error404Screen}; 
+export default {InicialScreen, Padrao, LoginScreen, CadastroScreen, RecuperarSenhaScreen, Error404Screen, CadastroScreenIndicacao}; 

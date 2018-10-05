@@ -57,6 +57,7 @@ ReactDOM.render(
             <Route path='/usuario/login' component={Public.LoginScreen}></Route>
             <Route path='/usuario/cadastro' component={Public.CadastroScreen}></Route>
             <Route path='/usuario/recuperar-senha' component={Public.RecuperarSenhaScreen}></Route>
+            <Route path="/usuario/cadastro-indicacoes/:idUsuario" component={Public.CadastroScreenIndicacao}></Route>
             <Route component={Public.Error404Screen} />
         </Route>
         
@@ -95,6 +96,7 @@ ReactDOM.render(
             <Route path="/usuario/historico/" component={Usuario.HistoricoScreen}></Route>
             <Route path="/usuario/comprar/" component={Usuario.CompraCifrasScreen}></Route>
             <Route path="/usuario/perfil/" component={Usuario.PerfilScreen}></Route>
+            <Route path="/usuario/indicacoes/" component={Usuario.IndicacoesScreen}></Route>
         </Route>
 
         {/* Rotas de erros */}

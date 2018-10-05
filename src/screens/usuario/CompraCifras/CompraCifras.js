@@ -5,7 +5,7 @@ import React, { Component } from "react";
 import utilUser from '../../../util/localStorage';
 // import { browserHistory } from "react-router/lib";
 // import providerBuscarRodadasEmQuiz from '../../../providers/usuario/quiz/buscarRodadasEmQuiz';
-import variables from '../../../variables';
+// import variables from '../../../variables';
 import Swal from 'sweetalert2';
 import providerCheckoutPagseguro from '../../../providers/usuario/pagseguro/obterCodigoCheckout';
 
@@ -47,7 +47,7 @@ export default class HomeScreen extends Component {
         let idUsuario = usuario._id;
         //let email = usuario.email;
         
-        const requestCheckout = await providerCheckoutPagseguro.obterCodigoCheckout({quantidadeCifras:valorReal, idUsuario: idUsuario});
+        const requestCheckout = await providerCheckoutPagseguro.obterCodigoCheckout({preco:valorReal, idUsuario: idUsuario, quantidadeCifras: this.state.quantidadeCifras});
         if(requestCheckout.data.status) window.location.href= `https://sandbox.pagseguro.uol.com.br/v2/checkout/payment.html?code=${requestCheckout.data.checkout.code}`;
         
         // Aqui sera redirecionado para o pagseguro

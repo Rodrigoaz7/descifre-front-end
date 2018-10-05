@@ -6,4 +6,5 @@ import ClassificacaoScreen from './Classificacao/ClassificacaoScreen';
 import HistoricoScreen from './Historico/HistoricoScreen';
 import CompraCifrasScreen from './CompraCifras/CompraCifras';
 import PerfilScreen from './Perfil/VerPerfil';
-export default {Padrao, HomeScreen, JogoScreen, ResultadoScreen, ClassificacaoScreen, HistoricoScreen, CompraCifrasScreen, PerfilScreen};
+import IndicacoesScreen from './Indicacoes/IndicacoesScreen';
+export default {Padrao, HomeScreen, JogoScreen, ResultadoScreen, ClassificacaoScreen, HistoricoScreen, CompraCifrasScreen, PerfilScreen, IndicacoesScreen};
