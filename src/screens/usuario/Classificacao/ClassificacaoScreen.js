@@ -19,7 +19,7 @@ export default class ClassificacaoScreen extends Component {
         const rodada = await providerObterRodada.obterRodada(idRodada);
         let usuario = utilUsuario.getUser();
         let colocacao = rodada.data.rodadas.jogadores.findIndex(jogada => jogada.quiz.idUsuario===usuario._id);
-        
+
         await this.setState({
             classificacao: rodada.data.rodadas.jogadores,
             colocacao: colocacao+1,
@@ -111,7 +111,7 @@ export default class ClassificacaoScreen extends Component {
                                                         {
                                                             this.state.classificacao.map((jogador, index)=>{
                                                                 return(
-                                                                    <tr key={index} bgcolor={index<=this.state.ganhadoresTamanho?"#DCEDC8":"#FFFFFF"}>
+                                                                    <tr key={index} bgcolor={index<this.state.ganhadoresTamanho?"#DCEDC8":"#FFFFFF"}>
                                                                         <th scope="row">{index+1}</th>
                                                                         <td>
                                                                             <center>

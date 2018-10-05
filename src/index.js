@@ -95,6 +95,7 @@ ReactDOM.render(
             <Route path="/usuario/historico/" component={Usuario.HistoricoScreen}></Route>
             <Route path="/usuario/comprar/" component={Usuario.CompraCifrasScreen}></Route>
             <Route path="/usuario/perfil/" component={Usuario.PerfilScreen}></Route>
+            <Route path="/usuario/transacoes/" component={Usuario.TransacoesScreen}></Route>
         </Route>
 
         {/* Rotas de erros */}
