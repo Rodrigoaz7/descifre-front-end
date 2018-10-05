@@ -57,6 +57,24 @@ export default class HomeScreen extends Component {
 
     handleSubmitCompra = async (e) => {
         e.preventDefault();
+        let usuario = utilUser.getUser();
+
+        if (this.state.quantidadeCifras <= 0) {
+            Swal({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Você deve comprar pelo menos uma cifra!',
+                footer: '<a href>Voltar para página de compras</a>'
+            });
+            return;
+        }
+        let valorReal = parseFloat(this.state.quantidadeCifras)/10;
+        let idUsuario = usuario._id;
+        //let email = usuario.email;
+        
+        const requestCheckout = await providerCheckoutPagseguro.obterCodigoCheckout({quantidadeCifras:valorReal, idUsuario: idUsuario});
+        if(requestCheckout.data.status) window.location.href= `https://sandbox.pagseguro.uol.com.br/v2/checkout/payment.html?code=${requestCheckout.data.checkout.code}`;
+        
         // Aqui sera redirecionado para o pagseguro
     }
 
@@ -158,7 +176,7 @@ export default class HomeScreen extends Component {
                                         <div className="row justify-content-center">
                                             <div className="col-lg-5">
                                                 <div className="form-group">
-                                                    <button type="submit" className="btn btn-primary btn-block" onClick={this.handleSubmit}>Continuar compra</button>
+                                                    <button type="submit" className="btn btn-primary btn-block" onClick={this.handleClick}>Continuar compra</button>
                                                 </div>
                                             </div>
                                         </div>

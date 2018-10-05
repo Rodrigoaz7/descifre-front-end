@@ -44,7 +44,7 @@ export default class MenuUsuario extends Component{
                     <Link to='/usuario/' className="nav-link">Início</Link>
                 </li>
                 <li className="nav-item">
-                    <Link to='/usuario/treino/' className="nav-link">Treino</Link>
+                    <Link to='/usuario/indicar-amigos/' className="nav-link">Indicar Amigos</Link>
                 </li>
                 <li className="nav-item">
                     <Link to='/usuario/historico/' className="nav-link">Histórico de rodadas</Link>
