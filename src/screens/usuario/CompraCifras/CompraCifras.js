@@ -3,20 +3,16 @@
 */
 import React, { Component } from "react";
 import utilUser from '../../../util/localStorage';
-<<<<<<< HEAD
 // import { browserHistory } from "react-router/lib";
 // import providerBuscarRodadasEmQuiz from '../../../providers/usuario/quiz/buscarRodadasEmQuiz';
 // import variables from '../../../variables';
 import Swal from 'sweetalert2';
-=======
 import { browserHistory } from "react-router/lib";
-import providerBuscarRodadasEmQuiz from '../../../providers/usuario/quiz/buscarRodadasEmQuiz';
+//import providerBuscarRodadasEmQuiz from '../../../providers/usuario/quiz/buscarRodadasEmQuiz';
 import providerSolicitarTransacao from '../../../providers/administrador/transacoes/cadastrarTransacao';
->>>>>>> f7e88668fa86eecd107d49f58fb3bf34e7ee067e
 import providerCheckoutPagseguro from '../../../providers/usuario/pagseguro/obterCodigoCheckout';
 import utilLocalStorage from '../../../util/localStorage';
 import Erros from '../../../ui/components/erros';
-import Swal from 'sweetalert2';
 
 export default class HomeScreen extends Component {
     constructor() {
