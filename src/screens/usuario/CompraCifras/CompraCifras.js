@@ -3,12 +3,8 @@
 */
 import React, { Component } from "react";
 import utilUser from '../../../util/localStorage';
-// import { browserHistory } from "react-router/lib";
-// import providerBuscarRodadasEmQuiz from '../../../providers/usuario/quiz/buscarRodadasEmQuiz';
-// import variables from '../../../variables';
 import Swal from 'sweetalert2';
 import { browserHistory } from "react-router/lib";
-//import providerBuscarRodadasEmQuiz from '../../../providers/usuario/quiz/buscarRodadasEmQuiz';
 import providerSolicitarTransacao from '../../../providers/administrador/transacoes/cadastrarTransacao';
 import providerCheckoutPagseguro from '../../../providers/usuario/pagseguro/obterCodigoCheckout';
 import utilLocalStorage from '../../../util/localStorage';
@@ -40,7 +36,7 @@ export default class HomeScreen extends Component {
             this.setState({ quantidadeSaque: 0 , cifrasParaSaque: 0});
         } else {
             //posso chamar alguma funcao do back para calcular a quantidade de cifras, p.e 10
-            this.setState({ quantidadeSaque: parseInt(parseFloat(cifras) * 10), cifrasParaSaque: parseInt(cifras) });
+            this.setState({ quantidadeSaque: (parseFloat(cifras) * 0.1).toFixed(2), cifrasParaSaque: parseFloat(cifras) });
         }
     }
 

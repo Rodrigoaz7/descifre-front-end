@@ -2,8 +2,6 @@
 *   Autor: Rodrigo Azevedo
 */
 import React, { Component } from "react";
-import utilUser from '../../../util/localStorage';
-import { browserHistory } from "react-router/lib";
 import utilLocalStorage from '../../../util/localStorage';
 import providerListarTransacoes from '../../../providers/administrador/transacoes/listarTransacoesUsuario';
 
