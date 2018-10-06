@@ -5,7 +5,7 @@ import React, { Component } from "react";
 import utilUser from '../../../util/localStorage';
 import Swal from 'sweetalert2';
 import { browserHistory } from "react-router/lib";
-import providerSolicitarTransacao from '../../../providers/administrador/transacoes/cadastrarTransacao';
+import providerRealizarSaque from '../../../providers/usuario/transacoes/realizarSaque';
 import providerCheckoutPagseguro from '../../../providers/usuario/pagseguro/obterCodigoCheckout';
 import utilLocalStorage from '../../../util/localStorage';
 import Erros from '../../../ui/components/erros';
@@ -86,17 +86,21 @@ export default class HomeScreen extends Component {
 
         let data = {
             token: token,
-            id_enviado_por: idUsuario,
-            id_recebido_por: idUsuario,
+            idUsuario: idUsuario,
             senha: this.state.senhaParaSaque,
             tipo: "saque",
-            quantia_transferida: this.state.cifrasParaSaque
+            quantiaTransferida: this.state.cifrasParaSaque
         }
 
-        let response = await providerSolicitarTransacao.criarTransacoes(data);
+        let response = await providerRealizarSaque.processarSaque(data);
 
         if (!response.status) {
-            this.setState({ errosSaque: response.erros });
+            let erros = '';
+            response.erros.map(erro=>{
+                erros += erro.msg + '\n'
+                return null;
+            });
+            Swal("Erro ao processar saque", erros, "error");
         } else {
             Swal(
                 'Solicitação de saque enviada!',
@@ -176,7 +180,7 @@ export default class HomeScreen extends Component {
                                         <div className="row justify-content-center">
                                             <div className="col-lg-5">
                                                 <div className="form-group">
-                                                    <button type="submit" className="btn btn-primary btn-block" onClick={this.handleClick}>Continuar compra</button>
+                                                    <button type="submit" className="btn btn-primary btn-block" onClick={this.handleSubmitCompra}>Continuar compra</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -206,12 +210,15 @@ export default class HomeScreen extends Component {
                                             <div className="row justify-content-center">
                                                 <div className="col-lg-6">
                                                     Informe sua senha, por segurança.
-                                                <input type="password" class="form-control" onChange={this.handleSenhaSaque}/>
+                                                <input type="password" className="form-control" onChange={this.handleSenhaSaque}/>
                                                 </div>
                                             </div>
                                         }
                                         <br />
-                                        <Erros erros={this.state.errosSaque} />
+                                        <div>
+                                            <Erros erros={this.state.errosSaque}/>
+                                        </div>
+                                        
                                         <div className="row justify-content-center">
                                             <div className="col-lg-5">
                                                 <div className="form-group">

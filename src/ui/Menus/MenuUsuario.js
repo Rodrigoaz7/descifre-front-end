@@ -50,10 +50,10 @@ export default class MenuUsuario extends Component{
                     <Link to='/usuario/historico/' className="nav-link">Histórico de rodadas</Link>
                 </li>
                 <li className="nav-item">
-                    <Link to='/usuario/comprar/' className="nav-link">Comprar cifras</Link>
+                    <Link to='/usuario/comprar/' className="nav-link">Cifras</Link>
                 </li>
                 <li className="nav-item">
-                    <Link to='/usuario/transacoes/' className="nav-link">Minhas cifras</Link>
+                    <Link to='/usuario/transacoes/' className="nav-link">Transações</Link>
                 </li>
                 <li className="nav-item">
                     <Link to='/usuario/perfil/' className="nav-link">Perfil</Link>

@@ -67,7 +67,8 @@ export default class HomeScreen extends Component {
                                                     <div className="table-responsive">
                                                         <table className="table table-bordered">
                                                             <thead>
-                                                                <tr>
+                                                                <tr style={{textAlign:'center'}}>
+                                                                    
                                                                     <th>Tipo</th>
                                                                     <th>Cifras movimentadas</th>
                                                                     <th>Data de transação</th>
@@ -76,15 +77,23 @@ export default class HomeScreen extends Component {
                                                             </thead>
                                                             <tbody>
                                                                 {
-                                                                    this.state.transacoes.map((transacao, index) => {
-
+                                                                    this.state.transacoes.reverse().map((transacao, index) => {
+                                                                        let dataTransacao = new Date(transacao.data_transferencia);
+                                                                        let stringData = dataTransacao.toLocaleString();
+                                                                        
                                                                         return (
-                                                                            <tr key={index}>
-                                                                                <td style={{ maxWidth: '100px' }}>{transacao.tipo}</td>
-
-                                                                                <td>{transacao.quantia_transferida}</td>
-
-                                                                                <td>{transacao.data_transferencia.substr(0, 10)}</td>
+                                                                            <tr style={{textAlign:'center'}} key={index}>
+                                                                                <td style={{ maxWidth: '100px' }}>{transacao.tipo.toUpperCase()}</td>
+                                                                                <td>
+                                                                                    {
+                                                                                        
+                                                                                        transacao.quantia_transferida>0 && transacao.tipo.toUpperCase()==="COMPRA"? <span>-{transacao.quantia_transferida}</span>:
+                                                                                        <span>{transacao.quantia_transferida}</span>
+                                                                                    
+                                                                                    }
+                                                                                </td>
+                                                                                
+                                                                                <td>{stringData}</td>
 
                                                                                 <td>{transacao.status}</td>
                                                                             </tr>)

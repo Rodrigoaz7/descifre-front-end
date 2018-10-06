@@ -78,7 +78,7 @@ export default class HomeScreen extends Component {
                                     {
                                     
                                     this.state.rodadas.length>0 &&
-                                    this.state.rodadas.map((rodada, index)=>{
+                                    this.state.rodadas.reverse().map((rodada, index)=>{
                                         return(
                                             <div key={index}>
                                                 <div className="card bg-secondary shadow border-0">
