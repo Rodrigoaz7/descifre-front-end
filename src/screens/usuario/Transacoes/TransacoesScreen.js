@@ -4,6 +4,7 @@
 import React, { Component } from "react";
 import utilLocalStorage from '../../../util/localStorage';
 import providerListarTransacoes from '../../../providers/administrador/transacoes/listarTransacoesUsuario';
+import statusCodes from '../../../util/statusCodes';
 
 export default class HomeScreen extends Component {
     constructor() {
@@ -95,7 +96,7 @@ export default class HomeScreen extends Component {
                                                                                 
                                                                                 <td>{stringData}</td>
 
-                                                                                <td>{transacao.status}</td>
+                                                                                <td>{statusCodes.getValue(`${transacao.status}`)}</td>
                                                                             </tr>)
                                                                     })
                                                                 }

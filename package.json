@@ -6,6 +6,7 @@
   "dependencies": {
     "ajv": "^6.5.4",
     "axios": "^0.18.0",
+    "enum": "^2.5.0",
     "react": "^16.4.2",
     "react-countdown-clock": "^2.4.0",
     "react-dom": "^16.4.2",
