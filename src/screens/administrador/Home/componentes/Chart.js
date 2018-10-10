@@ -2,16 +2,6 @@ import React, { Component } from "react";
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from "recharts";
 import providerContadorHome from '../../../../providers/administrador/contadores/contadorHome';
 
-// const data = [
-//       {name: 'Domingo', usuarios: 4000, cifras: 2400, amt: 2400},
-//       {name: 'Segunda', usuarios: 3000, cifras: 1398, amt: 2210},
-//       {name: 'Terça', usuarios: 2000, cifras: 9800, amt: 2290},
-//       {name: 'Quarta', usuarios: 2780, cifras: 3908, amt: 2000},
-//       {name: 'Quinta', usuarios: 1890, cifras: 4800, amt: 2181},
-//       {name: 'Sexta', usuarios: 2390, cifras: 3800, amt: 2500},
-//       {name: 'Sábado', usuarios: 3490, cifras: 4300, amt: 2100},
-// ];
-
 export default class SimpleLineChart extends Component {
     constructor(){
         super();
@@ -34,7 +24,7 @@ export default class SimpleLineChart extends Component {
         await this.setState({ 
             data:
             [
-                {name: 'Domingo', usuarios: parseInt(this.state.contadorUsuariosSemana[0],10), cifras: this.state.contadorCifrasSemana[0], amt: 2400},
+                {name: 'Domingo', usuarios: this.state.contadorUsuariosSemana[0], cifras: this.state.contadorCifrasSemana[0], amt: 2400},
                 {name: 'Segunda', usuarios: this.state.contadorUsuariosSemana[1], cifras: this.state.contadorCifrasSemana[1], amt: 2210},
                 {name: 'Terça', usuarios: this.state.contadorUsuariosSemana[2], cifras: this.state.contadorCifrasSemana[2], amt: 2290},
                 {name: 'Quarta', usuarios: this.state.contadorUsuariosSemana[3], cifras: this.state.contadorCifrasSemana[3], amt: 2000},

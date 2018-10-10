@@ -23,7 +23,8 @@ export default class HomeScreen extends Component {
             botaoSacarIndisponivel: true,
             botaoComprarIndisponivel: true,
             errosSaque: [],
-            errosCompra: []
+            errosCompra: [],
+            loading: false
         }
     }
     async componentDidMount() {
@@ -57,6 +58,7 @@ export default class HomeScreen extends Component {
 
     handleSubmitCompra = async (e) => {
         e.preventDefault();
+        this.setState({loading: true})
         let usuario = utilUser.getUser();
 
         if (this.state.quantidadeCifras <= 0) {
@@ -68,6 +70,7 @@ export default class HomeScreen extends Component {
             });
             return;
         }
+
         let valorReal = parseFloat(this.state.quantidadeCifras)/10;
         let idUsuario = usuario._id;
         //let email = usuario.email;
@@ -180,7 +183,8 @@ export default class HomeScreen extends Component {
                                         <div className="row justify-content-center">
                                             <div className="col-lg-5">
                                                 <div className="form-group">
-                                                    <button type="submit" className="btn btn-primary btn-block" onClick={this.handleSubmitCompra}>Continuar compra</button>
+                                                    <button type="submit" className="btn btn-primary btn-block" onClick={this.handleSubmitCompra} disabled={this.state.loading}>
+                                                    { this.state.loading ? "Redirecionando para pagseguro..." : "Continuar compra" }</button>
                                                 </div>
                                             </div>
                                         </div>

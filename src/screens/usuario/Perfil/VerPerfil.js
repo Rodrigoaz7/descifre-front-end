@@ -33,16 +33,16 @@ export default class PerfilScreen extends Component {
     }
     componentDidMount() {
         let usuario = utilLocalStorage.getUser();
-        console.log(usuario)
+
         this.setState({
             idUsuario: usuario._id,
             idPessoa: usuario.pessoa._id,
             nome: usuario.pessoa.nome,
             email: usuario.email,
-            conta: usuario.pessoa.conta,
-            agencia: usuario.pessoa.agencia,
-            sexo: usuario.pessoa.sexo,
-            telefone: usuario.pessoa.telefone,
+            conta: usuario.pessoa.conta || "",
+            agencia: usuario.pessoa.agencia || "",
+            sexo: usuario.pessoa.sexo || "",
+            telefone: usuario.pessoa.telefone || "",
             permissoes: usuario.permissoes,
             fotoInicial: usuario.pessoa.foto
         });
@@ -109,7 +109,7 @@ export default class PerfilScreen extends Component {
         };
 
         let postCadastro = await providerPerfil.realizarAtualizacao(data);
-        console.log(data)
+
         if (!postCadastro.status) {
             this.setState({ erros: postCadastro.erros });
         } else {
@@ -181,8 +181,12 @@ export default class PerfilScreen extends Component {
                                             </div>
                                         </div>
                                         <div className="col-lg-4 order-lg-1 text-lg-right align-self-lg-center">
-                                            <div className="card-profile-actions py-4 mt-lg-0" style={{float: 'left'}}>
-                                                <button type="button" className="btn btn-sm btn-default mr-4 float-right">Você possui {utilLocalStorage.getUser().quantidade_cifras} cifras</button>
+                                            <div className="card-profile-actions py-4 mt-lg-0" style={{ float: 'left' }}>
+                                                <button type="button" className="btn btn-sm btn-default mr-4 float-right" onClick={(e) => {
+                                                    e.preventDefault();
+                                                    browserHistory.push('/usuario/transacoes/')
+                                                    window.location.reload()
+                                                }}>Você possui {utilLocalStorage.getUser().quantidade_cifras} cifras</button>
                                             </div>
                                         </div>
                                     </div>
