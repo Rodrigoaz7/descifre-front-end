@@ -6,6 +6,7 @@ import Linha from '../../../../ui/components/linha';
 import providerCifras from '../../../../providers/administrador/transacoes/listarTransacoes';
 import { browserHistory } from "react-router";
 import Erros from '../../../../ui/components/erros';
+import statusCodes from '../../../../util/statusCodes';
 
 export default class CifrasScreen extends Component {
 
@@ -129,6 +130,7 @@ export default class CifrasScreen extends Component {
                                                                     <th>Tipo de transação</th>
                                                                     <th>Quantidade de cifras</th>
                                                                     <th>Data de transação</th>
+                                                                    <th>Status</th>
                                                                     <th>Dados</th>
                                                                 </tr>
 
@@ -140,6 +142,7 @@ export default class CifrasScreen extends Component {
                                                                         <td>{tr.tipo}</td>
                                                                         <td>C$ {tr.quantia_transferida}</td>
                                                                         <td>{tr.data_transferencia.substr(0, 10)}</td>
+                                                                        <td>{statusCodes.getValue(`${tr.status}`)}</td>
                                                                         <td><center><button className="btn btn-primary" type="button" id={tr._id} onClick={this.handlerRedirect}>Ver</button></center></td>
                                                                     </tr>
                                                                 )}

@@ -4,26 +4,34 @@
 import React, { Component } from "react";
 import Linha from '../../../../ui/components/linha';
 import { browserHistory } from "react-router";
+import statusCodes from '../../../../util/statusCodes';
+import providerAtualizarStatusTransacao from '../../../../providers/administrador/transacoes/atualizarStatusTransacao';
+import utilToken from '../../../../util/localStorage/index';
+import swal from 'sweetalert2';
 
 export default class CifrasScreen extends Component {
 
     constructor() {
         super();
         this.state = {
-            transacao: {}
+            transacao: {},
+            status: null,
+            erros: []
         }
     }
 
     async componentDidMount() {
         const dados = this.props.location.state.data;
-        console.log(dados)
+
         if (dados) {
             this.setState({
                 data_transferencia: dados.data_transferencia,
                 tipo: dados.tipo,
                 quantia_transferida: dados.quantia_transferida,
                 enviado_por: dados.enviado_por.email,
-                recebido_por: dados.recebido_por.email
+                recebido_por: dados.recebido_por.email,
+                status: dados.status,
+                _id: dados._id
             })
         } else {
             browserHistory.push({
@@ -33,6 +41,34 @@ export default class CifrasScreen extends Component {
         }
 
         document.title = "Cifras - Tela de administração de$cifre.";
+    }
+
+    selectHandle = async (e) => {
+        this.setState({status: parseInt(e.target.value)})
+    }
+
+    handleSubmit = async () => {
+        let token = utilToken.getToken();
+        let data = {
+            token: token,
+            idTransacao: this.state._id,
+            status: this.state.status
+        }
+
+        const response = await providerAtualizarStatusTransacao.atualizarStatusTransacao(data);
+
+        if(!response.status){
+            this.setState({ erros: response.erros });
+        } else {
+            swal(
+                'Transação editada!',
+                'O status da transação foi editado com sucesso.',
+                'success'
+            ).then(()=>{
+                browserHistory.push('/administrador/cifras');
+                window.location.reload();
+            })
+        }
     }
 
     handlerBack = () => {
@@ -108,10 +144,28 @@ export default class CifrasScreen extends Component {
                                                 </div>
                                             </div>
                                         </div>
+                                        <Linha tamanho={10} />
+                                        <div className="row justify-content-center">
+                                            <div className="col-lg-4">
+                                                <center><small className="d-block text-uppercase font-weight-bold mb-3">Status</small></center>
+                                                <div className="form-group">
+                                                    <div className="input-group">
+                                                        <select className="form-control" onChange={this.selectHandle}>
+                                                            <option value="0">Enviado e processando</option>
+                                                            <option value="1">Aceito</option>
+                                                            <option value="2">Recusado</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <Linha tamanho={12} />
                                         <br />
                                         <div className="row justify-content-center">
-                                            <div className="col-lg-2">
+                                            <div className="col-lg-3">
+                                                <button type="submit" className="btn btn-primary btn-block" onClick={this.handleSubmit}> Atualizar status </button>
+                                            </div>
+                                            <div className="col-lg-3">
                                                 <button type="submit" className="btn btn-danger btn-block" onClick={this.handlerBack}> Voltar </button>
                                             </div>
                                         </div>
