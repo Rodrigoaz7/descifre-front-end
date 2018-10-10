@@ -236,7 +236,11 @@ export default class NovoPatrocinadorScreen extends Component {
                                                             <button className="btn btn-primary btn-block" type="button" onClick={this.handlerSubmit}>Atualizar</button>
                                                         </div>
                                                         <div className="col-lg-6">
-                                                            <button className="btn btn-danger btn-block" type="submit">Cancelar</button>
+                                                            <button className="btn btn-danger btn-block" type="submit" onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    browserHistory.push('/administrador/patrocinador')
+                                                                    window.location.reload()
+                                                                }}>Cancelar</button>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -344,7 +344,11 @@ export default class NovaRodadaScreen extends Component {
                                                             <button type="submit" className="btn btn-success btn-block" onChange={this.handleSubmit}> Cadastrar </button>
                                                         </div>
                                                         <div className="col-lg-6">
-                                                            <button className="btn btn-danger btn-block" type="button">Cancelar</button>
+                                                            <button className="btn btn-danger btn-block" type="button" onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    browserHistory.push('/administrador/rodada/ver')
+                                                                    window.location.reload()
+                                                                }}>Cancelar</button>
                                                         </div>
                                                     </div>
                                                 </div>

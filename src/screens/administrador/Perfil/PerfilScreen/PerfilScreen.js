@@ -262,11 +262,6 @@ export default class PerfilScreen extends Component {
                                                 <button type="submit" className="btn btn-primary btn-block" onClick={this.handleSubmit}>Alterar</button>
                                             </div>
                                         </div>
-                                        <div className="col-lg-5">
-                                            <div className="form-group">
-                                                <button type="submit" className="btn btn-danger btn-block">Cancelar</button>
-                                            </div>
-                                        </div>
                                     </div>
                                     <br />
                                 </div>
