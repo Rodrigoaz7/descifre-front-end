@@ -88,7 +88,7 @@ export default class HomeScreen extends Component {
                                                                                 <td>
                                                                                     {
                                                                                         
-                                                                                        transacao.quantia_transferida>0 && transacao.tipo.toUpperCase()==="COMPRA"? <span>-{transacao.quantia_transferida}</span>:
+                                                                                        parseFloat(transacao.quantia_transferida)>0 && transacao.tipo.toUpperCase()==="COMPRA"? <span>-{transacao.quantia_transferida}</span>:
                                                                                         <span>{transacao.quantia_transferida}</span>
                                                                                     
                                                                                     }

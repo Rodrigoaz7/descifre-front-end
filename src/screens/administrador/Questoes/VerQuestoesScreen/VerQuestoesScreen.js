@@ -100,7 +100,6 @@ export default class VerQuestoesScreen extends Component {
         } else {
             resultado_questoes = await providerListarQuestoes.getQuestoes(this.state.selectedOption.value, this.state.pagina);
         }
-        console.log(resultado_questoes)
         await this.setState({ questoes: resultado_questoes.data.questoes })
     }
 
