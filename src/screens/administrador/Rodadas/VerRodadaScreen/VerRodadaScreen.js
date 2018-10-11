@@ -116,7 +116,9 @@ export default class VerRodadaScreen extends Component {
         const status_aberto = (rodada) => {
             let data_atual = new Date();
             let data_finalizacao = new Date(rodada.dataFinalizacao);
-            if (data_finalizacao.getTime() - data_atual.getTime() < 0) {
+            let data_abertura = new Date(rodada.dataAbertura);
+
+            if (data_finalizacao.getTime() - data_atual.getTime() < 0 || data_abertura.getTime() - data_atual.getTime() > 0) {
                 return (
                     "Fechado"
                 )
@@ -168,7 +170,7 @@ export default class VerRodadaScreen extends Component {
                                                                         <div className="input-group-prepend">
                                                                             <span className="input-group-text"><i className="ni ni-calendar-grid-58"></i></span>
                                                                         </div>
-                                                                        <input className="form-control datepicker" placeholder="Select date" type="datetime-local" onChange={this.handlerDataInicio}/>
+                                                                        <input className="form-control" placeholder="Select date" type="datetime-local" onChange={this.handlerDataInicio}/>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -179,7 +181,7 @@ export default class VerRodadaScreen extends Component {
                                                                         <div className="input-group-prepend">
                                                                             <span className="input-group-text"><i className="ni ni-calendar-grid-58"></i></span>
                                                                         </div>
-                                                                        <input className="form-control datepicker" placeholder="Select date" type="datetime-local" onChange={this.handlerDataFim}/>
+                                                                        <input className="form-control" placeholder="Select date" type="datetime-local" onChange={this.handlerDataFim}/>
                                                                     </div>
                                                                 </div>
                                                             </div>
