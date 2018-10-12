@@ -107,7 +107,7 @@ export default class VerQuestoesScreen extends Component {
         const resultado_questoes = await providerListarQuestoes.getQuestoes("", 1);
         const categorias = await providerListarCategorias.getCategorias();
         const total = await providerQuantidadeQuestoes.numeroQuestoes("");
-        console.log(total)
+
         let categorias_formatado = jsonutil.mutationArrayJson(categorias.data.categorias, ['_id', 'nome'], ['value', 'label']);
 
         await this.setState({

@@ -3,39 +3,58 @@
 */
 import React, { Component } from "react";
 import providerListarUsuarios from '../../../../providers/administrador/usuarios/listarUsuarios';
+import providerContadores from '../../../../providers/administrador/contadores/contadorHome';
 import { browserHistory } from "react-router";
+import Pagination from "react-ultimate-pagination-bootstrap-4";
 
 export default class VerQuestoesScreen extends Component {
-    constructor(){
+    constructor() {
         super();
         this.state = {
             usuarios: [],
-            filtro: ""
+            filtro: "",
+            pagina: 1,
+            total: 1
         }
     }
     async componentDidMount() {
-        const responsePost = await providerListarUsuarios.getUsuarios(10, "");
-        await this.setState({usuarios: responsePost.data.usuarios});
-        
+        const responsePost = await providerListarUsuarios.getUsuarios(1, "");
+        const qntdUsers = await providerContadores.getNumerosHome();
+        let total = parseInt(qntdUsers.data.numeros.qntdUsuarios);
+
+        //Se houver menos de 20 usuarios, entao precisamos de apenas uma pagina
+        if(total < 20) total = 1
+        else total = Math.round(total/20);
+
+        await this.setState({ usuarios: responsePost.data.usuarios, total: total });
+
         document.title = "Usuarios - Tela de administração de$cifre.";
     }
 
-    handlerFiltro = async(e) => {
-        this.setState({filtro: e.target.value})
+    handlerFiltro = async (e) => {
+        this.setState({ filtro: e.target.value })
     }
 
     handleSubmit = async (e) => {
-        const responsePost = await providerListarUsuarios.getUsuarios(10, this.state.filtro);
-        await this.setState({usuarios: responsePost.data.usuarios});
+        const responsePost = await providerListarUsuarios.getUsuarios(1, this.state.filtro);
+        await this.setState({ usuarios: responsePost.data.usuarios, pagina: 1});
     }
 
-    redirect = async(e) => {
+    handlePageChange = async (pageNumber) => {
+        let resultado = [];
+        await this.setState({ pagina: pageNumber });
+
+        resultado = await providerListarUsuarios.getUsuarios(this.state.pagina, this.state.filtro);
+        await this.setState({ usuarios: resultado.data.usuarios})
+    }
+
+    redirect = async (e) => {
         const id_obj = e.target.id;
         let user = null;
-        for(var i=0; i<this.state.usuarios.length; i++){
-            if(String(this.state.usuarios[i]._id) === String(id_obj)) user = this.state.usuarios[i];
+        for (var i = 0; i < this.state.usuarios.length; i++) {
+            if (String(this.state.usuarios[i]._id) === String(id_obj)) user = this.state.usuarios[i];
         }
-        
+
         browserHistory.push({
             pathname: '/administrador/usuario/ver',
             state: { data: user }
@@ -61,12 +80,12 @@ export default class VerQuestoesScreen extends Component {
                                         <div className="row justify-content-center">
                                             <div className="col-lg-8">
                                                 <div className="form-group">
-                                                    <input type="text" className="form-control form-control-alternative" placeholder="Pesquisa por nome ou email" value={this.state.filtro} onChange={this.handlerFiltro}/>
+                                                    <input type="text" className="form-control form-control-alternative" placeholder="Pesquisa por nome ou email" value={this.state.filtro} onChange={this.handlerFiltro} />
                                                 </div>
                                             </div>
                                             <div className="col-lg-1">
                                                 <div className="form-group">
-                                                    <button className="btn btn-success btn-sm btn-block form-control form-control-alternative" type="button"onClick={this.handleSubmit}>
+                                                    <button className="btn btn-success btn-sm btn-block form-control form-control-alternative" type="button" onClick={this.handleSubmit}>
                                                         <i className="fa fa-search" arialhidden="true"></i>
                                                     </button>
                                                 </div>
@@ -93,7 +112,7 @@ export default class VerQuestoesScreen extends Component {
                                                             </thead>
                                                             <tbody>
                                                                 {
-                                                                    this.state.usuarios.map((usuario, index)=>{
+                                                                    this.state.usuarios.map((usuario, index) => {
                                                                         return (<tr key={index}>
                                                                             <td style={{ maxWidth: '100px' }}>{usuario.pessoa.nome}</td>
                                                                             <td>{usuario.pessoa.email}</td>
@@ -101,12 +120,19 @@ export default class VerQuestoesScreen extends Component {
                                                                         </tr>)
                                                                     })
                                                                 }
-                                                                
+
                                                             </tbody>
                                                         </table>
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div className="row justify-content-center">
+                                            <Pagination
+                                                currentPage={this.state.pagina}
+                                                totalPages={this.state.total}
+                                                onChange={this.handlePageChange}
+                                            />
                                         </div>
                                     </div>
                                 </div>
