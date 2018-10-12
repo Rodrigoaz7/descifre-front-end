@@ -20,7 +20,7 @@ export default class VerQuestoesScreen extends Component {
     async componentDidMount() {
         const responsePost = await providerListarUsuarios.getUsuarios(1, "");
         const qntdUsers = await providerContadores.getNumerosHome();
-        let total = parseInt(qntdUsers.data.numeros.qntdUsuarios);
+        let total = parseInt(qntdUsers.data.numeros.qntdUsuarios, 10);
 
         //Se houver menos de 20 usuarios, entao precisamos de apenas uma pagina
         if(total < 20) total = 1

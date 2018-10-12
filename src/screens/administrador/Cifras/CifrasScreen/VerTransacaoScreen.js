@@ -4,7 +4,6 @@
 import React, { Component } from "react";
 import Linha from '../../../../ui/components/linha';
 import { browserHistory } from "react-router";
-import statusCodes from '../../../../util/statusCodes';
 import providerAtualizarStatusTransacao from '../../../../providers/administrador/transacoes/atualizarStatusTransacao';
 import utilToken from '../../../../util/localStorage/index';
 import swal from 'sweetalert2';
@@ -44,7 +43,7 @@ export default class CifrasScreen extends Component {
     }
 
     selectHandle = async (e) => {
-        this.setState({status: parseInt(e.target.value)})
+        this.setState({status: parseInt(e.target.value,10)})
     }
 
     handleSubmit = async () => {
