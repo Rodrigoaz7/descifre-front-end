@@ -14,6 +14,7 @@ export default class PerfilScreen extends Component {
     constructor() {
         super();
         this.state = {
+            loading: false,
             idUsuario: '',
             idPessoa: '',
             nome: '',
@@ -89,6 +90,7 @@ export default class PerfilScreen extends Component {
     handleSubmit = async (e) => {
         e.preventDefault();
 
+        this.setState({loading: true});
         let usuario = utilLocalStorage.getUser();
 
         let data = {
@@ -111,13 +113,14 @@ export default class PerfilScreen extends Component {
         let postCadastro = await providerPerfil.realizarAtualizacao(data);
 
         if (!postCadastro.status) {
-            this.setState({ erros: postCadastro.erros });
+            this.setState({ erros: postCadastro.erros, loading: false });
         } else {
             swal(
                 'Perfil editado!',
                 'Seu perfil foi editada com sucesso.',
                 'success'
             ).then(() => {
+                this.setState({loading: false});
                 window.scrollTo(0, 0);
                 localStorage.setItem('descifre_tokenUsuario', JSON.stringify(postCadastro.data.token));
                 localStorage.setItem('descifre_userData', JSON.stringify(postCadastro.data.userInfor));
@@ -277,7 +280,7 @@ export default class PerfilScreen extends Component {
                                     <div className="row justify-content-center">
                                         <div className="col-lg-5">
                                             <div className="form-group">
-                                                <button type="submit" className="btn btn-primary btn-block" onClick={this.handleSubmit}>Alterar</button>
+                                                <button type="submit" className="btn btn-primary btn-block" onClick={this.handleSubmit} disabled={this.state.loading}>{this.state.loading===false ? "Alterar" : "Atualizando..." }</button>
                                             </div>
                                         </div>
                                     </div>
