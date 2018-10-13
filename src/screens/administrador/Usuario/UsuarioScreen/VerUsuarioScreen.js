@@ -2,7 +2,6 @@
 *   Autor: Rodrigo Azevedo
 */
 import React, { Component } from "react";
-import { Link } from "react-router";
 import { browserHistory } from "react-router";
 import variables from '../../../../variables';
 import utilLocalStorage from '../../../../util/localStorage';

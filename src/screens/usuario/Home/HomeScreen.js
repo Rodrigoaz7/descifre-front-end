@@ -13,7 +13,8 @@ export default class HomeScreen extends Component {
         super();
         this.state = {
             rodadas: [],
-            idUsuario: ''
+            idUsuario: '',
+            carregando: false
         }
     }
     async componentDidMount() {
@@ -21,10 +22,12 @@ export default class HomeScreen extends Component {
         const rodadasPost = await providerListarRodadasAbertas.listarRodadas();
         const rodadas = rodadasPost.data.rodadas;
         let usuario = utilUser.getUser();
-        
         await this.setState({
             rodadas: rodadas,
             idUsuario: usuario._id
+        });
+        await this.setState({
+            carregando: true
         });
     }
     handleClick = async (e) => {
@@ -81,7 +84,7 @@ export default class HomeScreen extends Component {
                     </div>
                     <div className="container-fluid pt-lg-md">
                         <div className="row justify-content-center">
-                            <div className="col-lg-12">
+                            {this.state.carregando && <div className="col-lg-12">
                                 {
                                     this.state.rodadas.length===0 &&
                                     <div className="card bg-secondary shadow border-0">
@@ -140,8 +143,7 @@ export default class HomeScreen extends Component {
                                         )
                                     })
                                     }
-                                    
-                                </div>
+                                </div>}
                                 <br/>
                                 <br/>
                                 <br/>
