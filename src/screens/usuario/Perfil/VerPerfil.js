@@ -122,8 +122,7 @@ export default class PerfilScreen extends Component {
                 localStorage.setItem('descifre_tokenUsuario', JSON.stringify(postCadastro.data.token));
                 localStorage.setItem('descifre_userData', JSON.stringify(postCadastro.data.userInfor));
 
-                //browserHistory.push('/usuario/perfil');
-                //window.location.reload();
+                window.location.reload();
             });
         }
     }
@@ -163,7 +162,7 @@ export default class PerfilScreen extends Component {
                                         <div className="order-lg-1 col-lg-3 order-lg-2">
                                             <div className="card-profile-image">
                                                 {this.state.fotoInicial !== '' && this.state.fotoInicial !== undefined ? (
-                                                    <a href={`${variables.host}${variables.urlApi}/imagem/${utilLocalStorage.getToken()}?tipo=usuario&id=${this.state.idPessoa}`}>
+                                                    <a href={`${variables.urlFoto}/imagem/${utilLocalStorage.getToken()}?tipo=usuario&id=${this.state.idPessoa}`}>
                                                         <img src={`${variables.urlFoto}/imagem/${utilLocalStorage.getToken()}?tipo=usuario&id=${this.state.idPessoa}`} name="logomarca" className="img-fluid rounded-circle" style={{ maxHeight: '250px', width: '100%', marginTop: '-15%', boxShadow: '0 4px 10px 0' }} alt="imagem-perfil" />
                                                     </a>
                                                 ) :
