@@ -162,15 +162,9 @@ export default class PerfilScreen extends Component {
                                         <div className="order-lg-1 col-lg-3 order-lg-2">
                                             <div className="card-profile-image">
                                                 {this.state.fotoInicial !== '' && this.state.fotoInicial !== undefined ? (
-<<<<<<< HEAD
                                                     
                                                     <img src={`${variables.urlFoto}/imagem/${utilLocalStorage.getToken()}?tipo=usuario&id=${this.state.idPessoa}`} name="logomarca" className="img-fluid rounded-circle" style={{ maxHeight: '250px', width: '100%', marginTop: '-15%', boxShadow: '0 4px 10px 0' }} alt="imagem-perfil" />
                                                     
-=======
-                                                    <a href={`${variables.urlFoto}/imagem/${utilLocalStorage.getToken()}?tipo=usuario&id=${this.state.idPessoa}`}>
-                                                        <img src={`${variables.urlFoto}/imagem/${utilLocalStorage.getToken()}?tipo=usuario&id=${this.state.idPessoa}`} name="logomarca" className="img-fluid rounded-circle" style={{ maxHeight: '250px', width: '100%', marginTop: '-15%', boxShadow: '0 4px 10px 0' }} alt="imagem-perfil" />
-                                                    </a>
->>>>>>> 0ea56191ed044ee3fdd914e35f3de09eef9d7673
                                                 ) :
                                                     <img src="/img/public/person.png" className="img-fluid rounded-circle" style={{ width: '100%', marginTop: '-15%', boxShadow: '0 4px 10px 0' }} alt="imagem-perfil" />
                                                 }
