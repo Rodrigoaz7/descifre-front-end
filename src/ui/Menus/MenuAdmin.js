@@ -40,7 +40,7 @@ export default class MenuNavPublic extends Component{
     }
     render(){
         return(
-            <ul className="navbar-nav align-items-lg-center ml-lg-auto">
+            <ul className="navbar-nav align-items-lg-center ml-lg-auto" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation" role="button">
                 <li className="nav-item">
                     <Link to='/administrador/' className="nav-link">Início</Link>
                 </li>

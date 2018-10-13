@@ -8,7 +8,20 @@ const listarRodadas = async (titulo, situacao, data_abertura, data_fechamento) =
     try{
         dataResponse = await axios.get(`${variables.urlApi}/usuario/rodadas/abertas/${token}`);
     }catch(error){
-        dataResponse = error.response.data;
+        if(error.response.status===500){
+            dataResponse = {
+                data:{
+                    rodadas: []
+                }
+            };
+        }else{
+            dataResponse = {
+                data:{
+                    rodadas: []
+                }
+            };
+        }
+        
     }
     
     return dataResponse;

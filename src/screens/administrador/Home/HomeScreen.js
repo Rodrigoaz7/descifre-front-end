@@ -19,6 +19,7 @@ export default class HomeScreen extends Component {
         document.title = "Administrador - Tela de administração de$cifre.";
 
         const responsePost = await providerListarUsuarios.getUsuarios(5, "");
+        console.log(responsePost)
         if(responsePost.data.status) await this.setState({ usuarios: responsePost.data.usuarios });
 
     }
