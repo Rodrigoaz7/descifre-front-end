@@ -58,7 +58,6 @@ ReactDOM.render(
             <Route path='/usuario/cadastro' component={Public.CadastroScreen}></Route>
             <Route path='/usuario/recuperar-senha' component={Public.RecuperarSenhaScreen}></Route>
             <Route path="/usuario/cadastro-indicacoes/:idUsuario" component={Public.CadastroScreenIndicacao}></Route>
-            <Route component={Public.Error404Screen} />
         </Route>
         
         {/* Rotas administrativas */}
@@ -106,7 +105,7 @@ ReactDOM.render(
         </Route>
         
         {/* Cath erros */}
-        <Redirect from="*" to='/erros/404' />
+        <Redirect from="*" to='/erros/404'/>
     </Router>
     , document.getElementById('root'));
 registerServiceWorker();

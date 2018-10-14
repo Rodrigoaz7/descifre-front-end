@@ -2,6 +2,7 @@
 *   Autor: Marcus Dantas
 */
 import React, { Component } from "react";
+import {browserHistory} from "react-router/lib";
 export default class Error404Screen extends Component {
     
     componentDidMount() {
@@ -48,6 +49,12 @@ export default class Error404Screen extends Component {
                                                 <h6 style={{color:'#212121'}}>
                                                     Normalmente culpamos os estágiarios por esses problemas
                                                 </h6>
+                                            </center>
+                                            <br/>
+                                            <center>
+                                                <button onClick={browserHistory.goBack} className="btn btn-success btn-block">
+                                                    Voltar para página anterior
+                                                </button>
                                             </center>
                                         </center>
                                     </div>

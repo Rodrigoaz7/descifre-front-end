@@ -24,6 +24,19 @@ export default class MenuUsuario extends Component{
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut"
         };
+        this.state = {
+            width: 768
+        }
+    }
+    async componentDidMount(){
+        await this.setState({
+            width: window.innerWidth
+        });
+        window.addEventListener("resize", async ()=>{
+            await this.setState({
+                width: window.innerWidth
+            });
+        })
     }
     handleSair = async (e) =>{
         e.preventDefault();
@@ -39,7 +52,7 @@ export default class MenuUsuario extends Component{
     }
     render(){
         return(
-            <ul className="navbar-nav align-items-lg-center ml-lg-auto" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation" role="button">
+            <ul className="navbar-nav align-items-lg-center ml-lg-auto" data-toggle="collapse" data-target={this.state.width>990 ?"" :"#navbar_global"} aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation" role="button">
                 <li className="nav-item">
                     <Link to='/usuario/' className="nav-link">Início</Link>
                 </li>
