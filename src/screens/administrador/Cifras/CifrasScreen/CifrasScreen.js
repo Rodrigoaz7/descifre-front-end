@@ -4,9 +4,11 @@
 import React, { Component } from "react";
 import Linha from '../../../../ui/components/linha';
 import providerCifras from '../../../../providers/administrador/transacoes/listarTransacoes';
+import quantTransacoes from '../../../../providers/administrador/contadores/contadorTransacoes';
 import { browserHistory } from "react-router";
 import Erros from '../../../../ui/components/erros';
 import statusCodes from '../../../../util/statusCodes';
+import Pagination from "react-ultimate-pagination-bootstrap-4";
 
 export default class CifrasScreen extends Component {
 
@@ -17,15 +19,31 @@ export default class CifrasScreen extends Component {
             erros: [],
             radio: "",
             data: "",
-            user: ""
+            user: "",
+            pagina: 1,
+            total: 1
         }
     }
 
     async componentDidMount() {
-        const response = await providerCifras.getTransacoes(10, "", "", "");
-        await this.setState({ transacoes: response.data.transacoes });
+        const response = await providerCifras.getTransacoes(this.state.pagina, "", "", "");
+        let resultado_tamanho = await quantTransacoes.getNumeroDeTransacoes();
+        let total = parseInt(resultado_tamanho.data.quantidade);
 
+        //Se houver menos de 20 usuarios, entao precisamos de apenas uma pagina
+        if(total < 20) total = 1;
+        else total = Math.ceil(total/20.0);
+
+        this.setState({ transacoes: response.data.transacoes, total: total });
         document.title = "Cifras - Tela de administração de$cifre.";
+    }
+
+    handlePageChange = async (pageNumber) => {
+        let resultado = [];
+        await this.setState({ pagina: pageNumber });
+
+        resultado = await providerCifras.getTransacoes(this.state.pagina, this.state.radio, this.state.data, this.state.user);
+        await this.setState({ transacoes: resultado.data.transacoes})
     }
 
     handlerRadio = async (e) => {
@@ -41,8 +59,8 @@ export default class CifrasScreen extends Component {
     }
 
     handlerSubmit = async () => {
-        const response = await providerCifras.getTransacoes(10, this.state.radio, this.state.data, this.state.user);
-        await this.setState({transacoes: response.data.transacoes})
+        const response = await providerCifras.getTransacoes(1, this.state.radio, this.state.data, this.state.user);
+        await this.setState({transacoes: response.data.transacoes, pagina: 1})
     }
 
     handlerRedirect = async(e) => {
@@ -159,6 +177,13 @@ export default class CifrasScreen extends Component {
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div className="row justify-content-center">
+                                            <Pagination
+                                                currentPage={this.state.pagina}
+                                                totalPages={this.state.total}
+                                                onChange={this.handlePageChange}
+                                            />
                                         </div>
                                     </div>
                                 </div>
