@@ -77,7 +77,7 @@ export default class CifrasScreen extends Component {
                                         <div className="row justify-content-center">
                                             <div className="col-lg-2">
                                                 <center><small className="text-uppercase font-weight-bold        mb-3">Premiação</small></center>
-                                                <center><input type="radio" id="Premiacao" name="tt" value="premiacao" onClick={this.handlerRadio} /></center>
+                                                <center><input type="radio" id="Premiacao" name="tt" value="premio" onClick={this.handlerRadio} /></center>
                                             </div>
                                             <div className="col-lg-2">
                                                 <center><small className="text-uppercase font-weight-bold        mb-3">Indicação</small></center>
