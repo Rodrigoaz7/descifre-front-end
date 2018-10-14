@@ -146,7 +146,7 @@ export default class CifrasScreen extends Component {
                                                             <tbody>
                                                                 {this.state.transacoes.map((tr, index) =>
                                                                     <tr key={index}>
-                                                                        <td>{tr.recebido_por.email}</td>
+                                                                        <td>{tr.recebido_por===undefined? "":tr.recebido_por.email}</td>
                                                                         <td>{tr.tipo}</td>
                                                                         <td>C$ {tr.quantia_transferida}</td>
                                                                         <td>{tr.data_transferencia.substr(0, 10)}</td>
