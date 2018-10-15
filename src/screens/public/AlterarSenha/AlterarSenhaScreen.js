@@ -2,43 +2,48 @@
 *   Autor: Marcus Dantas
 */
 import React, { Component } from "react";
-import providerRecuperarSenha from '../../../providers/public/autenticacao/providerRecuperarSenha';
+import providerAlterarSenha from '../../../providers/public/autenticacao/providerAlterarSenha';
 import Swal from 'sweetalert2';
 import {browserHistory} from "react-router/lib";
 
-export default class RecuperarSenhaScreen extends Component {
+export default class AlterarSenhaScreen extends Component {
     constructor() {
         super();
         this.state = {
-            email: '',
             load: false
         }
     }
     componentDidMount() {
-        document.title = "Recuperar senha - Tela de recuperação de senha."
+        document.title = "Recuperar senha - Alterar senha.";
     }
     handleSubmit = async (e) => {
         e.preventDefault();
-        await this.setState({email: this.email.value, load: !this.stateload});
-        const requestPost = await providerRecuperarSenha.recuperarSenha({email:this.state.email});
-        if(requestPost.status){
+        await this.setState({senha: this.senha.value, repetirSenha: this.repetirSenha.value, load: !this.state.load});
+        
+        const token = this.props.params.token;
+        
+        const requestAlterarSenha = await providerAlterarSenha.alterarSenha({senha:this.state.senha, repetirSenha:this.state.repetirSenha, token: token});
+        
+        if(requestAlterarSenha.status){
             Swal({
                 type: 'success',
-                title: 'Email enviado',
-                text: `Um e-mail de recuperação foi enviado para ${this.state.email}`
+                title: 'Senha alterada com sucesso.',
+                text: `Faça login para entrar no De$cifre.`
             }).then(async (result) => {
                 if (result.value) {
                     browserHistory.push('/usuario/login');
                 }
             });
         }else{
+            
             Swal({
                 type: 'error',
                 title: 'Oops...',
-                text: 'Nenhum e-mail foi encontrado na nossa base de dados :('
+                text: `${requestAlterarSenha.erros.map(erro=>{return erro.msg})}`
             });
+            await this.setState({load: !this.state.load});
         }
-        await this.setState({load: !this.state.load});
+        
     }
     render() {
         return (
@@ -68,21 +73,31 @@ export default class RecuperarSenhaScreen extends Component {
                                 <div className="card bg-secondary shadow border-0">
                                     <div className="card-body px-lg-5 py-lg-5">
                                         <div className="text-muted text-center mb-3">
-                                            <small>Digite seu e-mail para recuperar a sua senha</small>
+                                            <small>Digite sua nova senha para realizar a alteração.</small>
                                         </div>
                                         <form onSubmit={this.handleSubmit}>
                                             <div className="form-group mb-3">
-                                                <div className="input-group input-group-alternative">
-                                                    <div className="input-group-prepend">
-                                                        <span className="input-group-text"><i className="ni ni-email-83"></i></span>
+                                                <div className="form-group">
+                                                    <div className="input-group input-group-alternative">
+                                                        <div className="input-group-prepend">
+                                                            <span className="input-group-text"><i className="ni ni-lock-circle-open"></i></span>
+                                                        </div>
+                                                        <input className="form-control" placeholder="Digite sua senha" ref={input => this.senha = input} type="password" />
                                                     </div>
-                                                    <input ref={input => this.email = input} className="form-control" placeholder="Email" type="email"/>
+                                                </div>
+                                                <div className="form-group">
+                                                    <div className="input-group input-group-alternative">
+                                                        <div className="input-group-prepend">
+                                                            <span className="input-group-text"><i className="ni ni-lock-circle-open"></i></span>
+                                                        </div>
+                                                        <input className="form-control" placeholder="Repita sua senha" ref={input => this.repetirSenha = input} type="password" />
+                                                    </div>
                                                 </div>
                                             </div>
                                             
                                             <div className="text-center">
                                                 <button type="submit" className="btn btn-primary btn-block my-4" disabled={this.state.load}>
-                                                    {this.state.load?"Enviando...":"Enviar e-mail de recuperação"}
+                                                    {this.state.load?"Alterando...":"Alterar senha"}
                                                 </button>
                                             </div>
                                         </form>

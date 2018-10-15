@@ -55,6 +55,7 @@ ReactDOM.render(
         <Route path='/' component={Public.Padrao}>
             <IndexRoute component={Public.InicialScreen}/>
             <Route path='/usuario/login' component={Public.LoginScreen}></Route>
+            <Route path='/usuario/alterar-senha/:token' component={Public.AlterarSenhaScreen}></Route>
             <Route path='/usuario/cadastro' component={Public.CadastroScreen}></Route>
             <Route path='/usuario/recuperar-senha' component={Public.RecuperarSenhaScreen}></Route>
             <Route path="/usuario/cadastro-indicacoes/:idUsuario" component={Public.CadastroScreenIndicacao}></Route>

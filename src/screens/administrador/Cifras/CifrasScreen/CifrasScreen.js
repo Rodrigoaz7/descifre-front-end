@@ -28,7 +28,7 @@ export default class CifrasScreen extends Component {
     async componentDidMount() {
         const response = await providerCifras.getTransacoes(this.state.pagina, "", "", "");
         let resultado_tamanho = await quantTransacoes.getNumeroDeTransacoes();
-        let total = parseInt(resultado_tamanho.data.quantidade);
+        let total = parseInt(resultado_tamanho.data.quantidade, 10);
 
         //Se houver menos de 20 usuarios, entao precisamos de apenas uma pagina
         if(total < 20) total = 1;
