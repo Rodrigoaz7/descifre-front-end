@@ -17,7 +17,6 @@ export default class ResultadoScreen extends Component {
 
     async componentDidMount() {
         if(localStorage.getItem('resultadoQuiz')!==null){
-            console.log(JSON.parse(localStorage.getItem('resultadoQuiz')));
             await this.setState({
                 resultados: JSON.parse(localStorage.getItem('resultadoQuiz'))
             });

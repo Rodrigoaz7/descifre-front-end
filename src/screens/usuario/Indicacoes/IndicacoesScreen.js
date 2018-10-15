@@ -17,9 +17,9 @@ export default class HomeScreen extends Component {
         document.title = "Indicações - Indique amigos e ganhe cifras.";
         let usuario = utilUser.getUser();
         const requestIndicacoes = await providerIndicacoes.obterIndicacoes(usuario._id);
-        console.log(requestIndicacoes.data)
+        
         await this.setState({
-            url: `http://${window.location.hostname}:3000/usuario/cadastro-indicacoes/${usuario._id}`,
+            url: `http://${window.location.hostname}/usuario/cadastro-indicacoes/${usuario._id}`,
             indicacoes: requestIndicacoes.data.indicacoes
         });
     }
@@ -81,31 +81,38 @@ export default class HomeScreen extends Component {
                                                     <h4 style={{color:'#212121'}}>Suas indicações</h4>
                                                 </center>
                                                 <hr/>
-                                                <table className="table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">#</th>
-                                                            <th scope="col">E-mail indicado</th>
-                                                            <th scope="col">Cifras recebidas</th>
-                                                            
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    {this.state.indicacoes.map((indicacao, index)=>{
-                                                        return(
-                                                            <tr key={index  }>
-                                                                <th scope="row">{index+1}</th>
-                                                                <td>{indicacao.idUsuarioIndicado.email}</td>
-                                                                <td>{indicacao.valorGanho}</td>
-                                                            
-                                                            </tr>
-                                                        )
-                                                    })}
-                                                        
-                                                        
-                                                    </tbody>
-                                                </table>
-                                                
+                                                <div className="row">
+                                                    <div className="col-lg-12">
+                                                        <div className="form-group">
+                                                            <div className="table-responsive">
+                                                                <table className="table">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th scope="col">#</th>
+                                                                            <th scope="col">E-mail indicado</th>
+                                                                            <th scope="col">Cifras recebidas</th>
+                                                                            
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    {this.state.indicacoes.map((indicacao, index)=>{
+                                                                        return(
+                                                                            <tr key={index  }>
+                                                                                <th scope="row">{index+1}</th>
+                                                                                <td>{indicacao.idUsuarioIndicado.email}</td>
+                                                                                <td>{indicacao.valorGanho}</td>
+                                                                            
+                                                                            </tr>
+                                                                        )
+                                                                    })}
+                                                                        
+                                                                        
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>    
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
