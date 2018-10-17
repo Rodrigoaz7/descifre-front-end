@@ -2,11 +2,12 @@ import variables from '../../../variables';
 import axios from 'axios';
 import utilLocalStorage from '../../../util/localStorage';
 
-const obterQuizzes = async (id, pagina) => {
+const obterNumIndicacoes = async (id) => {
+
     let dataResponse;
     let token = utilLocalStorage.getToken();
     try{
-        dataResponse = await axios.get(`${variables.urlApi}/usuario/quiz/buscar-rodadas/${id}/${token}/${pagina}`);
+        dataResponse = await axios.get(`${variables.urlApi}/usuario/indicacoes/quantidade/${id}/${token}`);
     }catch(error){
         dataResponse = error.response.data;
     }
@@ -14,4 +15,4 @@ const obterQuizzes = async (id, pagina) => {
     return dataResponse;
 }
 
-export default { obterQuizzes };
+export default { obterNumIndicacoes };
