@@ -72,7 +72,7 @@ export default class MenuUsuario extends Component{
                     <Link to='/usuario/perfil/' className="nav-link">Perfil</Link>
                 </li>
                 <li onClick={(e) => this.handleSair(e)} className="nav-item">
-                    <Link to='/usuario/sair' className="nav-link">Sair</Link>
+                    <Link to='/' className="nav-link">Sair</Link>
                 </li>
             </ul>
         );

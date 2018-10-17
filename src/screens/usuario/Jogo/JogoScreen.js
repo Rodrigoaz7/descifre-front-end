@@ -21,6 +21,7 @@ export default class JogoScreen extends Component {
         }
     }
     gerarNovaQuestao = async () =>{
+        
         let idQuiz;
         if(localStorage.getItem('idQuizAtivo')!==undefined) idQuiz = localStorage.getItem('idQuizAtivo');
         let usuario = utilUser.getUser();
@@ -60,7 +61,6 @@ export default class JogoScreen extends Component {
     }
     handleClick = async (e) => {
         e.preventDefault();
-        // Caso nenhum questão selecionada.
         if(this.state.respostaSelecionada===null || this.state.respostaSelecionada===""){
             Swal({
                 type: 'error',
@@ -91,7 +91,8 @@ export default class JogoScreen extends Component {
         await this.setState({
             tempoQuestao: 30,
             completions: this.state.completions + 1
-        });    
+        });  
+        window.scrollTo(0,0);  
     }
     render() {
         return (

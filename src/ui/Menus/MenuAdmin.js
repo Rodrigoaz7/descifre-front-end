@@ -97,7 +97,7 @@ export default class MenuNavPublic extends Component{
                     <Link to='/administrador/perfil' className="nav-link">Perfil</Link>
                 </li> 
                 <li onClick={(e) => this.handleSair(e)} className="nav-item">
-                    <Link to='/administrador/' className="nav-link">Sair</Link>
+                    <Link to='/' className="nav-link">Sair</Link>
                 </li> 
             </ul>
         );
