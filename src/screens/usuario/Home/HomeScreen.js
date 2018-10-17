@@ -121,6 +121,8 @@ export default class HomeScreen extends Component {
                                                                 <center>
                                                                     Abertura: {dataAbertura.toLocaleString()}<br/>
                                                                     Finalização: {dataFinalizacao.toLocaleString()}
+                                                                    <br />
+                                                                    Duração da rodada: {rodada.duracao} minutos.
                                                                 </center>
                                                                 <hr/>
                                                                 <center>

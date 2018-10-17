@@ -31,8 +31,8 @@ export default class CifrasScreen extends Component {
         let total = parseInt(resultado_tamanho.data.quantidade, 10);
 
         //Se houver menos de 20 usuarios, entao precisamos de apenas uma pagina
-        if(total < 20) total = 1;
-        else total = Math.ceil(total/20.0);
+        if (total < 20) total = 1;
+        else total = Math.ceil(total / 20.0);
 
         this.setState({ transacoes: response.data.transacoes, total: total });
         document.title = "Cifras - Tela de administração de$cifre.";
@@ -43,27 +43,27 @@ export default class CifrasScreen extends Component {
         await this.setState({ pagina: pageNumber });
 
         resultado = await providerCifras.getTransacoes(this.state.pagina, this.state.radio, this.state.data, this.state.user);
-        await this.setState({ transacoes: resultado.data.transacoes})
+        await this.setState({ transacoes: resultado.data.transacoes })
     }
 
     handlerRadio = async (e) => {
-        await this.setState({radio: e.target.value})
+        await this.setState({ radio: e.target.value })
     }
 
     handlerData = async (e) => {
-        await this.setState({data: e.target.value})
+        await this.setState({ data: e.target.value })
     }
 
     handlerUser = async (e) => {
-        await this.setState({user: e.target.value})
+        await this.setState({ user: e.target.value })
     }
 
     handlerSubmit = async () => {
         const response = await providerCifras.getTransacoes(1, this.state.radio, this.state.data, this.state.user);
-        await this.setState({transacoes: response.data.transacoes, pagina: 1})
+        await this.setState({ transacoes: response.data.transacoes, pagina: 1 })
     }
 
-    handlerRedirect = async(e) => {
+    handlerRedirect = async (e) => {
         const id_obj = e.target.id;
         let transacao = null;
         for (var i = 0; i < this.state.transacoes.length; i++) {
@@ -145,9 +145,9 @@ export default class CifrasScreen extends Component {
                                         <center><h3>Resultados</h3></center>
                                         <div className="row">
                                             <div className="col-lg-12">
+                                                <Erros erros={this.state.erros} />
                                                 <div className="form-group">
                                                     <div className="table-responsive">
-                                                        <Erros erros={this.state.erros} />
                                                         <table className="table table-bordered">
                                                             <thead>
 
@@ -164,7 +164,7 @@ export default class CifrasScreen extends Component {
                                                             <tbody>
                                                                 {this.state.transacoes.map((tr, index) =>
                                                                     <tr key={index}>
-                                                                        <td>{tr.recebido_por===undefined? "":tr.recebido_por.email}</td>
+                                                                        <td>{tr.recebido_por === undefined ? "" : tr.recebido_por.email}</td>
                                                                         <td>{tr.tipo}</td>
                                                                         <td>C$ {tr.quantia_transferida}</td>
                                                                         <td>{tr.data_transferencia.substr(0, 10)}</td>
