@@ -126,9 +126,11 @@ export default class HomeScreen extends Component {
                                                                 </center>
                                                                 <hr/>
                                                                 <center>
+                                                                    <i className="fas fa-trophy" style={{color:"#FDD835", fontSize:'3em'}}></i>
                                                                     <h4 style={{color:'green'}}>
                                                                         {rodada.premiacao} CIFRAS
                                                                     </h4>
+
                                                                 </center>
                                                                 <hr/>
                                                                 <button value={rodada._id} onClick={e=>this.handleClick(e)} type="button" className="btn btn-success btn-block">

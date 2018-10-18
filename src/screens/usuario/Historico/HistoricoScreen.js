@@ -39,7 +39,6 @@ export default class HomeScreen extends Component {
     }
 
     handlePageChange = async (pageNumber) => {
-        let resultado = [];
         await this.setState({ pagina: pageNumber });
 
         let usuario = utilUser.getUser();

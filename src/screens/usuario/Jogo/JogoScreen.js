@@ -51,16 +51,6 @@ export default class JogoScreen extends Component {
         await this.setState({
             respostaSelecionada: e.target.value
         });
-    }
-    handleNovaQuestao = async () => {
-        await this.gerarNovaQuestao();
-        await this.setState({
-            tempoQuestao: 30,
-            completions: this.state.completions + 1
-        });
-    }
-    handleClick = async (e) => {
-        e.preventDefault();
         if(this.state.respostaSelecionada===null || this.state.respostaSelecionada===""){
             Swal({
                 type: 'error',
@@ -70,30 +60,75 @@ export default class JogoScreen extends Component {
             });
             return;
         }
-        // Array de jogadas
-        let jogadas = [];
-        if(localStorage.getItem('jogoDescifre')!==null) jogadas = JSON.parse(localStorage.getItem('jogoDescifre'));
-        
-        let item = {
-            idQuestao: this.state.questao[0]._id,
-            alternativa: this.state.respostaSelecionada
-        }
-        
-        if(!jogadas.find(x => x.idQuestao === this.state.questao[0]._id)){
-            jogadas.push(item);
-            localStorage.setItem('jogoDescifre', JSON.stringify(jogadas));
+        setTimeout(async () => {
+            // Array de jogadas
+            let jogadas = [];
+            if(localStorage.getItem('jogoDescifre')!==null) jogadas = JSON.parse(localStorage.getItem('jogoDescifre'));
+            
+            let item = {
+                idQuestao: this.state.questao[0]._id,
+                alternativa: this.state.respostaSelecionada
+            }
+            
+            if(!jogadas.find(x => x.idQuestao === this.state.questao[0]._id)){
+                jogadas.push(item);
+                localStorage.setItem('jogoDescifre', JSON.stringify(jogadas));
+                await this.setState({
+                    respostaSelecionada:null,
+                    perguntasRespondidas: jogadas.length
+                });
+            }
+            await this.gerarNovaQuestao();
             await this.setState({
-                respostaSelecionada:null,
-                perguntasRespondidas: jogadas.length
-            });
-        }
+                tempoQuestao: 30,
+                completions: this.state.completions + 1
+            });  
+            window.scrollTo(0,0);
+        },200);
+    }
+    handleNovaQuestao = async () => {
         await this.gerarNovaQuestao();
         await this.setState({
             tempoQuestao: 30,
             completions: this.state.completions + 1
-        });  
-        window.scrollTo(0,0);  
+        });    
     }
+    // Aprovar possível remoção
+    // handleClick = async (e) => {
+    //     e.preventDefault();
+    //     if(this.state.respostaSelecionada===null || this.state.respostaSelecionada===""){
+    //         Swal({
+    //             type: 'error',
+    //             title: 'Oops...',
+    //             text: `Você deve selecionar uma resposta.`,
+    //             footer: 'Volte para o quiz e marque uma alternativa'
+    //         });
+    //         return;
+    //     }
+    //     // Array de jogadas
+    //     let jogadas = [];
+    //     if(localStorage.getItem('jogoDescifre')!==null) jogadas = JSON.parse(localStorage.getItem('jogoDescifre'));
+        
+    //     let item = {
+    //         idQuestao: this.state.questao[0]._id,
+    //         alternativa: this.state.respostaSelecionada
+    //     }
+        
+    //     if(!jogadas.find(x => x.idQuestao === this.state.questao[0]._id)){
+    //         jogadas.push(item);
+    //         localStorage.setItem('jogoDescifre', JSON.stringify(jogadas));
+    //         await this.setState({
+    //             respostaSelecionada:null,
+    //             perguntasRespondidas: jogadas.length
+    //         });
+    //     }
+    //     await this.gerarNovaQuestao();
+    //     await this.setState({
+    //         tempoQuestao: 30,
+    //         completions: this.state.completions + 1
+    //     });  
+    //     window.scrollTo(0,0);  
+    // }
 
     handleClickPular = async (e) => {
         e.preventDefault();
@@ -207,11 +242,8 @@ export default class JogoScreen extends Component {
                                         </div>
                                         <hr/>
                                         <div className="row">
-                                            <div className="col-lg-6">
-                                                <button onClick={this.handleClickPular} type="button" className="btn btn-block btn-danger">Pular pergunta</button>
-                                            </div>
-                                            <div className="col-lg-6">
-                                                <button onClick={this.handleClick} type="button" className="btn btn-block btn-success">Próxima pergunta</button>
+                                            <div className="col-lg-12">
+                                                <button onClick={this.handleClickPular} type="button" className="btn btn-block btn-danger">Pular <i className="fas fa-forward" style={{"color":"#ffffff"}}></i></button>
                                             </div>
                                         </div>
                                     </div>
