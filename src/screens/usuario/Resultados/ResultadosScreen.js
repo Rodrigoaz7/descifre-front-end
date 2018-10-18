@@ -123,7 +123,7 @@ export default class ResultadoScreen extends Component {
                                                                             <th scope="row">{index+1}</th>
                                                                             <td>
                                                                                 <center>
-                                                                                    {resultado.resposta}
+                                                                                    {resultado.resposta ? resultado.resposta : "Você pulou esta questão"}
                                                                                 </center>
                                                                             </td>
                                                                             <td>

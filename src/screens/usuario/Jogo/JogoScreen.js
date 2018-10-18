@@ -94,6 +94,34 @@ export default class JogoScreen extends Component {
         });  
         window.scrollTo(0,0);  
     }
+
+    handleClickPular = async (e) => {
+        e.preventDefault();
+        // Array de jogadas
+        let jogadas = [];
+        if(localStorage.getItem('jogoDescifre')!==null) jogadas = JSON.parse(localStorage.getItem('jogoDescifre'));
+        
+        let item = {
+            idQuestao: this.state.questao[0]._id,
+            alternativa: null
+        }
+        
+        if(!jogadas.find(x => x.idQuestao === this.state.questao[0]._id)){
+            jogadas.push(item);
+            localStorage.setItem('jogoDescifre', JSON.stringify(jogadas));
+            await this.setState({
+                respostaSelecionada:null,
+                perguntasRespondidas: jogadas.length
+            });
+        }
+        await this.gerarNovaQuestao();
+        await this.setState({
+            tempoQuestao: 30,
+            completions: this.state.completions + 1
+        });  
+        window.scrollTo(0,0);
+    }
+
     render() {
         return (
             <div className="position-relative alt">
@@ -179,7 +207,10 @@ export default class JogoScreen extends Component {
                                         </div>
                                         <hr/>
                                         <div className="row">
-                                            <div className="col-lg-12">
+                                            <div className="col-lg-6">
+                                                <button onClick={this.handleClickPular} type="button" className="btn btn-block btn-danger">Pular pergunta</button>
+                                            </div>
+                                            <div className="col-lg-6">
                                                 <button onClick={this.handleClick} type="button" className="btn btn-block btn-success">Próxima pergunta</button>
                                             </div>
                                         </div>
