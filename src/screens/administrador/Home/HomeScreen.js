@@ -65,27 +65,28 @@ export default class HomeScreen extends Component {
                                         <div className="row">
                                             <div className="col-lg-12">
                                                 <br /><br />
-                                                <table className="table table-bordered">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Nome</th>
-                                                            <th>Email</th>
-                                                            <th>Dados</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {
-                                                            this.state.usuarios.map((usuario, index) => {
-                                                                return (<tr key={index}>
-                                                                    <td style={{ maxWidth: '100px' }}>{usuario.pessoa.nome}</td>
-                                                                    <td>{usuario.pessoa.email}</td>
-                                                                    <td><center><button className="btn btn-primary" type="button" id={usuario._id} onClick={this.redirect}>Ver</button></center></td>
-                                                                </tr>)
-                                                            })
-                                                        }
-
-                                                    </tbody>
-                                                </table>
+                                                <div className="table-responsive">
+                                                    <table className="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Nome</th>
+                                                                <th>Email</th>
+                                                                <th>Dados</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {
+                                                                this.state.usuarios.map((usuario, index) => {
+                                                                    return (<tr key={index}>
+                                                                        <td style={{ maxWidth: '100px' }}>{usuario.pessoa.nome}</td>
+                                                                        <td>{usuario.pessoa.email}</td>
+                                                                        <td><center><button className="btn btn-primary" type="button" id={usuario._id} onClick={this.redirect}>Ver</button></center></td>
+                                                                    </tr>)
+                                                                })
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
