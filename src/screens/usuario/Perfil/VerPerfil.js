@@ -5,6 +5,7 @@ import React, { Component } from "react";
 import Linha from '../../../ui/components/linha';
 import utilLocalStorage from '../../../util/localStorage';
 import providerPerfil from '../../../providers/administrador/perfil/atualizarPerfil';
+import providerQuantCifras from '../../../providers/usuario/cifras/quantidadeCifras';
 import swal from 'sweetalert2';
 import { browserHistory } from "react-router";
 import Erros from '../../../ui/components/erros';
@@ -28,12 +29,14 @@ export default class PerfilScreen extends Component {
             foto: '',
             fotoName: '',
             fotoInicial: '',
+            quantidadeCifras: 0,
             permissoes: [],
             erros: []
         }
     }
-    componentDidMount() {
+    async componentDidMount() {
         let usuario = utilLocalStorage.getUser();
+        let quantCifras = await providerQuantCifras.quantidadeCifras();
 
         this.setState({
             idUsuario: usuario._id,
@@ -45,7 +48,8 @@ export default class PerfilScreen extends Component {
             sexo: usuario.pessoa.sexo || "",
             telefone: usuario.pessoa.telefone || "",
             permissoes: usuario.permissoes,
-            fotoInicial: usuario.pessoa.foto
+            fotoInicial: usuario.pessoa.foto,
+            quantidade_cifras: quantCifras.data.quantidadeCifras
         });
 
         document.title = "Perfil - Tela de administração de$cifre.";
@@ -188,7 +192,7 @@ export default class PerfilScreen extends Component {
                                                     e.preventDefault();
                                                     browserHistory.push('/usuario/transacoes/')
                                                     window.location.reload()
-                                                }}>Você possui {utilLocalStorage.getUser().quantidade_cifras} cifras</button>
+                                                }}>Você possui {this.state.quantidade_cifras} cifras</button>
                                             </div>
                                         </div>
                                     </div>

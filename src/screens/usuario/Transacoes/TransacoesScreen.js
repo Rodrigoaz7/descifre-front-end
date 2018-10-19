@@ -5,20 +5,40 @@ import React, { Component } from "react";
 import utilLocalStorage from '../../../util/localStorage';
 import providerListarTransacoes from '../../../providers/administrador/transacoes/listarTransacoesUsuario';
 import statusCodes from '../../../util/statusCodes';
+import Pagination from "react-ultimate-pagination-bootstrap-4";
 
 export default class HomeScreen extends Component {
     constructor() {
         super();
         this.state = {
-            transacoes: []
+            transacoes: [],
+            pagina: 1,
+            total: 1
         }
     }
     async componentDidMount() {
         document.title = "Compra de cifras - compre suas próprias cifras.";
 
-        const resultado_transacoes = await providerListarTransacoes.getTransacoes(30, "", "", utilLocalStorage.getUser()._id);
+        const resultado_transacoes = await providerListarTransacoes.getTransacoes(1);
+        let total = resultado_transacoes.data.tamanhoTransacoes;
 
-        this.setState({ transacoes: resultado_transacoes.data.transacoes })
+        if (total < 10) total = 1;
+        else total = Math.ceil(total / 10.0);
+
+        this.setState({ transacoes: resultado_transacoes.data.transacoes.reverse(), total: total })
+    }
+
+    handlePageChange = async (pageNumber) => {
+        await this.setState({ pagina: pageNumber });
+
+        let usuario = utilLocalStorage.getUser();
+        const resultado_transacoes = await providerListarTransacoes.getTransacoes(this.state.pagina);
+
+        await this.setState({
+            transacoes: resultado_transacoes.data.transacoes.reverse()
+        });
+
+        window.scrollTo(0,0);
     }
 
     handleClick = async (e) => {
@@ -68,8 +88,8 @@ export default class HomeScreen extends Component {
                                                     <div className="table-responsive">
                                                         <table className="table table-bordered">
                                                             <thead>
-                                                                <tr style={{textAlign:'center'}}>
-                                                                    
+                                                                <tr style={{ textAlign: 'center' }}>
+
                                                                     <th>Tipo</th>
                                                                     <th>Cifras movimentadas</th>
                                                                     <th>Data de transação</th>
@@ -81,19 +101,19 @@ export default class HomeScreen extends Component {
                                                                     this.state.transacoes.reverse().map((transacao, index) => {
                                                                         let dataTransacao = new Date(transacao.data_transferencia);
                                                                         let stringData = dataTransacao.toLocaleString();
-                                                                        
+
                                                                         return (
-                                                                            <tr style={{textAlign:'center'}} key={index}>
+                                                                            <tr style={{ textAlign: 'center' }} key={index}>
                                                                                 <td style={{ maxWidth: '100px' }}>{transacao.tipo.toUpperCase()}</td>
                                                                                 <td>
                                                                                     {
-                                                                                        
-                                                                                        parseFloat(transacao.quantia_transferida)>0 && transacao.tipo.toUpperCase()==="COMPRA"? <span>-{transacao.quantia_transferida}</span>:
-                                                                                        <span>{transacao.quantia_transferida}</span>
-                                                                                    
+
+                                                                                        parseFloat(transacao.quantia_transferida) > 0 && transacao.tipo.toUpperCase() === "COMPRA" ? <span>-{transacao.quantia_transferida}</span> :
+                                                                                            <span>{transacao.quantia_transferida}</span>
+
                                                                                     }
                                                                                 </td>
-                                                                                
+
                                                                                 <td>{stringData}</td>
 
                                                                                 <td>{statusCodes.getValue(`${transacao.status}`)}</td>
@@ -106,6 +126,13 @@ export default class HomeScreen extends Component {
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div className="row justify-content-center">
+                                            <Pagination
+                                                currentPage={this.state.pagina}
+                                                totalPages={this.state.total}
+                                                onChange={this.handlePageChange}
+                                            />
                                         </div>
                                     </div>
                                 </div>
