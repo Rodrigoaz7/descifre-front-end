@@ -83,7 +83,7 @@ export default class PerfilScreen extends Component {
                                         </div>
                                         <div className="col-lg-4 order-lg-1 text-lg-right align-self-lg-center">
                                             <div className="card-profile-actions py-4 mt-lg-0" style={{float: 'left'}}>
-                                                <button type="button" className="btn btn-sm btn-default mr-4 float-right">{this.state.nome} possui {this.state.quantidade_cifras} cifras</button>
+                                                <button type="button" className="btn btn-sm btn-default mr-4 float-right">{this.state.nome.split(' ')[0]} possui {this.state.quantidade_cifras} cifras</button>
                                             </div>
                                         </div>
                                     </div>
