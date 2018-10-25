@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { browserHistory } from "react-router/lib";
 import providerRealizarSaque from '../../../providers/usuario/transacoes/realizarSaque';
 import providerCheckoutPagseguro from '../../../providers/usuario/pagseguro/obterCodigoCheckout';
+import providerQuantCifras from '../../../providers/usuario/cifras/quantidadeCifras';
 import utilLocalStorage from '../../../util/localStorage';
 import Erros from '../../../ui/components/erros';
 
@@ -14,6 +15,7 @@ export default class HomeScreen extends Component {
     constructor() {
         super();
         this.state = {
+            cifrasUsuario: 0,
             quantidadeSaque: 0.0,
             quantidadeCompra: 0,
             quantidadeCifras: 0,
@@ -29,6 +31,9 @@ export default class HomeScreen extends Component {
     }
     async componentDidMount() {
         document.title = "Compra de cifras - compre suas próprias cifras.";
+        let quantCifras = await providerQuantCifras.quantidadeCifras();
+        this.setState({cifrasUsuario: quantCifras.data.quantidadeCifras})
+        
     }
 
     handleCalculaCifras = async (e) => {
@@ -201,7 +206,7 @@ export default class HomeScreen extends Component {
                                         <br />
                                         <div className="row">
                                             <div className="col-lg-6">
-                                                ATENÇÃO: Você possui {utilLocalStorage.getUser().quantidade_cifras} cifras
+                                                ATENÇÃO: Você possui {this.state.cifrasUsuario} cifras
                                                 <input type="number" className="form-control" onChange={this.handleCalculaCifras} />
                                             </div>
                                             <div className="col-lg-6">
