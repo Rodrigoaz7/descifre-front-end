@@ -118,7 +118,14 @@ export default class PerfilScreen extends Component {
         let postCadastro = await providerPerfil.realizarAtualizacao(data);
 
         if (!postCadastro.status) {
-            this.setState({ erros: postCadastro.erros, loading: false });
+            if (postCadastro.erros === undefined) {
+                let arrayErro = [];
+                arrayErro.push({msg: "E-mail já registrado."})
+                this.setState({ erros: arrayErro, loading: false })
+            }
+            else {
+                this.setState({ erros: postCadastro.erros, loading: false });
+            }
         } else {
             swal(
                 'Perfil editado!',

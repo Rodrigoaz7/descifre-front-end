@@ -94,7 +94,7 @@ export default class PerfilScreen extends Component {
     handleSubmit = async (e) => {
         e.preventDefault();
 
-        this.setState({loading: true});
+        this.setState({ loading: true });
         let usuario = utilLocalStorage.getUser();
 
         let data = {
@@ -115,16 +115,22 @@ export default class PerfilScreen extends Component {
         };
 
         let postCadastro = await providerPerfil.realizarAtualizacao(data);
-
         if (!postCadastro.status) {
-            this.setState({ erros: postCadastro.erros, loading: false });
+            if (postCadastro.erros === undefined) {
+                let arrayErro = [];
+                arrayErro.push({msg: "E-mail já registrado."})
+                this.setState({ erros: arrayErro, loading: false })
+            }
+            else {
+                this.setState({ erros: postCadastro.erros, loading: false });
+            }
         } else {
             swal(
                 'Perfil editado!',
                 'Seu perfil foi editada com sucesso.',
                 'success'
             ).then(() => {
-                this.setState({loading: false});
+                this.setState({ loading: false });
                 window.scrollTo(0, 0);
                 localStorage.setItem('descifre_tokenUsuario', JSON.stringify(postCadastro.data.token));
                 localStorage.setItem('descifre_userData', JSON.stringify(postCadastro.data.userInfor));
@@ -169,9 +175,9 @@ export default class PerfilScreen extends Component {
                                         <div className="order-lg-1 col-lg-3 order-lg-2">
                                             <div className="card-profile-image">
                                                 {this.state.fotoInicial !== '' && this.state.fotoInicial !== undefined ? (
-                                                    
+
                                                     <img src={`${variables.urlFoto}/imagem/${utilLocalStorage.getToken()}?tipo=usuario&id=${this.state.idPessoa}`} name="logomarca" className="img-fluid rounded-circle" style={{ maxHeight: '250px', width: '100%', marginTop: '-15%', boxShadow: '0 4px 10px 0' }} alt="imagem-perfil" />
-                                                    
+
                                                 ) :
                                                     <img src="/img/public/person.png" className="img-fluid rounded-circle" style={{ width: '100%', marginTop: '-15%', boxShadow: '0 4px 10px 0' }} alt="imagem-perfil" />
                                                 }
@@ -284,7 +290,7 @@ export default class PerfilScreen extends Component {
                                     <div className="row justify-content-center">
                                         <div className="col-lg-5">
                                             <div className="form-group">
-                                                <button type="submit" className="btn btn-primary btn-block" onClick={this.handleSubmit} disabled={this.state.loading}>{this.state.loading===false ? "Alterar" : "Atualizando..." }</button>
+                                                <button type="submit" className="btn btn-primary btn-block" onClick={this.handleSubmit} disabled={this.state.loading}>{this.state.loading === false ? "Alterar" : "Atualizando..."}</button>
                                             </div>
                                         </div>
                                     </div>
