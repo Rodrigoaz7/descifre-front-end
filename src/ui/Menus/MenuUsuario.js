@@ -55,21 +55,36 @@ export default class MenuUsuario extends Component{
             <ul className="navbar-nav align-items-lg-center ml-lg-auto" data-toggle="collapse" data-target={this.state.width>990 ?"" :"#navbar_global"} aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation" role="button">
                 <li className="nav-item">
                     <Link to='/usuario/' className="nav-link">Início</Link>
+                </li>   
+                <li className="nav-item dropdown">
+                    <Link to="" className="nav-link" data-toggle="dropdown"  href="" role="button">
+                        <i className="ni ni-bold-down d-lg-none"></i>
+                        <span className="nav-link-inner--text">Jogo</span>
+                    </Link>
+                    <div className="dropdown-menu">
+                        <Link to='/usuario/treino/' className="dropdown-item">Treino</Link>
+                        <Link to='/usuario/historico/' className="dropdown-item">Histórico de rodadas</Link>
+                    </div>
                 </li>
-                <li className="nav-item">
-                    <Link to='/usuario/indicacoes/' className="nav-link">Indicar Amigos</Link>
+                <li className="nav-item dropdown">
+                    <Link to="" className="nav-link" data-toggle="dropdown"  href="" role="button">
+                        <i className="ni ni-bold-down d-lg-none"></i>
+                        <span className="nav-link-inner--text">Compras e transações</span>
+                    </Link>
+                    <div className="dropdown-menu">
+                        <Link to='/usuario/comprar/' className="dropdown-item">Cifras</Link>
+                        <Link to='/usuario/transacoes/' className="dropdown-item">Transações</Link>
+                    </div>
                 </li>
-                <li className="nav-item">
-                    <Link to='/usuario/historico/' className="nav-link">Histórico de rodadas</Link>
-                </li>
-                <li className="nav-item">
-                    <Link to='/usuario/comprar/' className="nav-link">Cifras</Link>
-                </li>
-                <li className="nav-item">
-                    <Link to='/usuario/transacoes/' className="nav-link">Transações</Link>
-                </li>
-                <li className="nav-item">
-                    <Link to='/usuario/perfil/' className="nav-link">Perfil</Link>
+                <li className="nav-item dropdown">
+                    <Link to="" className="nav-link" data-toggle="dropdown"  href="" role="button">
+                        <i className="ni ni-bold-down d-lg-none"></i>
+                        <span className="nav-link-inner--text">Meu De$cifre</span>
+                    </Link>
+                    <div className="dropdown-menu">
+                        <Link to='/usuario/perfil/' className="dropdown-item">Perfil</Link>
+                        <Link to='/usuario/indicacoes/' className="dropdown-item">Indicar amigos</Link>
+                    </div>
                 </li>
                 <li onClick={(e) => this.handleSair(e)} className="nav-item">
                     <Link to='/' className="nav-link">Sair</Link>

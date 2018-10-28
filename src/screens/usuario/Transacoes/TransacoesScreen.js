@@ -2,7 +2,6 @@
 *   Autor: Rodrigo Azevedo
 */
 import React, { Component } from "react";
-import utilLocalStorage from '../../../util/localStorage';
 import providerListarTransacoes from '../../../providers/administrador/transacoes/listarTransacoesUsuario';
 import statusCodes from '../../../util/statusCodes';
 import Pagination from "react-ultimate-pagination-bootstrap-4";
@@ -31,7 +30,6 @@ export default class HomeScreen extends Component {
     handlePageChange = async (pageNumber) => {
         await this.setState({ pagina: pageNumber });
 
-        let usuario = utilLocalStorage.getUser();
         const resultado_transacoes = await providerListarTransacoes.getTransacoes(this.state.pagina);
 
         await this.setState({
