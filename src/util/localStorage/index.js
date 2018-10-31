@@ -19,9 +19,15 @@ const clearToken = () =>{
     localStorage.removeItem('descifre_tokenUsuario');
 }
 
+const getIdUser = () => {
+    if(localStorage.getItem('descifre_userData')!==null){
+        let usuario = JSON.parse(localStorage.getItem('descifre_userData'));
+        return usuario._id;
+    }
+}
 const clearAll = () =>{
     clearUser();
     clearToken();
 }
 
-export default {getToken, getUser, clearUser, clearToken, clearAll};
+export default {getToken, getUser, clearUser, clearToken, clearAll, getIdUser};
