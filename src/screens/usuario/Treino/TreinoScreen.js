@@ -5,6 +5,7 @@ import React, { Component } from "react";
 import providerObterTreino from '../../../providers/usuario/treino/obterTreino';
 import providerObterQuestaoTreino from '../../../providers/usuario/treino/obterQuestaoTreino';
 import providerEntrarOuCriarTreino from '../../../providers/usuario/treino/entrarOuCriarTreino';
+import providerProcessarQuestaoTreino from '../../../providers/usuario/treino/processarQuestaoTreino';
 import utilUser from '../../../util/localStorage';
 import providerCriarQuiz from '../../../providers/usuario/quiz/criarQuiz';
 import { browserHistory } from "react-router/lib";
@@ -17,7 +18,9 @@ export default class HomeScreen extends Component {
             treino: {},
             statusTreino: false,
             treinoEmAndamento: false,
-            questao: []
+            questao: [],
+            alternativaCorreta: '',
+            loading: false
         }
     }
     async componentDidMount() {
@@ -53,17 +56,44 @@ export default class HomeScreen extends Component {
     }
 
     handleClickSair = async () => {
-        this.setState({treinoEmAndamento: false})
+        this.setState({ treinoEmAndamento: false, alternativaCorreta: '' })
     }
 
-    handleClickPular = async () => {
-        // Pular questao
+    handleClickPular = async (e) => {
+        e.preventDefault();
+        this.setState({ loading: true })
+
+        let data = {
+            idTreino: this.state.treino._id,
+            idUsuario: utilUser.getUser()._id,
+            idQuestao: this.state.questao._id,
+            token: utilUser.getToken(),
+            respostaQuestao: "Pular"
+        }
+        const response = await providerProcessarQuestaoTreino.processar(data);
+        const questao = await providerObterQuestaoTreino.getQuestao(this.state.treino._id);
+        await this.setState({ treino: response.data.treino, questao: questao.data.questao, alternativaCorreta: '', loading: false })
+
     }
 
     handleResposta = async (e) => {
-        // Responder questao
-    }
+        e.preventDefault();
 
+        let data = {
+            idTreino: this.state.treino._id,
+            idUsuario: utilUser.getUser()._id,
+            idQuestao: this.state.questao._id,
+            token: utilUser.getToken(),
+            respostaQuestao: e.target.value
+        }
+        const response = await providerProcessarQuestaoTreino.processar(data);
+        const questao = await providerObterQuestaoTreino.getQuestao(this.state.treino._id);
+        await this.setState({ treino: response.data.treino, alternativaCorreta: response.data.correta })
+        setTimeout(function () {
+            if (this.state.treino.qntdVidas == 0) this.handleClickSair();
+            this.setState({ alternativaCorreta: '', questao: questao.data.questao});
+        }.bind(this), 2000);
+    }
 
     render() {
         return (
@@ -110,7 +140,7 @@ export default class HomeScreen extends Component {
                                                         <br />
                                                         {
                                                             this.state.treino.qntdVidas === 0 &&
-                                                            <span>Suas vidas irão recarregar em: {
+                                                            <span>Suas vidas irão recarregar-se em: {
                                                                 new Date(this.state.treino.vidaRecuperada.data).toLocaleString()
                                                             }</span>
                                                         }
@@ -166,28 +196,48 @@ export default class HomeScreen extends Component {
                                                         }
                                                         <hr />
                                                     </center>
-                                                    <div className="row">
-                                                        <div className="col-lg-12">
-                                                            <p style={{ fontSize: '16px', color: '#212121', fontWeight: '400' }}>({this.state.questao.categoria.nome}) - {this.state.questao.enunciado}</p>
 
-                                                            <div onChange={e => this.handleResposta(e)}>
-                                                                {
-                                                                    this.state.questao.alternativas.map((alternativa, indexAlternativa) => {
-                                                                        return (
-                                                                            <div className="custom-control custom-radio mb-3 radio" key={indexAlternativa}>
-                                                                                <input name="resposta" className="custom-control-input" id={`alternativa${indexAlternativa}`} type="radio" value={alternativa.descricao}
-                                                                                    checked={this.state.respostaSelecionada === alternativa.descricao}
-                                                                                />
-                                                                                <label className="custom-control-label" htmlFor={`alternativa${indexAlternativa}`}>
-                                                                                    <span>{alternativa.descricao}</span>
-                                                                                </label>
-                                                                            </div>
-                                                                        )
-                                                                    })
-                                                                }
+                                                    {!this.state.loading &&
+                                                        <div className="row">
+                                                            <div className="col-lg-12">
+                                                                <p style={{ fontSize: '16px', color: '#212121', fontWeight: '400' }}>({this.state.questao.categoria.nome}) - {this.state.questao.enunciado}</p>
+
+                                                                <div onChange={e => this.handleResposta(e)}>
+                                                                    {
+                                                                        this.state.questao.alternativas.map((alternativa, indexAlternativa) => {
+                                                                            return (
+                                                                                <div className="custom-control custom-radio mb-3 radio" key={indexAlternativa}>
+                                                                                    <input name="resposta" className="custom-control-input" id={`alternativa${indexAlternativa}`} type="radio" value={alternativa.descricao}
+                                                                                        checked={this.state.respostaSelecionada === alternativa.descricao}
+                                                                                    />
+                                                                                    <label className="custom-control-label" htmlFor={`alternativa${indexAlternativa}`}>
+                                                                                        {
+                                                                                            alternativa.descricao.toUpperCase() === this.state.alternativaCorreta.toUpperCase() &&
+                                                                                            <span style={{ "color": "green", "fontSize": "110%" }}>
+                                                                                                {alternativa.descricao}
+                                                                                            </span>
+                                                                                        }
+                                                                                        {
+                                                                                            alternativa.descricao.toUpperCase() !== this.state.alternativaCorreta.toUpperCase() &&
+                                                                                            <span>
+                                                                                                {alternativa.descricao}
+                                                                                            </span>
+                                                                                        }
+                                                                                    </label>
+                                                                                </div>
+                                                                            )
+                                                                        })
+                                                                    }
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    }
+                                                    {
+                                                        this.state.loading &&
+                                                        <center>
+                                                            <img className="img-fluid" alt="carregando questao" src="/img/public/loading.gif" />
+                                                        </center>
+                                                    }
                                                     <hr />
                                                     <div className="row">
                                                         <div className="col-lg-6">
