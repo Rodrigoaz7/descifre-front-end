@@ -9,5 +9,6 @@ import RecuperarSenhaScreen from "./RecuperarSenha/RecuperarSenhaScreen";
 import Error404Screen from './Erros/Error404Screen';
 import CadastroScreenIndicacao from '../public/Cadastro/CadastroScreenIndicacao';
 import AlterarSenhaScreen from './AlterarSenha/AlterarSenhaScreen';
+import PoliticaDePrivacidade from './PoliticaDePrivacidade/PoliticaDePrivacidade';
 
-export default {InicialScreen, Padrao, LoginScreen, CadastroScreen, RecuperarSenhaScreen, Error404Screen, CadastroScreenIndicacao, AlterarSenhaScreen}; 
+export default {InicialScreen, Padrao, LoginScreen, CadastroScreen, RecuperarSenhaScreen, Error404Screen, CadastroScreenIndicacao, AlterarSenhaScreen, PoliticaDePrivacidade}; 

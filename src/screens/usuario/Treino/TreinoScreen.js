@@ -7,8 +7,6 @@ import providerObterQuestaoTreino from '../../../providers/usuario/treino/obterQ
 import providerEntrarOuCriarTreino from '../../../providers/usuario/treino/entrarOuCriarTreino';
 import providerProcessarQuestaoTreino from '../../../providers/usuario/treino/processarQuestaoTreino';
 import utilUser from '../../../util/localStorage';
-import providerCriarQuiz from '../../../providers/usuario/quiz/criarQuiz';
-import { browserHistory } from "react-router/lib";
 import Swal from 'sweetalert2';
 
 export default class HomeScreen extends Component {
@@ -90,7 +88,7 @@ export default class HomeScreen extends Component {
         const questao = await providerObterQuestaoTreino.getQuestao(this.state.treino._id);
         await this.setState({ treino: response.data.treino, alternativaCorreta: response.data.correta })
         setTimeout(function () {
-            if (this.state.treino.qntdVidas == 0) this.handleClickSair();
+            if (this.state.treino.qntdVidas === 0) this.handleClickSair();
             this.setState({ alternativaCorreta: '', questao: questao.data.questao});
         }.bind(this), 2000);
     }
@@ -240,10 +238,10 @@ export default class HomeScreen extends Component {
                                                     }
                                                     <hr />
                                                     <div className="row">
-                                                        <div className="col-lg-6">
+                                                        <div className="col-lg-6 col-6">
                                                             <button onClick={this.handleClickPular} type="button" className="btn btn-block btn-danger">Pular <i className="fas fa-forward" style={{ "color": "#ffffff" }}></i></button>
                                                         </div>
-                                                        <div className="col-lg-6">
+                                                        <div className="col-lg-6 col-6">
                                                             <button onClick={this.handleClickSair} type="button" className="btn btn-block btn-dark">Sair do treino <i className="fas fa-sign-out-alt" style={{ "color": "#ffffff" }}></i></button>
                                                         </div>
                                                     </div>

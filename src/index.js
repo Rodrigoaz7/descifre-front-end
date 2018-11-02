@@ -59,6 +59,7 @@ ReactDOM.render(
             <Route path='/usuario/cadastro' component={Public.CadastroScreen}></Route>
             <Route path='/usuario/recuperar-senha' component={Public.RecuperarSenhaScreen}></Route>
             <Route path="/usuario/cadastro-indicacoes/:idUsuario" component={Public.CadastroScreenIndicacao}></Route>
+            <Route path="/usuario/politica-de-privacidade" component={Public.PoliticaDePrivacidade}></Route>
         </Route>
         
         {/* Rotas administrativas */}

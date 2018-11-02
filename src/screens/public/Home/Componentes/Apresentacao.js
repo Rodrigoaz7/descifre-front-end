@@ -19,7 +19,7 @@ const Apresentacao = () => (
                 <div className="row justify-content-center align-items-center">
                     <div className="col-lg-7 text-center pt-lg">
                         <img alt="Logo principal" src="./img/brand/white.png" style={{width: "200px"}} className="img-fluid"/>
-                        <p className="lead text-white mt-4 mb-5">Conecte-se ao De$cifre e ganhe créditos para iniciar sua tragetória rumo as cifras.</p>
+                        <p className="lead text-white mt-4 mb-5">Conecte-se ao De$cifre e ganhe créditos para iniciar sua trajetória rumo as cifras.</p>
                         <div className="btn-wrapper">
                             <Link to="/usuario/cadastro" className="btn btn-success btn-block btn-icon mb-3 mb-sm-0" data-toggle="scroll">
                                 <span className="btn-inner--icon"><i className="ni ni-favourite-28"></i></span>

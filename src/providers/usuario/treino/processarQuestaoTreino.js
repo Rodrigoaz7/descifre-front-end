@@ -1,6 +1,5 @@
 import variables from '../../../variables';
 import axios from 'axios';
-import utilLocalStorage from '../../../util/localStorage';
 
 const processar = async (data) => {
     let dataResponse;
