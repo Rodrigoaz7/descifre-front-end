@@ -4,6 +4,7 @@ import providerLogout from "../../providers/public/autenticacao/providerLogout";
 import utilLocalStorage from '../../util/localStorage/';
 import {browserHistory} from "react-router/lib";
 import toastr from "toastr";
+import swal from 'sweetalert2';
 
 export default class MenuNavPublic extends Component{
     constructor(){
@@ -40,16 +41,30 @@ export default class MenuNavPublic extends Component{
         })
     }
     handleSair = async (e) =>{
-        e.preventDefault();
-        let sairSessao = await providerLogout.sairSessao();
+
+        swal({
+            title: 'Você tem certeza?',
+            text: "Deseja realmente sair?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sim, quero sair!',
+            cancelButtonText: 'Não quero sair'
+        }).then(async (result) => {
+            
+            if (result.value) {
+                let sairSessao = await providerLogout.sairSessao();
         
-        if(!sairSessao.status){
-            toastr.error("Tivemos um problema ao finalizar sua sessão por favor tente novamente.", "Erro ao realizar logout");
-        }else{
-            utilLocalStorage.clearAll();
-            toastr.success("Sua sessão foi encerrada com sucesso, volte logo :)", "Sessão finalizada");
-            browserHistory.push('/');  
-        }           
+                if(!sairSessao.status){
+                    toastr.error("Tivemos um problema ao finalizar sua sessão por favor tente novamente.", "Erro ao realizar logout");
+                }else{
+                    utilLocalStorage.clearAll();
+                    toastr.success("Sua sessão foi encerrada com sucesso, volte logo :)", "Sessão finalizada");
+                    browserHistory.push('/');  
+                }   
+            }
+        });            
     }
     render(){
         return(
@@ -96,8 +111,8 @@ export default class MenuNavPublic extends Component{
                 <li className="nav-item">
                     <Link to='/administrador/perfil' className="nav-link">Perfil</Link>
                 </li> 
-                <li onClick={(e) => this.handleSair(e)} className="nav-item">
-                    <Link to='/' className="nav-link">Sair</Link>
+                <li onClick={(e) => this.handleSair(e)} className="nav-item" style={{cursor: 'pointer'}}>
+                    <Link to='' className="nav-link">Sair</Link>
                 </li> 
             </ul>
         );
