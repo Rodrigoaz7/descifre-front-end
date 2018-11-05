@@ -1,7 +1,8 @@
 /*
-*   Autor: Marcus Dantas
+*   Autor: Marcus Dantas e Rodrigo Azevedo
 */
 import React, { Component } from "react";
+import ReactCountdownClock from 'react-countdown-clock';
 import providerObterTreino from '../../../providers/usuario/treino/obterTreino';
 import providerObterQuestaoTreino from '../../../providers/usuario/treino/obterQuestaoTreino';
 import providerEntrarOuCriarTreino from '../../../providers/usuario/treino/entrarOuCriarTreino';
@@ -18,7 +19,9 @@ export default class HomeScreen extends Component {
             treinoEmAndamento: false,
             questao: [],
             alternativaCorreta: '',
-            loading: false
+            loading: false,
+            tempoQuestao: 30,
+            completions: 0
         }
     }
     async componentDidMount() {
@@ -70,7 +73,7 @@ export default class HomeScreen extends Component {
         }
         const response = await providerProcessarQuestaoTreino.processar(data);
         const questao = await providerObterQuestaoTreino.getQuestao(this.state.treino._id);
-        await this.setState({ treino: response.data.treino, questao: questao.data.questao, alternativaCorreta: '', loading: false })
+        await this.setState({ treino: response.data.treino, questao: questao.data.questao, alternativaCorreta: '', tempoQuestao: 30, completions: this.state.completions+1, loading: false })
 
     }
 
@@ -89,8 +92,17 @@ export default class HomeScreen extends Component {
         await this.setState({ treino: response.data.treino, alternativaCorreta: response.data.correta })
         setTimeout(function () {
             if (this.state.treino.qntdVidas === 0) this.handleClickSair();
-            this.setState({ alternativaCorreta: '', questao: questao.data.questao});
-        }.bind(this), 2000);
+            this.setState({ alternativaCorreta: '', questao: questao.data.questao, tempoQuestao: 30, completions: this.state.completions + 1 });
+        }.bind(this), 1000);
+    }
+
+    handleNovaQuestao = async () => {
+
+        this.setState({ loading: true })
+
+        const questao = await providerObterQuestaoTreino.getQuestao(this.state.treino._id);
+        await this.setState({questao: questao.data.questao, alternativaCorreta: '', tempoQuestao: 30, completions: this.state.completions + 1, loading: false })
+
     }
 
     render() {
@@ -130,6 +142,7 @@ export default class HomeScreen extends Component {
                                                             Ambiente de treino De$cifre
                                                         </h4>
                                                     </center>
+
                                                     <center>
                                                         {
                                                             this.state.statusTreino &&
@@ -175,25 +188,56 @@ export default class HomeScreen extends Component {
                                                 this.state.treinoEmAndamento &&
 
                                                 <div className="col-lg-12">
-                                                    <center>
-                                                        <h4>
-                                                            Ambiente de treino De$cifre
-                                                        </h4>
-                                                    </center>
-                                                    <center>
-                                                        {
-                                                            this.state.statusTreino &&
-                                                            <span>Você tem {this.state.treino.qntdVidas} vidas</span>
-                                                        }
-                                                        <br />
-                                                        {
-                                                            this.state.treino.qntdVidas === 0 &&
-                                                            <span>Suas vidas irão recarregar em: {
-                                                                new Date(this.state.treino.vidaRecuperada.data).toLocaleString()
-                                                            }</span>
-                                                        }
-                                                        <hr />
-                                                    </center>
+                                                    <div className="row justify-content-center">
+                                                        <center>
+                                                            <h4>
+                                                                Ambiente de treino De$cifre
+                                                            </h4>
+                                                        </center>
+                                                    </div>
+
+                                                    <div className="row justify-content-center">
+                                                        <div className="col-6">
+                                                            <center>
+                                                                <br />
+                                                                {
+                                                                    this.state.statusTreino &&
+
+                                                                    <div>
+                                                                        <h4 style={{ fontSize: '50px', color: '#212121', fontWeight: '400' }}>
+                                                                            {this.state.treino.qntdVidas}
+                                                                        </h4>
+                                                                        <h5 style={{ fontSize: '16px', color: '#212121', fontWeight: '400' }}>
+                                                                            VIDAS RESTANTES
+                                                                    </h5>
+                                                                    </div>
+                                                                }
+                                                                <br />
+                                                                {
+                                                                    this.state.treino.qntdVidas === 0 &&
+                                                                    <h4>Suas vidas irão recarregar em: {
+                                                                        new Date(this.state.treino.vidaRecuperada.data).toLocaleString()
+                                                                    }</h4>
+                                                                }
+                                                            </center>
+                                                        </div>
+
+                                                        <div className="col-6">
+                                                            <br />
+                                                            <div className="offset-1 col-6">
+                                                                <ReactCountdownClock
+                                                                    key={this.state.completions}
+                                                                    seconds={this.state.tempoQuestao}
+                                                                    color="#212121"
+                                                                    alpha={1}
+                                                                    size={100}
+                                                                    onComplete={this.handleNovaQuestao}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <hr />
 
                                                     {!this.state.loading &&
                                                         <div className="row">
@@ -242,7 +286,7 @@ export default class HomeScreen extends Component {
                                                             <button onClick={this.handleClickPular} type="button" className="btn btn-block btn-danger">Pular <i className="fas fa-forward" style={{ "color": "#ffffff" }}></i></button>
                                                         </div>
                                                         <div className="col-lg-6 col-6">
-                                                            <button onClick={this.handleClickSair} type="button" className="btn btn-block btn-dark">Sair do treino <i className="fas fa-sign-out-alt" style={{ "color": "#ffffff" }}></i></button>
+                                                            <button onClick={this.handleClickSair} type="button" className="btn btn-block btn-dark">Sair <i className="fas fa-sign-out-alt" style={{ "color": "#ffffff" }}></i></button>
                                                         </div>
                                                     </div>
                                                 </div>

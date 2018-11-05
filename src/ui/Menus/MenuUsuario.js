@@ -80,6 +80,7 @@ export default class MenuUsuario extends Component{
                     </Link>
                     <div className="dropdown-menu">
                         <Link to='/usuario/treino/' className="dropdown-item">Treino</Link>
+                        <Link to='/usuario/treino/ranking/' className="dropdown-item">Ranking semanal</Link>
                         <Link to='/usuario/historico/' className="dropdown-item">Histórico de rodadas</Link>
                     </div>
                 </li>
