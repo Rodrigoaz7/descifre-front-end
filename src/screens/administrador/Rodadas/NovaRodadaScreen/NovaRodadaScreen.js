@@ -26,7 +26,10 @@ export default class NovaRodadaScreen extends Component {
             dataFinalizacao: '',
             premiacao: '',
             taxa_entrada: '',
-            erros: []
+            premiacaoVoucher: false,
+            premiacaoTextoVoucher: '',
+            erros: [],
+            emailPatrocinador:''
         };
         this.numeroPremiados = null; // Variavel para ajudar na adição dos inputs.
         this.usuariosPremiados = []; // Array de usuários premiados.
@@ -57,7 +60,11 @@ export default class NovaRodadaScreen extends Component {
             dataFinalizacao: '',
             premiacao: '',
             taxa_entrada: '',
-            erros: []
+            erros: [],
+            premiacaoVoucher: false,
+            premiacaoTextoVoucher: '',
+            emailPatrocinador: ''
+
         });
         this.titulo.value = "";
         this.dataAbertura.value = "";
@@ -99,13 +106,22 @@ export default class NovaRodadaScreen extends Component {
     }
     handleSubmit = async (e) => {
         e.preventDefault();
+        
+        let premiacaoValor = this.premiacao!==null?parseFloat(this.premiacao.value):0;
+        
+        let premiacaoTextoVoucher = this.premiacaoTextoVoucher==undefined?"":this.premiacaoTextoVoucher.value;
+
+        let emailPatrocinador = this.emailPatrocinador==undefined?"":this.emailPatrocinador.value;
 
         await this.setState({
             tituloRodada: String(this.titulo.value),
             dataAbertura: new Date(this.dataAbertura.value),
             dataFinalizacao: new Date(this.dataFinalizacao.value),
-            premiacao: parseFloat(this.premiacao.value),
-            taxa_entrada: parseFloat(this.taxa_entrada.value)
+            premiacao: parseFloat(premiacaoValor),
+            taxa_entrada: parseFloat(this.taxa_entrada.value),
+            premiacaoVoucher: this.state.premiacaoVoucher,
+            premiacaoTextoVoucher: premiacaoTextoVoucher,
+            emailPatrocinador: emailPatrocinador
         });
 
         let data = {
@@ -116,9 +132,22 @@ export default class NovaRodadaScreen extends Component {
             premiacao: this.state.premiacao,
             taxa_entrada: this.state.taxa_entrada,
             jogadores: [],
-            ganhadores: this.state.quantidadeUsuariosPremiados.map((usuario, index) => { return { porcentagemPremio: parseInt(usuario.porcentagemPremio, 10) } }),
-            token: utilLocalStorage.getToken()
+            ganhadores: this.state.quantidadeUsuariosPremiados.map((usuario, index) => {           if(this.state.premiacaoVoucher){
+                    return { 
+                        porcentagemPremio: parseInt(100, 10) 
+                    } 
+                }else{
+                    return { 
+                        porcentagemPremio: parseInt(usuario.porcentagemPremio, 10) 
+                    } 
+                }
+            }),
+            token: utilLocalStorage.getToken(),
+            premiacaoVoucher: this.state.premiacaoVoucher,
+            premiacaoTextoVoucher: this.state.premiacaoTextoVoucher,
+            emailPatrocinador: this.state.emailPatrocinador
         };
+        
         let response = await providerCadastrarRodada.realizarCadastro(data);
         if (!response.status) {
             await this.setState({ erros: [] });
@@ -235,12 +264,36 @@ export default class NovaRodadaScreen extends Component {
                                                         </div>
                                                     </div>
                                                     <Linha tamanho={8} />
-                                                    <div class="row">
+                                                    <div className="row">
+                                                        <div className="col-lg-12">
+                                                            <center>
+                                                                <h4>Premiação em voucher: </h4>
+                                                                <br/>
+                                                                <label className="custom-toggle">
+                                                                    <input type="checkbox"
+                                                                    value={this.state.premiacaoVoucher}
+                                                                    onChange={()=>{this.setState({premiacaoVoucher: !this.state.premiacaoVoucher})}}
+                                                                    />
+                                                                    <span className="custom-toggle-slider rounded-circle"></span>
+                                                                </label>
+                                                            </center>
+                                                        </div>
+                                                    </div>
+                                                    <Linha tamanho={8} />
+                                                    <div className="row">
                                                         <div className="col-lg-6">
                                                             <small className="d-block text-uppercase font-weight-bold mb-3">Prêmiação: </small>
-                                                            <input className="form-control " placeholder="Digite o valor do prêmio em cifras" type="number"
+                                                            {   !this.state.premiacaoVoucher &&
+                                                                <input className="form-control " placeholder="Digite o valor do prêmio em cifras" type="number"
                                                                 step="0.01"
                                                                 ref={input => this.premiacao = input} />
+                                                            
+                                                            }
+                                                            {   this.state.premiacaoVoucher &&
+                                                                <input className="form-control " placeholder="Descreva a premiação" type="text"
+                                                                ref={input => this.premiacaoTextoVoucher = input} />
+                                                            
+                                                            }
                                                         </div>
                                                         <div className="col-lg-6">
                                                             <small className="d-block text-uppercase font-weight-bold mb-3">Taxa de entrada: </small>
@@ -249,7 +302,23 @@ export default class NovaRodadaScreen extends Component {
                                                                 ref={input => this.taxa_entrada = input} />
                                                         </div>
                                                     </div>
-                                                    <br />
+                                                    <Linha tamanho={8} />
+                                                    {
+                                                    this.state.premiacaoVoucher &&
+                                                    <div>
+                                                        <div className="row">
+                                                            <div className="col-lg-12">
+                                                                <center>
+                                                                    <h3>E-mail patrocinador</h3>
+                                                                </center>
+                                                                <br/>
+                                                                <input className="form-control " placeholder="Digite o e-mail do patrocinador" type="email"
+                                                                ref={input => this.emailPatrocinador = input} />
+                                                            </div>
+                                                        </div>
+                                                        <Linha tamanho={8} />
+                                                    </div>
+                                                    }
                                                     <div className="row">
                                                         <div className="col-lg-12">
                                                             <center>
@@ -269,6 +338,7 @@ export default class NovaRodadaScreen extends Component {
                                                     </div>
                                                     <br />
                                                     {
+                                                        !this.state.premiacaoVoucher &&
                                                         this.state.quantidadeUsuariosPremiados.map((usuario, index) => {
                                                             return (
                                                                 <div key={index}>
