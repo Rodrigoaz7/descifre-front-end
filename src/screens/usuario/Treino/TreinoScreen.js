@@ -31,12 +31,18 @@ export default class HomeScreen extends Component {
         if (requestTreino.data.status) {
             await this.setState({ statusTreino: true, treino: requestTreino.data.treino })
         } else {
-            Swal({
-                type: 'error',
-                title: 'Oops...',
-                text: `${requestTreino.data.msg}`,
-                footer: ''
-            })
+            const novoTreino = await providerEntrarOuCriarTreino.processar();
+            if (novoTreino.data.status) {
+                const treino = await providerObterTreino.obterTreino();
+                await this.setState({ statusTreino: true, treino: treino.data.treino })
+            } else {
+                Swal({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: `${requestTreino.data.msg}`,
+                    footer: ''
+                })
+            }
         }
     }
     handleClick = async (e) => {
@@ -73,7 +79,7 @@ export default class HomeScreen extends Component {
         }
         const response = await providerProcessarQuestaoTreino.processar(data);
         const questao = await providerObterQuestaoTreino.getQuestao(this.state.treino._id);
-        await this.setState({ treino: response.data.treino, questao: questao.data.questao, alternativaCorreta: '', tempoQuestao: 30, completions: this.state.completions+1, loading: false })
+        await this.setState({ treino: response.data.treino, questao: questao.data.questao, alternativaCorreta: '', tempoQuestao: 30, completions: this.state.completions + 1, loading: false })
 
     }
 
@@ -101,7 +107,7 @@ export default class HomeScreen extends Component {
         this.setState({ loading: true })
 
         const questao = await providerObterQuestaoTreino.getQuestao(this.state.treino._id);
-        await this.setState({questao: questao.data.questao, alternativaCorreta: '', tempoQuestao: 30, completions: this.state.completions + 1, loading: false })
+        await this.setState({ questao: questao.data.questao, alternativaCorreta: '', tempoQuestao: 30, completions: this.state.completions + 1, loading: false })
 
     }
 
