@@ -28,7 +28,9 @@ export default class NovaRodadaScreen extends Component {
             dataAbertura: '',
             dataFinalizacao: '',
             premiacao: '',
+            premiacaoVoucher: '',
             taxa_entrada: '',
+            premiacaoEmCifras: true,
             erros: []
         };
         this.numeroPremiados = null; // Variavel para ajudar na adição dos inputs.
@@ -60,7 +62,9 @@ export default class NovaRodadaScreen extends Component {
             dataFinalizacao: '',
             premiacao: '',
             taxa_entrada: '',
-            erros: []
+            erros: [],
+            premiacaoVoucher: '',
+            premiacaoEmCifras: true
         });
         this.titulo.value = "";
         this.dataAbertura.value = "";
@@ -82,7 +86,9 @@ export default class NovaRodadaScreen extends Component {
                 dataFinalizacao: dados.dataFinalizacao,
                 premiacao: dados.premiacao,
                 taxa_entrada: dados.taxa_entrada,
-                quantidadeUsuariosPremiados: dados.ganhadores
+                quantidadeUsuariosPremiados: dados.ganhadores,
+                premiacaoEmCifras: dados.pagamentoEmCifras,
+                premiacaoVoucher: dados.premioVoucher
 
             })
             this.numeroPremiados = dados.ganhadores.length
@@ -138,6 +144,10 @@ export default class NovaRodadaScreen extends Component {
         this.setState({premiacao: e.target.value})
     }
 
+    handlerPremiacaoVoucher = async (e) => {
+        this.setState({premiacaoVoucher: e.target.value})
+    }
+
     handlerTaxaEntrada = async (e) =>{
         this.setState({taxa_entrada: e.target.value})
     }
@@ -157,6 +167,9 @@ export default class NovaRodadaScreen extends Component {
             taxa_entrada: this.state.taxa_entrada,
             jogadores: [],
             ganhadores: this.state.quantidadeUsuariosPremiados.map((usuario, index) => { return { porcentagemPremio: parseInt(usuario.porcentagemPremio, 10) } }),
+            pagamentoEmCifras: this.state.premiacaoEmCifras,
+            premiacaoVoucher: this.state.premiacaoVoucher,
+            premiacaoTextoVoucher: this.state.premiacaoVoucher,
             token: utilLocalStorage.getToken()
         };
 
@@ -262,7 +275,7 @@ export default class NovaRodadaScreen extends Component {
                                                                 <input id="rangeTempo" className="form-control " placeholder="Duração da rodada em min"
                                                                     value={this.state.tempoParaResposta}
                                                                     onChange={input => this.handleTempo(input)}
-                                                                    type="range" min="5" max="25" />
+                                                                    type="range" min="1" max="25" />
                                                             </div>
 
                                                             <div style={{ padding: "10px" }} className="col-lg-2">
@@ -282,12 +295,24 @@ export default class NovaRodadaScreen extends Component {
                                                     </div>
                                                     <Linha tamanho={8} />
                                                     <div class="row">
-                                                        <div className="col-lg-6">
-                                                            <small className="d-block text-uppercase font-weight-bold mb-3">Prêmiação: </small>
-                                                            <input className="form-control " placeholder="Digite o valor do prêmio em cifras" type="number"
+                                                        {
+                                                            this.state.premiacaoEmCifras &&
+                                                            <div className="col-lg-6">
+                                                                <small className="d-block text-uppercase font-weight-bold mb-3">Premiação: </small>
+                                                                <input className="form-control " placeholder="Digite o valor do prêmio em cifras" type="number"
                                                                 step="0.01"
                                                                 ref={input => this.premiacao = input} value={this.state.premiacao} onChange={this.handlerPremiacao}/>
-                                                        </div>
+                                                            </div>
+                                                        }
+                                                        {
+                                                            !this.state.premiacaoEmCifras &&
+                                                            <div className="col-lg-6">
+                                                                <small className="d-block text-uppercase font-weight-bold mb-3">Premiação: </small>
+                                                                <input className="form-control " placeholder="descrição da premiação" type="text"
+                                                                ref={input => this.premiacaoVoucher = input} value={this.state.premiacaoVoucher} onChange={this.handlerPremiacaoVoucher}/>
+                                                            </div>
+                                                        }
+                                                        
                                                         <div className="col-lg-6">
                                                             <small className="d-block text-uppercase font-weight-bold mb-3">Taxa de entrada: </small>
                                                             <input className="form-control " placeholder="Digite o valor da taxa de entrada em cifras" type="number"
