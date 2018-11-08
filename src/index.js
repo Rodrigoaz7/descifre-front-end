@@ -89,6 +89,7 @@ ReactDOM.render(
         {/* Rotas patrocinador */}
         <Route path='/patrocinador/' component={Patrocinador.Padrao} onEnter={requirePatrocinador}>
             <IndexRoute component={Patrocinador.HomeScreen}/>
+            <Route path="/patrocinador/perfil" component={Patrocinador.PerfilPatrocinadorScreen}></Route>
         </Route>
 
         {/* Rotas administrativas */}
