@@ -109,9 +109,9 @@ export default class NovaRodadaScreen extends Component {
         
         let premiacaoValor = this.premiacao!==null?parseFloat(this.premiacao.value):0;
         
-        let premiacaoTextoVoucher = this.premiacaoTextoVoucher==undefined?"":this.premiacaoTextoVoucher.value;
+        let premiacaoTextoVoucher = this.premiacaoTextoVoucher===undefined?"":this.premiacaoTextoVoucher.value;
 
-        let emailPatrocinador = this.emailPatrocinador==undefined?"":this.emailPatrocinador.value;
+        let emailPatrocinador = this.emailPatrocinador===undefined?"":this.emailPatrocinador.value;
 
         await this.setState({
             tituloRodada: String(this.titulo.value),

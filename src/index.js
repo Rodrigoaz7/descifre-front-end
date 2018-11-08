@@ -3,8 +3,23 @@ import ReactDOM from 'react-dom';
 import Public from './screens/public/index';
 import Admin from './screens/administrador/index';
 import Usuario from './screens/usuario/index';
+import Patrocinador from './screens/patrocinador/index';
 import { Router, Route, IndexRoute, browserHistory, Redirect} from 'react-router/lib';
 import registerServiceWorker from './registerServiceWorker';
+
+const loggedPatrocinador = () => {
+    if(localStorage.getItem('descifre_userData')!==null && localStorage.getItem('descifre_tokenUsuario')!==null){
+        let data = JSON.parse(localStorage.getItem('descifre_userData'));
+        let admin = false;
+        data.permissoes.map((permissao, index) =>{
+            if(permissao==="Patrocinador") admin = true;
+            return null;
+        });
+        if(admin) return true;
+        return false;
+    }
+    return false;
+}
 
 const loggedAdministrador = () => {
     if(localStorage.getItem('descifre_userData')!==null && localStorage.getItem('descifre_tokenUsuario')!==null){
@@ -33,6 +48,15 @@ const loggedUsuario = () => {
     }
     return false;
 }
+
+const requirePatrocinador = (nextState, replace) => {
+    if (!loggedPatrocinador()) {
+        replace({
+            pathname: '/usuario/login'
+        });
+    }
+}
+
 const requireUsuario = (nextState, replace) => {
     if (!loggedUsuario()) {
         replace({
@@ -61,7 +85,12 @@ ReactDOM.render(
             <Route path="/usuario/cadastro-indicacoes/:idUsuario" component={Public.CadastroScreenIndicacao}></Route>
             <Route path="/usuario/politica-de-privacidade" component={Public.PoliticaDePrivacidade}></Route>
         </Route>
-        
+
+        {/* Rotas patrocinador */}
+        <Route path='/patrocinador/' component={Patrocinador.Padrao} >
+            <IndexRoute component={Patrocinador.HomeScreen}/>
+        </Route>
+
         {/* Rotas administrativas */}
         <Route path='/administrador/' component={Admin.Padrao} onEnter={requireAdmistrador}>
         
