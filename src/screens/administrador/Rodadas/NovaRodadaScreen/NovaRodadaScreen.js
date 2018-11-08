@@ -282,7 +282,7 @@ export default class NovaRodadaScreen extends Component {
                                                     <Linha tamanho={8} />
                                                     <div className="row">
                                                         <div className="col-lg-6">
-                                                            <small className="d-block text-uppercase font-weight-bold mb-3">Prêmiação: </small>
+                                                            <small className="d-block text-uppercase font-weight-bold mb-3">Premiação: </small>
                                                             {   !this.state.premiacaoVoucher &&
                                                                 <input className="form-control " placeholder="Digite o valor do prêmio em cifras" type="number"
                                                                 step="0.01"

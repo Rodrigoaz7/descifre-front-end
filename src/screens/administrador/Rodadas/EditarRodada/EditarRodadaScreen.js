@@ -31,7 +31,9 @@ export default class NovaRodadaScreen extends Component {
             premiacaoVoucher: '',
             taxa_entrada: '',
             premiacaoEmCifras: true,
-            erros: []
+            premiacaoEmVoucher: false,
+            erros: [],
+            emailPatrocinador: ''
         };
         this.numeroPremiados = null; // Variavel para ajudar na adição dos inputs.
         this.usuariosPremiados = []; // Array de usuários premiados.
@@ -64,7 +66,9 @@ export default class NovaRodadaScreen extends Component {
             taxa_entrada: '',
             erros: [],
             premiacaoVoucher: '',
-            premiacaoEmCifras: true
+            premiacaoEmCifras: true,
+            premiacaoEmVoucher: false,
+            emailPatrocinador: ''
         });
         this.titulo.value = "";
         this.dataAbertura.value = "";
@@ -73,12 +77,12 @@ export default class NovaRodadaScreen extends Component {
         this.taxa_entrada.value = 0;
         this.numeroPremiados = null;
     }
-    componentDidMount() {
+    async componentDidMount() {
         document.title = "Adicionar nova rodada - Tela de administração de$cifre.";
         const dados = this.props.location.state.data;
-
-        if(dados){
-            this.setState({
+       
+        if (dados) {
+            await this.setState({
                 id: dados._id,
                 tempoParaResposta: dados.duracao,
                 tituloRodada: dados.titulo, // Titulo da rodada
@@ -87,11 +91,13 @@ export default class NovaRodadaScreen extends Component {
                 premiacao: dados.premiacao,
                 taxa_entrada: dados.taxa_entrada,
                 quantidadeUsuariosPremiados: dados.ganhadores,
-                premiacaoEmCifras: dados.pagamentoEmCifras,
-                premiacaoVoucher: dados.premioVoucher
+                premiacaoEmCifras: Boolean(dados.pagamentoEmCifras),
+                premiacaoEmVoucher: !Boolean(dados.pagamentoEmCifras),
+                premiacaoVoucher: dados.premioVoucher,
+                emailPatrocinador: dados.emailPatrocinador
 
             })
-            this.numeroPremiados = dados.ganhadores.length
+            this.numeroPremiados = dados.ganhadores.length;
         } else {
             browserHistory.push({
                 pathname: '/administrador/rodada/ver',
@@ -129,27 +135,31 @@ export default class NovaRodadaScreen extends Component {
     }
 
     handlerTitulo = async (e) => {
-        this.setState({tituloRodada: e.target.value})
+        this.setState({ tituloRodada: e.target.value })
     }
 
-    handlerDataAbertura = async (e) =>{
-        this.setState({dataAbertura: e.target.value})
+    handlerDataAbertura = async (e) => {
+        this.setState({ dataAbertura: e.target.value })
     }
 
-    handlerDataFinalizacao = async (e) =>{
-        this.setState({dataFinalizacao: e.target.value})
+    handlerDataFinalizacao = async (e) => {
+        this.setState({ dataFinalizacao: e.target.value })
     }
 
     handlerPremiacao = async (e) => {
-        this.setState({premiacao: e.target.value})
+        this.setState({ premiacao: e.target.value })
     }
 
     handlerPremiacaoVoucher = async (e) => {
-        this.setState({premiacaoVoucher: e.target.value})
+        this.setState({ premiacaoVoucher: e.target.value })
     }
 
-    handlerTaxaEntrada = async (e) =>{
-        this.setState({taxa_entrada: e.target.value})
+    handlerTaxaEntrada = async (e) => {
+        this.setState({ taxa_entrada: e.target.value })
+    }
+
+    handleEmailPatrocinador = async (e) => {
+        this.setState({emailPatrocinador: e.target.value })
     }
 
     handleSubmit = async (e) => {
@@ -166,15 +176,26 @@ export default class NovaRodadaScreen extends Component {
             premiacao: this.state.premiacao,
             taxa_entrada: this.state.taxa_entrada,
             jogadores: [],
-            ganhadores: this.state.quantidadeUsuariosPremiados.map((usuario, index) => { return { porcentagemPremio: parseInt(usuario.porcentagemPremio, 10) } }),
+            // ganhadores: this.state.quantidadeUsuariosPremiados.map((usuario, index) => { return { porcentagemPremio: parseInt(usuario.porcentagemPremio, 10) } }),
             pagamentoEmCifras: this.state.premiacaoEmCifras,
-            premiacaoVoucher: this.state.premiacaoVoucher,
+            premiacaoVoucher: this.state.premiacaoEmVoucher,
             premiacaoTextoVoucher: this.state.premiacaoVoucher,
+            emailPatrocinador: this.state.emailPatrocinador,
+            ganhadores: this.state.quantidadeUsuariosPremiados.map((usuario, index) => {
+                if (this.state.premiacaoVoucher) {
+                    return {
+                        porcentagemPremio: parseInt(100, 10)
+                    }
+                } else {
+                    return {
+                        porcentagemPremio: parseInt(usuario.porcentagemPremio, 10)
+                    }
+                }
+            }),
             token: utilLocalStorage.getToken()
         };
 
         let response = await providerAtulizarRodada.realizarUpdate(data);
-
         if (!response.status) {
             this.setState({ erros: response.erros });
         } else {
@@ -182,11 +203,11 @@ export default class NovaRodadaScreen extends Component {
                 'Rodada editada!',
                 'A rodada foi editada com sucesso.',
                 'success'
-            ).then(()=>{
+            ).then(() => {
                 window.scrollTo(0, 0);
                 browserHistory.push('/administrador/rodada/ver');
                 window.location.reload();
-            });            
+            });
         }
     }
     render() {
@@ -213,7 +234,7 @@ export default class NovaRodadaScreen extends Component {
                                                         <div className="col-lg-12">
                                                             <div className="form-group">
                                                                 <input type="text" className="form-control form-control-lg form-control-alternative" placeholder="Titulo da rodada"
-                                                                    ref={input => this.titulo = input} value={this.state.tituloRodada} onChange={this.handlerTitulo}/>
+                                                                    ref={input => this.titulo = input} value={this.state.tituloRodada} onChange={this.handlerTitulo} />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -285,7 +306,24 @@ export default class NovaRodadaScreen extends Component {
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <Linha tamanho={8} />
+                                                    <div className="row">
+                                                        <div className="col-lg-12">
+                                                            <center>
+                                                                <h4>Premiação em voucher: </h4>
+                                                                <br />
+                                                                <label className="custom-toggle">
+                                                                    <input type="checkbox"
+                                                                        checked={this.state.premiacaoEmVoucher}
+                                                                        onChange={() => { this.setState({ premiacaoEmVoucher: !this.state.premiacaoEmVoucher }) }}
+                                                                    />
+                                                                    <span className="custom-toggle-slider rounded-circle"></span>
+                                                                </label>
+                                                            </center>
+                                                        </div>
+                                                    </div>
                                                     <br />
+                                                    <hr />
                                                     <div className="row">
                                                         <div className="col-lg-12">
                                                             <center>
@@ -296,30 +334,48 @@ export default class NovaRodadaScreen extends Component {
                                                     <Linha tamanho={8} />
                                                     <div class="row">
                                                         {
-                                                            this.state.premiacaoEmCifras &&
+                                                            !this.state.premiacaoEmVoucher &&
                                                             <div className="col-lg-6">
                                                                 <small className="d-block text-uppercase font-weight-bold mb-3">Premiação: </small>
                                                                 <input className="form-control " placeholder="Digite o valor do prêmio em cifras" type="number"
-                                                                step="0.01"
-                                                                ref={input => this.premiacao = input} value={this.state.premiacao} onChange={this.handlerPremiacao}/>
+                                                                    step="1"
+                                                                    ref={input => this.premiacao = input} value={this.state.premiacao} onChange={this.handlerPremiacao} />
                                                             </div>
                                                         }
                                                         {
-                                                            !this.state.premiacaoEmCifras &&
+                                                            this.state.premiacaoEmVoucher &&
                                                             <div className="col-lg-6">
                                                                 <small className="d-block text-uppercase font-weight-bold mb-3">Premiação: </small>
                                                                 <input className="form-control " placeholder="descrição da premiação" type="text"
-                                                                ref={input => this.premiacaoVoucher = input} value={this.state.premiacaoVoucher} onChange={this.handlerPremiacaoVoucher}/>
+                                                                    ref={input => this.premiacaoVoucher = input} value={this.state.premiacaoVoucher} onChange={this.handlerPremiacaoVoucher} />
                                                             </div>
                                                         }
-                                                        
+
                                                         <div className="col-lg-6">
                                                             <small className="d-block text-uppercase font-weight-bold mb-3">Taxa de entrada: </small>
                                                             <input className="form-control " placeholder="Digite o valor da taxa de entrada em cifras" type="number"
-                                                                step="0.01"
-                                                                ref={input => this.taxa_entrada = input} value={this.state.taxa_entrada} onChange={this.handlerTaxaEntrada}/>
+                                                                step="1"
+                                                                ref={input => this.taxa_entrada = input} value={this.state.taxa_entrada} onChange={this.handlerTaxaEntrada} />
                                                         </div>
                                                     </div>
+                                                    <Linha tamanho={8} />
+                                                    {
+                                                        this.state.premiacaoEmVoucher &&
+                                                        <div>
+                                                            <div className="row">
+                                                                <div className="col-lg-12">
+                                                                    <center>
+                                                                        <h3>E-mail patrocinador</h3>
+                                                                    </center>
+                                                                    <br />
+                                                                    <input className="form-control " placeholder="Digite o e-mail do patrocinador" type="email"
+                                                                        value={this.state.emailPatrocinador}
+                                                                        onChange={this.handleEmailPatrocinador} />
+                                                                </div>
+                                                            </div>
+                                                            <Linha tamanho={8} />
+                                                        </div>
+                                                    }
                                                     <br />
                                                     <div className="row">
                                                         <div className="col-lg-12">
@@ -340,6 +396,7 @@ export default class NovaRodadaScreen extends Component {
                                                     </div>
                                                     <br />
                                                     {
+                                                        !this.state.premiacaoEmVoucher &&
                                                         this.state.quantidadeUsuariosPremiados.map((usuario, index) => {
                                                             return (
                                                                 <div key={index}>
@@ -363,17 +420,17 @@ export default class NovaRodadaScreen extends Component {
                                                         })
                                                     }
                                                     <br />
-                                                    <Erros erros={this.state.erros}/>
+                                                    <Erros erros={this.state.erros} />
                                                     <div className="row">
                                                         <div className="col-lg-6">
                                                             <button type="submit" className="btn btn-success btn-block" onChange={this.handleSubmit}> Cadastrar </button>
                                                         </div>
                                                         <div className="col-lg-6">
                                                             <button className="btn btn-danger btn-block" type="button" onClick={(e) => {
-                                                                    e.preventDefault();
-                                                                    browserHistory.push('/administrador/rodada/ver')
-                                                                    window.location.reload()
-                                                                }}>Cancelar</button>
+                                                                e.preventDefault();
+                                                                browserHistory.push('/administrador/rodada/ver')
+                                                                window.location.reload()
+                                                            }}>Cancelar</button>
                                                         </div>
                                                     </div>
                                                 </div>
