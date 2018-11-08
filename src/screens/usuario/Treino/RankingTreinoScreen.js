@@ -25,8 +25,8 @@ export default class ClassificacaoScreen extends Component {
         this.setState({ classificacao: ranking.data.ranking, colocacao: ranking.data.colocacao + 1, totalGeral: ranking.data.total})
         let total = ranking.data.total;
         
-        if (total < 5) total = 1;
-        else total = Math.ceil(total / 5.0);
+        if (total < 10) total = 1;
+        else total = Math.ceil(total / 10.0);
         
         this.setState({total: total})
         
