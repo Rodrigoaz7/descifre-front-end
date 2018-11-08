@@ -1,0 +1,15 @@
+{
+  "short_name": "De$cifre",
+  "name": "Responda perguntas e ganhe cifras que podem ser convertidas em dinheiro de verdade",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#212121",
+  "background_color": "#ffffff"
+}

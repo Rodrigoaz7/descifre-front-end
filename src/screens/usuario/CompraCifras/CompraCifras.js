@@ -10,7 +10,8 @@ import providerCheckoutPagseguro from '../../../providers/usuario/pagseguro/obte
 import providerQuantCifras from '../../../providers/usuario/cifras/quantidadeCifras';
 import utilLocalStorage from '../../../util/localStorage';
 import Erros from '../../../ui/components/erros';
-
+import variavles from '../../../variables';
+import variables from "../../../variables";
 export default class HomeScreen extends Component {
     constructor() {
         super();
@@ -81,7 +82,7 @@ export default class HomeScreen extends Component {
         //let email = usuario.email;
         
         const requestCheckout = await providerCheckoutPagseguro.obterCodigoCheckout({preco:valorReal, idUsuario: idUsuario, quantidadeCifras: this.state.quantidadeCifras});
-        if(requestCheckout.data.status) window.location.href= `https://sandbox.pagseguro.uol.com.br/v2/checkout/payment.html?code=${requestCheckout.data.checkout.code}`;
+        if(requestCheckout.data.status) window.location.href= `${variables.pagseguroUrl}/v2/checkout/payment.html?code=${requestCheckout.data.checkout.code}`;
         
         // Aqui sera redirecionado para o pagseguro
     }

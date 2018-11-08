@@ -3,7 +3,6 @@
 */
 import React, { Component } from "react";
 import providerRanking from '../../../providers/usuario/treino/obterRanking';
-import utilUsuario from '../../../util/localStorage';
 import Pagination from "react-ultimate-pagination-bootstrap-4";
 
 export default class ClassificacaoScreen extends Component {

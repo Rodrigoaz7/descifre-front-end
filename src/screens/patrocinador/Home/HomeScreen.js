@@ -2,7 +2,6 @@
 *   Autor: Marcus Dantas
 */
 import React, { Component } from "react";
-import { browserHistory } from "react-router";
 import providerVerificarVoucher from '../../../providers/patrocinador/voucher/verificarVoucher';
 import providerAtivarVoucher from '../../../providers/patrocinador/voucher/ativarVoucher';
 import Erros from '../../../ui/components/erros';
