@@ -81,32 +81,33 @@ export default class VerRodadaScreen extends Component {
     async componentDidMount() {
         document.title = "Adicionar nova rodada - Tela de administração de$cifre.";
         const resultado_rodadas = await ProviderListarRodadas.listarRodadas("", "", "", "");
+        //console.log(resultado_rodadas)
         this.setState({
-            rodadas: resultado_rodadas.data.rodadas
+            rodadas: resultado_rodadas.data.rodadas.reverse()
         });
-        console.log(this.state.rodadas)
+        //console.log(this.state.rodadas)
 
     }
 
-    handlerTitulo = async(e) => {
-        await this.setState({titulo: e.target.value})
+    handlerTitulo = async (e) => {
+        await this.setState({ titulo: e.target.value })
     }
 
-    handlerSituacao = async(e) => {
-        await this.setState({situacao: e.target.value})
+    handlerSituacao = async (e) => {
+        await this.setState({ situacao: e.target.value })
     }
 
-    handlerDataInicio = async(e) => {
-        await this.setState({data_inicio: e.target.value})
+    handlerDataInicio = async (e) => {
+        await this.setState({ data_inicio: e.target.value })
     }
 
-    handlerDataFim = async(e) => {
-        await this.setState({data_fim: e.target.value})
+    handlerDataFim = async (e) => {
+        await this.setState({ data_fim: e.target.value })
     }
 
-    handlerSubmit = async() => {
+    handlerSubmit = async () => {
         const response = await ProviderListarRodadas.listarRodadas(this.state.titulo, this.state.situacao, this.state.data_inicio, this.state.data_fim);
-        await this.setState({rodadas: response.data.rodadas})
+        await this.setState({ rodadas: response.data.rodadas })
     }
 
     render() {
@@ -150,14 +151,14 @@ export default class VerRodadaScreen extends Component {
                                                     <div className="form-group">
                                                         <div className="row">
                                                             <div className="col-lg-12">
-                                                                <center><input type="text" className="form-control form-control-lg form-control-alternative" placeholder="Titulo da rodada" onChange={this.handlerTitulo}/></center>
+                                                                <center><input type="text" className="form-control form-control-lg form-control-alternative" placeholder="Titulo da rodada" onChange={this.handlerTitulo} /></center>
                                                             </div>
                                                         </div>
                                                         <hr />
                                                         <div className="row">
                                                             <div className="col-lg-2">
                                                                 <center><small className="d-block text-uppercase font-weight-bold mb-3">Fechado</small></center>
-                                                                <center><input type="radio" id="Fechado" name="fr" value="Fechado" onClick={this.handlerSituacao}/></center>
+                                                                <center><input type="radio" id="Fechado" name="fr" value="Fechado" onClick={this.handlerSituacao} /></center>
                                                             </div>
                                                             <div className="col-lg-2">
                                                                 <center><small className="d-block text-uppercase font-weight-bold mb-3">Aberto</small></center>
@@ -170,7 +171,7 @@ export default class VerRodadaScreen extends Component {
                                                                         <div className="input-group-prepend">
                                                                             <span className="input-group-text"><i className="ni ni-calendar-grid-58"></i></span>
                                                                         </div>
-                                                                        <input className="form-control" placeholder="Select date" type="datetime-local" onChange={this.handlerDataInicio}/>
+                                                                        <input className="form-control" placeholder="Select date" type="datetime-local" onChange={this.handlerDataInicio} />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -181,7 +182,7 @@ export default class VerRodadaScreen extends Component {
                                                                         <div className="input-group-prepend">
                                                                             <span className="input-group-text"><i className="ni ni-calendar-grid-58"></i></span>
                                                                         </div>
-                                                                        <input className="form-control" placeholder="Select date" type="datetime-local" onChange={this.handlerDataFim}/>
+                                                                        <input className="form-control" placeholder="Select date" type="datetime-local" onChange={this.handlerDataFim} />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -203,6 +204,7 @@ export default class VerRodadaScreen extends Component {
                                                                                     <th>Título</th>
                                                                                     <th>Estado</th>
                                                                                     <th>Duração</th>
+                                                                                    <th>Tipo de premiação</th>
                                                                                     <th>Premiação</th>
                                                                                     <th>Editar</th>
                                                                                     <th>Apagar</th>
@@ -218,7 +220,27 @@ export default class VerRodadaScreen extends Component {
 
                                                                                         <td>{r.duracao}</td>
 
-                                                                                        <td>{r.premiacao}</td>
+                                                                                        <td>
+                                                                                            {
+                                                                                                r.pagamentoEmCifras &&
+                                                                                                <span>Cifras</span>
+                                                                                            }
+                                                                                            {
+                                                                                                !r.pagamentoEmCifras &&
+                                                                                                <span>Voucher</span>
+                                                                                            }
+                                                                                        </td>
+
+                                                                                        <td>
+                                                                                            {
+                                                                                                r.pagamentoEmCifras &&
+                                                                                                <span>{r.premiacao}</span>
+                                                                                            }
+                                                                                            {
+                                                                                                !r.pagamentoEmCifras &&
+                                                                                                <span>{r.premioVoucher}</span>
+                                                                                            }
+                                                                                        </td>
 
                                                                                         <td><center><button className="btn btn-primary" type="button" id={r._id} onClick={this.handleClickEdit}    >editar</button></center></td>
                                                                                         <td><center><button className="btn btn-danger" type="button" id={r._id} onClick={this.handleClickDelete} >apagar</button></center></td>
