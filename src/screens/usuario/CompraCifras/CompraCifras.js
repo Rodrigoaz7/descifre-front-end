@@ -10,7 +10,6 @@ import providerCheckoutPagseguro from '../../../providers/usuario/pagseguro/obte
 import providerQuantCifras from '../../../providers/usuario/cifras/quantidadeCifras';
 import utilLocalStorage from '../../../util/localStorage';
 import Erros from '../../../ui/components/erros';
-import variavles from '../../../variables';
 import variables from "../../../variables";
 export default class HomeScreen extends Component {
     constructor() {
