@@ -14,22 +14,23 @@ export default class ClassificacaoScreen extends Component {
             ganhadoresTamanho: 5,
             pagina: 1,
             total: 1,
-            totalGeral: 0
+            totalGeral: 0,
+            contador: 0
         }
     }
 
     async componentDidMount() {
-        
+
         let ranking = await providerRanking.obterRanking(1);
-        
-        this.setState({ classificacao: ranking.data.ranking, colocacao: ranking.data.colocacao + 1, totalGeral: ranking.data.total})
+
+        this.setState({ classificacao: ranking.data.ranking, colocacao: ranking.data.colocacao + 1, totalGeral: ranking.data.total })
         let total = ranking.data.total;
-        
+
         if (total < 10) total = 1;
         else total = Math.ceil(total / 10.0);
-        
-        this.setState({total: total})
-        
+
+        this.setState({ total: total })
+
         document.title = `Classificação da rodada - De$cifre, muito mais do que um jogo.`;
     }
 
@@ -42,7 +43,7 @@ export default class ClassificacaoScreen extends Component {
             classificacao: resultado.data.ranking
         });
 
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
     }
 
     render() {
@@ -128,9 +129,16 @@ export default class ClassificacaoScreen extends Component {
                                                         <tbody>
                                                             {
                                                                 this.state.classificacao.map((jogador, index) => {
+                                                                    let contador = 0;
                                                                     return (
                                                                         <tr key={index} bgcolor={index < this.state.ganhadoresTamanho ? "#DCEDC8" : "#FFFFFF"}>
-                                                                            <th scope="row">{index + 1}</th>
+                                                                            <th scope="row">
+                                                                                {  
+                                                                                    (index + (this.state.pagina*10) - 9)
+                                                                                }
+                                                                               
+
+                                                                            </th>
                                                                             <td>
                                                                                 <center>
                                                                                     {jogador.usuario.email}
