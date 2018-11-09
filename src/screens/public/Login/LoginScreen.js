@@ -57,12 +57,15 @@ export default class LoginScreen extends Component {
         localStorage.setItem('descifre_userData', JSON.stringify(postLogin.data.usuario));
         
         let admin = false;
+        let patrocinador = false;
 
         postLogin.data.usuario.permissoes.map((permissao, index) =>{
             if(permissao==="Administrador") admin = true;
+            if(permissao==="Patrocinador") patrocinador = true;
             return null;
         });
         if(admin) browserHistory.push(`/administrador/`);
+        else if(patrocinador) browserHistory.push(`/patrocinador/`);
         else browserHistory.push(`/usuario/`);
     }
     render() {

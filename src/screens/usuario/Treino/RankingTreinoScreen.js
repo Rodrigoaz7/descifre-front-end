@@ -13,18 +13,23 @@ export default class ClassificacaoScreen extends Component {
             colocacao: 0,
             ganhadoresTamanho: 5,
             pagina: 1,
-            total: 1
+            total: 1,
+            totalGeral: 0
         }
     }
 
     async componentDidMount() {
+        
         let ranking = await providerRanking.obterRanking(1);
-        this.setState({ classificacao: ranking.data.ranking, colocacao: ranking.data.colocacao + 1})
-        let total = ranking.data.ranking.length;
+        
+        this.setState({ classificacao: ranking.data.ranking, colocacao: ranking.data.colocacao + 1, totalGeral: ranking.data.total})
+        let total = ranking.data.total;
+        
         if (total < 10) total = 1;
         else total = Math.ceil(total / 10.0);
-
+        
         this.setState({total: total})
+        
         document.title = `Classificação da rodada - De$cifre, muito mais do que um jogo.`;
     }
 
@@ -72,7 +77,7 @@ export default class ClassificacaoScreen extends Component {
 
                                                 <center>
                                                     <h4 style={{ fontSize: '50px', color: '#212121', fontWeight: '400' }}>
-                                                        {this.state.classificacao.length}
+                                                        {this.state.totalGeral}
                                                     </h4>
                                                     <h5 style={{ fontSize: '16px', color: '#212121', fontWeight: '400' }}>
                                                         JOGADORES
