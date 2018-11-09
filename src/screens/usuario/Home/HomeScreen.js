@@ -102,7 +102,6 @@ export default class HomeScreen extends Component {
                                         </div>
                                     </div>}
                                     {
-                                    
                                     this.state.rodadas.length>0 &&
                                     this.state.rodadas.map((rodada, index)=>{
                                         const dataAbertura = new Date(rodada.dataAbertura);

@@ -4,7 +4,7 @@
 import React, { Component } from "react";
 import providerObterRodada from '../../../providers/usuario/rodadas/obterRodada';
 import utilUsuario from '../../../util/localStorage';
-
+import Patrocinadores from '../../../ui/components/patrocinador';
 export default class ClassificacaoScreen extends Component {
     constructor() {
         super();
@@ -53,6 +53,7 @@ export default class ClassificacaoScreen extends Component {
                     <div className="container-fluid pt-lg-md">
                         <div className="row justify-content-center">
                             <div className="col-lg-12">
+                                <Patrocinadores urlImagem={'familia-picui.png'}/>
                                 <div className="card bg-secondary shadow border-0">
                                     <div className="card-body px-lg-5 py-lg-5">
                                         <div className="row">

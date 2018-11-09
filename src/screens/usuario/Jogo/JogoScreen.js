@@ -8,6 +8,7 @@ import providerQuestaoAleatoria from '../../../providers/usuario/questao/provide
 import providerProcessarQuiz from '../../../providers/usuario/quiz/processarQuiz';
 import Swal from 'sweetalert2';
 import { browserHistory } from "react-router";
+import Patrocinadores from '../../../ui/components/patrocinador';
 
 export default class JogoScreen extends Component {
     constructor() {
@@ -188,6 +189,7 @@ export default class JogoScreen extends Component {
                     <div className="container-fluid pt-lg-md">
                         <div className="row justify-content-center">
                             <div className="col-lg-12">
+                                <Patrocinadores urlImagem={'familia-picui.png'}/>
                                 <div className="card bg-secondary shadow border-0">
                                     {!this.state.loading &&
                                         <div className="card-body px-lg-5 py-lg-5">
