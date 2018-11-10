@@ -14,7 +14,8 @@ export default class HomeScreen extends Component {
         this.state = {
             rodadas: [],
             idUsuario: '',
-            carregando: false
+            carregando: false,
+            nome: ''
         }
     }
     async componentDidMount() {
@@ -24,7 +25,8 @@ export default class HomeScreen extends Component {
         let usuario = utilUser.getUser();
         await this.setState({
             rodadas: rodadas,
-            idUsuario: usuario._id
+            idUsuario: usuario._id,
+            nome: usuario.pessoa.nome
         });
         await this.setState({
             carregando: true
@@ -84,6 +86,68 @@ export default class HomeScreen extends Component {
                     </div>
                     <div className="container-fluid pt-lg-md">
                         <div className="row justify-content-center">
+                        <div className="modal" id="myModal">
+                            <div className="modal-dialog modal-lg">
+                                <div className="modal-content">
+
+                                <div className="modal-header">
+                                    <h4 className="modal-title">Solução de dúvidas</h4>
+                                    <button type="button" className="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <div className="modal-body">
+                                    {this.state.nome},<br/>
+                                    <p style={{textAlign:'justify'}}>
+                                        Estamos aqui para explicar a você o funcionamento da rodada do De$cifre:
+                                        <br/>
+                                    </p>
+                                    <center>
+                                        <i style={{fontSize:'2em'}} className="fas fa-lock-open"></i><br/>
+                                    </center>
+                                        
+                                    <p style={{textAlign:'justify'}}> 
+                                        O cadeado aberto representa o horário de abertura da rodada. A partir desse horário
+                                        você já pode clicar em "Jogar agora"  e iniciar sua rodada.
+                                    </p>
+                                    
+                                    <center>
+                                        <i style={{fontSize:'2em'}} className="fas fa-lock"></i><br/>
+                                    </center>
+                                        
+                                    <p style={{textAlign:'justify'}}> 
+                                        O cadeado fechado representa o horário máximo que você pode entrar na rodada. Depois desse horário
+                                        a rodada será processada e você não poderá mais entrar nela.
+                                    </p>
+                                    
+                                    <center>
+                                        <i style={{fontSize:'2em'}} className="fas fa-clock"></i><br/>
+                                    </center>
+                                        
+                                    <p style={{textAlign:'justify'}}> 
+                                        O relógio representa quanto tempo você tem para responder as perguntas: quando você entrar na rodada você terá um minuto para responder o máximo de questões possíeis.
+                                    </p>
+                                    <center><strong>Detalhes importantes</strong></center>
+                                    <p style={{textAlign:'justify'}}> 
+                                        A prêmiação das rodadas padrões do De$cifre são distribuídas da seguinte forma:<br/>
+                                        <strong>1º</strong> Lugar -> 5 cifras<br/>
+                                        <strong>2º</strong> Lugar -> 3 cifras<br/>
+                                        <strong>3º</strong> Lugar -> 2 cifras<br/>
+                                        <strong>Em caso de empate o jogador que iniciou a rodada primeiro irá ganhar no critério de desempate.</strong>
+                                        <br/>
+                                        <strong>O JOGO</strong><br/>
+                                        Ao clicar em jogar agora o usuário terá 1 minuto para responder o máximo de perguntas que conseguir, ao final desse minuto ele não poderá mais responder perguntas
+                                        e so conseguirá ver a classificação dessa rodada.
+                                    </p>
+                                    
+                                </div>
+
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-danger" data-dismiss="modal">Sair</button>
+                                </div>
+
+                                </div>
+                            </div>
+                        </div>
                             {this.state.carregando && <div className="col-lg-12">
                                 {
                                     this.state.rodadas.length===0 &&
@@ -116,8 +180,8 @@ export default class HomeScreen extends Component {
                                                                     <h4>
                                                                         {rodada.titulo.toUpperCase()}
                                                                     </h4>
-                                                                    <hr/>
                                                                 </center>
+                                                                <hr/>
                                                                 <center>
                                                                     <div className="row">
                                                                         <div className="col-4">
@@ -125,11 +189,11 @@ export default class HomeScreen extends Component {
                                                                             {dataAbertura.toLocaleTimeString()}<br/>
                                                                         </div>
                                                                         <div className="col-4">
-                                                                            <i style={{fontSize:'2em'}} class="fas fa-clock"></i><br/>
+                                                                            <i style={{fontSize:'2em'}} className="fas fa-clock"></i><br/>
                                                                             {rodada.duracao} minuto
                                                                         </div>
                                                                         <div className="col-4">
-                                                                            <i style={{fontSize:'2em'}} class="fas fa-lock"></i><br/>
+                                                                            <i style={{fontSize:'2em'}} className="fas fa-lock"></i><br/>
                                                                             {dataFinalizacao.toLocaleTimeString()}
                                                                         </div>
                                                                     </div>
@@ -144,11 +208,20 @@ export default class HomeScreen extends Component {
 
                                                                 </center>
                                                                 <hr/>
-                                                                <button value={rodada._id} onClick={e=>this.handleClick(e)} type="button" className="btn btn-success btn-block">
-                                                                    Jogar agora<br/>
-                                                                    {rodada.taxa_entrada===0 && <span>(Grátis)</span>}
-                                                                    {rodada.taxa_entrada>0 && <span>({rodada.taxa_entrada} Cifras)</span>}
-                                                                </button>
+                                                                <div className="row">
+                                                                    <div className="col-lg-10 col-8">
+                                                                        <button value={rodada._id} onClick={e=>this.handleClick(e)} type="button" className="btn btn-success btn-block">
+                                                                            Jogar agora<br/>
+                                                                            {rodada.taxa_entrada===0 && <span>(Grátis)</span>}
+                                                                            {rodada.taxa_entrada>0 && <span>({rodada.taxa_entrada} Cifras)</span>}
+                                                                        </button>
+                                                                    </div>
+                                                                    <div className="col-lg-2 col-4">
+                                                                        <button type="button" className="btn btn-secondary btn-block" data-toggle="modal" data-target="#myModal">
+                                                                            <strong><span style={{fontSize:'1.97em'}}>?</span></strong>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>

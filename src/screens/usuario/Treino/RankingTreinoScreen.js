@@ -129,7 +129,7 @@ export default class ClassificacaoScreen extends Component {
                                                         <tbody>
                                                             {
                                                                 this.state.classificacao.map((jogador, index) => {
-                                                                    let contador = 0;
+                                                                    
                                                                     return (
                                                                         <tr key={index} bgcolor={index < this.state.ganhadoresTamanho ? "#DCEDC8" : "#FFFFFF"}>
                                                                             <th scope="row">
