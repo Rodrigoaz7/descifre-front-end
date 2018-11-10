@@ -18534,3 +18534,10 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle
 .wrap {
     word-wrap:break-word
 }
+/* Media queries */
+/* xs < 768 */
+@media screen and (max-width: 767px) {
+    .mobile{
+        display: none;
+    }
+}

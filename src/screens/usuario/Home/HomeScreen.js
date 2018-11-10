@@ -173,7 +173,7 @@ export default class HomeScreen extends Component {
                                         return(
                                             <div key={index}>
                                                 <div className="card bg-secondary shadow border-0">
-                                                    <div  className="card-body px-lg-5 py-lg-5">
+                                                    <div className="card-body px-lg-5 py-lg-5">
                                                         <div className="row">
                                                             <div className="col-lg-12">
                                                                 <center>

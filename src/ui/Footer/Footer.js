@@ -2,7 +2,7 @@ import React, { Component } from "react";
 export default class Footer extends Component{
     render(){
         return(
-            <footer className="footer has-cards">
+            <footer className="footer has-cards mobile">
                 <div className="container">
                     <hr/>
                     <div className="row align-items-center justify-content-md-between">
