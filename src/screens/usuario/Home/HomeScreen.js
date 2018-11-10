@@ -116,12 +116,24 @@ export default class HomeScreen extends Component {
                                                                     <h4>
                                                                         {rodada.titulo.toUpperCase()}
                                                                     </h4>
+                                                                    <hr/>
                                                                 </center>
                                                                 <center>
-                                                                    Abertura: {dataAbertura.toLocaleString()}<br/>
-                                                                    Finalização: {dataFinalizacao.toLocaleString()}
-                                                                    <br />
-                                                                    Duração da rodada: {rodada.duracao} minutos.
+                                                                    <div className="row">
+                                                                        <div className="col-4">
+                                                                            <i style={{fontSize:'2em'}} className="fas fa-lock-open"></i><br/>
+                                                                            {dataAbertura.toLocaleTimeString()}<br/>
+                                                                        </div>
+                                                                        <div className="col-4">
+                                                                            <i style={{fontSize:'2em'}} class="fas fa-clock"></i><br/>
+                                                                            {rodada.duracao} minuto
+                                                                        </div>
+                                                                        <div className="col-4">
+                                                                            <i style={{fontSize:'2em'}} class="fas fa-lock"></i><br/>
+                                                                            {dataFinalizacao.toLocaleTimeString()}
+                                                                        </div>
+                                                                    </div>
+                                                                    
                                                                 </center>
                                                                 <hr/>
                                                                 <center>
