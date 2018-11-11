@@ -7,6 +7,8 @@ import utilUser from '../../../util/localStorage';
 import providerCriarQuiz from '../../../providers/usuario/quiz/criarQuiz';
 import {browserHistory} from "react-router/lib";
 import Swal from 'sweetalert2';
+import providerQuantidadeCifras from '../../../providers/usuario/cifras/quantidadeCifras';
+
 
 export default class HomeScreen extends Component {
     constructor() {
@@ -15,18 +17,21 @@ export default class HomeScreen extends Component {
             rodadas: [],
             idUsuario: '',
             carregando: false,
-            nome: ''
+            nome: '',
+            cifras: 0
         }
     }
     async componentDidMount() {
         document.title = "Home usuário - Bem vindo ao De$cifre.";
         const rodadasPost = await providerListarRodadasAbertas.listarRodadas();
+        const requestCifras = await providerQuantidadeCifras.quantidadeCifras();
         const rodadas = rodadasPost.data.rodadas;
         let usuario = utilUser.getUser();
         await this.setState({
             rodadas: rodadas,
             idUsuario: usuario._id,
-            nome: usuario.pessoa.nome
+            nome: usuario.pessoa.nome,
+            cifras: requestCifras.data.quantidadeCifras
         });
         await this.setState({
             carregando: true
@@ -89,61 +94,60 @@ export default class HomeScreen extends Component {
                         <div className="modal" id="myModal">
                             <div className="modal-dialog modal-lg">
                                 <div className="modal-content">
+                                    <div className="modal-header">
+                                        <h4 className="modal-title">Solução de dúvidas</h4>
+                                        <button type="button" className="close" data-dismiss="modal">&times;</button>
+                                    </div>
 
-                                <div className="modal-header">
-                                    <h4 className="modal-title">Solução de dúvidas</h4>
-                                    <button type="button" className="close" data-dismiss="modal">&times;</button>
-                                </div>
+                                    <div className="modal-body">
+                                        {this.state.nome},<br/>
+                                        <p style={{textAlign:'justify'}}>
+                                            Estamos aqui para explicar a você o funcionamento da rodada do De$cifre:
+                                            <br/>
+                                        </p>
+                                        <center>
+                                            <i style={{fontSize:'2em'}} className="fas fa-lock-open"></i><br/>
+                                        </center>
+                                            
+                                        <p style={{textAlign:'justify'}}> 
+                                            O cadeado aberto representa o horário de abertura da rodada. A partir desse horário
+                                            você já pode clicar em "Jogar agora"  e iniciar sua rodada.
+                                        </p>
+                                        
+                                        <center>
+                                            <i style={{fontSize:'2em'}} className="fas fa-lock"></i><br/>
+                                        </center>
+                                            
+                                        <p style={{textAlign:'justify'}}> 
+                                            O cadeado fechado representa o horário máximo que você pode entrar na rodada. Depois desse horário
+                                            a rodada será processada e você não poderá mais entrar nela.
+                                        </p>
+                                        
+                                        <center>
+                                            <i style={{fontSize:'2em'}} className="fas fa-clock"></i><br/>
+                                        </center>
+                                            
+                                        <p style={{textAlign:'justify'}}> 
+                                            O relógio representa quanto tempo você tem para responder as perguntas: quando você entrar na rodada você terá um minuto para responder o máximo de questões possíeis.
+                                        </p>
+                                        <center><strong>Detalhes importantes</strong></center>
+                                        <p style={{textAlign:'justify'}}> 
+                                            A prêmiação das rodadas padrões do De$cifre são distribuídas da seguinte forma:<br/>
+                                            <strong>1º</strong> Lugar -> 5 cifras<br/>
+                                            <strong>2º</strong> Lugar -> 3 cifras<br/>
+                                            <strong>3º</strong> Lugar -> 2 cifras<br/>
+                                            <strong>Em caso de empate o jogador que iniciou a rodada primeiro irá ganhar no critério de desempate.</strong>
+                                            <br/>
+                                            <strong>O JOGO</strong><br/>
+                                            Ao clicar em jogar agora o usuário terá 1 minuto para responder o máximo de perguntas que conseguir, ao final desse minuto ele não poderá mais responder perguntas
+                                            e so conseguirá ver a classificação dessa rodada.
+                                        </p>
+                                        
+                                    </div>
 
-                                <div className="modal-body">
-                                    {this.state.nome},<br/>
-                                    <p style={{textAlign:'justify'}}>
-                                        Estamos aqui para explicar a você o funcionamento da rodada do De$cifre:
-                                        <br/>
-                                    </p>
-                                    <center>
-                                        <i style={{fontSize:'2em'}} className="fas fa-lock-open"></i><br/>
-                                    </center>
-                                        
-                                    <p style={{textAlign:'justify'}}> 
-                                        O cadeado aberto representa o horário de abertura da rodada. A partir desse horário
-                                        você já pode clicar em "Jogar agora"  e iniciar sua rodada.
-                                    </p>
-                                    
-                                    <center>
-                                        <i style={{fontSize:'2em'}} className="fas fa-lock"></i><br/>
-                                    </center>
-                                        
-                                    <p style={{textAlign:'justify'}}> 
-                                        O cadeado fechado representa o horário máximo que você pode entrar na rodada. Depois desse horário
-                                        a rodada será processada e você não poderá mais entrar nela.
-                                    </p>
-                                    
-                                    <center>
-                                        <i style={{fontSize:'2em'}} className="fas fa-clock"></i><br/>
-                                    </center>
-                                        
-                                    <p style={{textAlign:'justify'}}> 
-                                        O relógio representa quanto tempo você tem para responder as perguntas: quando você entrar na rodada você terá um minuto para responder o máximo de questões possíeis.
-                                    </p>
-                                    <center><strong>Detalhes importantes</strong></center>
-                                    <p style={{textAlign:'justify'}}> 
-                                        A prêmiação das rodadas padrões do De$cifre são distribuídas da seguinte forma:<br/>
-                                        <strong>1º</strong> Lugar -> 5 cifras<br/>
-                                        <strong>2º</strong> Lugar -> 3 cifras<br/>
-                                        <strong>3º</strong> Lugar -> 2 cifras<br/>
-                                        <strong>Em caso de empate o jogador que iniciou a rodada primeiro irá ganhar no critério de desempate.</strong>
-                                        <br/>
-                                        <strong>O JOGO</strong><br/>
-                                        Ao clicar em jogar agora o usuário terá 1 minuto para responder o máximo de perguntas que conseguir, ao final desse minuto ele não poderá mais responder perguntas
-                                        e so conseguirá ver a classificação dessa rodada.
-                                    </p>
-                                    
-                                </div>
-
-                                <div className="modal-footer">
-                                    <button type="button" className="btn btn-danger" data-dismiss="modal">Sair</button>
-                                </div>
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn btn-danger" data-dismiss="modal">Sair</button>
+                                    </div>
 
                                 </div>
                             </div>
@@ -165,6 +169,31 @@ export default class HomeScreen extends Component {
                                             </div>
                                         </div>
                                     </div>}
+                                    <div className="card bg-secondary shadow border-0">
+                                        <div className="card-body px-lg-5 py-lg-5">
+                                            <div className="row">
+                                                <div className="col-lg-5 col-5">
+
+                                                    <h2>
+                                                        <center>
+                                                            {this.state.cifras} <span style={{fontSize:'12px'}}>cifras</span>
+                                                        </center>
+                                                    </h2>
+                                                
+                                                </div>
+                                                <div className="col-lg-2 col-2">
+                                                    <hr className="hr-vertical"/>
+                                                </div>
+                                                <div className="col-lg-5 col-5">
+                                                    <button onClick={()=>{browserHistory.push('/usuario/comprar/')}} type="button" className="btn btn-success btn-block btn-md" disabled={this.state.cifras<150}>
+                                                        sacar
+                                                    </button>
+                                                    
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div><br/>
                                     {
                                     this.state.rodadas.length>0 &&
                                     this.state.rodadas.map((rodada, index)=>{

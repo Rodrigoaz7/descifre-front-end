@@ -18,7 +18,7 @@ export default class Padrao extends Component{
         return(
             <div>
                 <header className="header-global">
-                    <nav id="navbar-main" className="navbar navbar-main navbar-expand-lg navbar-transparent navbar-light">
+                    <nav id="navbar-main" className="navbar fixed-top  navbar-main navbar-expand-lg navbar-transparent navbar-light ">
                     <div className="container">
                         <Link to='/usuario/' className="navbar-brand mr-lg-5">
                             <img alt="nav-brand" src="/img/brand/white.png"/>
@@ -50,7 +50,7 @@ export default class Padrao extends Component{
                 <main>
                     {this.props.children}
                 </main>
-                <Footer/>
+                <Footer />
             </div>
         );
     }
