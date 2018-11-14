@@ -20,9 +20,14 @@ export default class Patrocinadores extends Component {
         try {
             const requestPatrocinador = await axios.get(`${variables.urlApi}/usuario/patrocinador/${localStorage.getItem('idRodadaAtiva')}/${utilLocalStorage.getToken()}`);
             await axios.get(`${variables.urlApi}/usuario/patrocinadores/${localStorage.getItem('idRodadaAtiva')}/${utilLocalStorage.getToken()}`);
-
+            let urlApi = '';
+            if(variables.host==='http://localhost:8080'){
+                urlApi = `${variables.host}${variables.urlApi}/usuario/patrocinadores/${localStorage.getItem('idRodadaAtiva')}/${utilLocalStorage.getToken()}`;
+            }else{
+                urlApi = `${variables.urlApi}/usuario/patrocinadores/${localStorage.getItem('idRodadaAtiva')}/${utilLocalStorage.getToken()}`;
+            }
             await this.setState({
-                urlImg:`${variables.host}${variables.urlApi}/usuario/patrocinadores/${localStorage.getItem('idRodadaAtiva')}/${utilLocalStorage.getToken()}`,
+                urlImg:urlApi,
                 showImg: true,
                 patrocinador: requestPatrocinador.data.patrocinador
             });
