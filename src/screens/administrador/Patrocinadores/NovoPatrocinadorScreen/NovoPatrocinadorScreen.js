@@ -47,7 +47,7 @@ export default class NovoPatrocinadorScreen extends Component {
             }
         }
         await this.setState({rodadas_patrocinadas: rodadas_a_patrocinar})
-
+        let localizacao = this.localizacao.value;
         //let usuario = utilLocalStorage.getUser()
         let data = {
             nome: this.state.nome,
@@ -57,11 +57,12 @@ export default class NovoPatrocinadorScreen extends Component {
             quantia_paga: this.state.quantia_paga,
             rodadas_patrocinadas: this.state.rodadas_patrocinadas,
             logomarca: this.state.logomarca,
+            localizacao: localizacao,
             token: utilLocalStorage.getToken()
         };
 
         let postCadastro = await providerCadastro.realizarCadastro(data);
-        console.log(postCadastro)
+        
         if (!postCadastro.status) {
             if(postCadastro.erros!==undefined){
                 this.setState({ erros: postCadastro.erros });
@@ -171,7 +172,13 @@ export default class NovoPatrocinadorScreen extends Component {
                                                     </div>
                                                 </div>
                                             </div>
-
+                                            <div className="row">
+                                                <div className="offset-lg-1 col-lg-10">
+                                                    <div className="form-group">
+                                                        <input type="text" className="form-control form-control-md form-control-alternative" placeholder="Localização do patrocinador" ref={input=>this.localizacao=input}/>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <center><h4>Rodadas Abertas</h4></center>
                                             <br />
                                             <div className="row justify-content-center">

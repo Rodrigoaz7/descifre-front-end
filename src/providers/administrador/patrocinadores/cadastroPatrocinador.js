@@ -12,7 +12,7 @@ const realizarCadastro = async (data) => {
     data_formatada.append('quantia_paga', data.quantia_paga);
     data_formatada.append('logomarca', data.logomarca);
     data_formatada.append('token', data.token);
-    
+    data_formatada.append('localizacao', data.localizacao);
     try {
         dataResponse = await axios.post(`${variables.urlApi}/administrador/patrocinadores`, data_formatada, {
             headers: {

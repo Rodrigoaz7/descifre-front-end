@@ -131,6 +131,7 @@ ReactDOM.render(
             <Route path="/usuario/treino/ranking/" component={Usuario.RankingTreinoScreen}></Route>
             <Route path="/usuario/indicacoes/" component={Usuario.IndicacoesScreen}></Route>
             <Route path="/usuario/transacoes/" component={Usuario.TransacoesScreen}></Route>
+            <Route path="/usuario/vouchers/" component={Usuario.VoucherScreen}></Route>
         </Route>
 
         {/* Rotas de erros */}

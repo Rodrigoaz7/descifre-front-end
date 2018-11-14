@@ -8,7 +8,7 @@ import providerQuestaoAleatoria from '../../../providers/usuario/questao/provide
 import providerProcessarQuiz from '../../../providers/usuario/quiz/processarQuiz';
 import Swal from 'sweetalert2';
 import { browserHistory } from "react-router";
-import Patrocinadores from '../../../ui/components/patrocinador';
+import PatrocinadorRodada from '../../../ui/components/patrocinadorRodada';
 
 export default class JogoScreen extends Component {
     constructor() {
@@ -23,7 +23,6 @@ export default class JogoScreen extends Component {
         }
     }
     gerarNovaQuestao = async () => {
-
         let idQuiz;
         if (localStorage.getItem('idQuizAtivo') !== undefined) idQuiz = localStorage.getItem('idQuizAtivo');
         let usuario = utilUser.getUser();
@@ -47,7 +46,8 @@ export default class JogoScreen extends Component {
 
     async componentDidMount() {
         document.title = "Jogo usuário - A melhor platahtmlForma de entreterimento do Brasil.";
-        await this.gerarNovaQuestao()
+        console.log(localStorage.getItem('idRodadaAtiva'))
+        await this.gerarNovaQuestao();
     }
     handleResposta = async (e) => {
         await this.setState({
@@ -189,13 +189,12 @@ export default class JogoScreen extends Component {
                     <div className="container-fluid pt-lg-md">
                         <div className="row justify-content-center">
                             <div className="col-lg-12">
-                                <Patrocinadores urlImagem={'familia-picui.png'}/>
+                                <PatrocinadorRodada idRodada={localStorage.getItem('idRodadaAtiva')}/>
                                 <div className="card bg-secondary shadow border-0">
                                     {!this.state.loading &&
                                         <div className="card-body px-lg-5 py-lg-5">
                                             <div className="row">
                                                 <div className="col-6">
-
                                                     <center>
                                                         <h4 style={{ fontSize: '50px', color: '#212121', fontWeight: '400' }}>
                                                             {this.state.perguntasRespondidas}

@@ -3,7 +3,7 @@
 */
 import React, { Component } from "react";
 import { browserHistory } from "react-router";
-
+import PatrocinadorRodada from '../../../ui/components/patrocinadorRodada';
 
 export default class ResultadoScreen extends Component {
     constructor() {
@@ -67,6 +67,7 @@ export default class ResultadoScreen extends Component {
                     <div className="container-fluid pt-lg-md">
                         <div className="row justify-content-center">
                             <div className="col-lg-12">
+                                <PatrocinadorRodada idRodada={localStorage.getItem('idRodadaAtiva')}/>
                                 <div className="card bg-secondary shadow border-0">
                                     <div className="card-body px-lg-5 py-lg-5">
                                         <div className="row">

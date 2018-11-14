@@ -102,7 +102,7 @@ export default class MenuUsuario extends Component{
                     <div className="dropdown-menu">
                         <Link to='/usuario/perfil/' className="dropdown-item">Perfil</Link>
                         <Link to='/usuario/indicacoes/' className="dropdown-item">Indicar amigos</Link>
-                        {/* <Link to='/usuario/vouchers/' className="dropdown-item">Vouchers</Link> */}
+                        <Link to='/usuario/vouchers/' className="dropdown-item">Vouchers</Link>
                     </div>
                 </li>
                 <li onClick={(e) => this.handleSair(e)} className="nav-item" style={{cursor: 'pointer'}}>

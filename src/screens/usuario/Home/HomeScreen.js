@@ -42,9 +42,10 @@ export default class HomeScreen extends Component {
         const idRodada = e.target.value;
         const usuario = utilUser.getUser();
         const requestCriarQuiz = await providerCriarQuiz.criarQuiz({idRodada: idRodada, idUsuario: usuario._id});
+        localStorage.setItem('idRodadaAtiva', idRodada);
         if(requestCriarQuiz.data!==undefined && requestCriarQuiz.data.status && !requestCriarQuiz.data.resultados){
             localStorage.setItem('idQuizAtivo', requestCriarQuiz.data.idQuiz);
-
+            
             if(requestCriarQuiz.data.valorTransacao!==undefined){
                 usuario.quantidade_cifras = parseFloat(usuario.quantidade_cifras) - parseFloat(requestCriarQuiz.data.valorTransacao);
                 localStorage.setItem('descifre_userData', JSON.stringify(usuario));
@@ -155,19 +156,23 @@ export default class HomeScreen extends Component {
                             {this.state.carregando && <div className="col-lg-12">
                                 {
                                     this.state.rodadas.length===0 &&
-                                    <div className="card bg-secondary shadow border-0">
-                                        <div className="card-body px-lg-5 py-lg-5">
-                                            <div className="row">
-                                                <div className="col-lg-12">
-                                                    <center>
-                                                        <img className="img-fluid" alt="Menino triste" src="/img/public/menino-triste.gif"/>
-                                                        <h4 style={{color: '#212121'}}><br/>
-                                                            Não exite nenhuma rodada aberta.
-                                                        </h4>
-                                                    </center>
+                                    <div>
+                                        <div className="card bg-secondary shadow border-0">
+                                            <div className="card-body px-lg-5 py-lg-5">
+                                                <div className="row">
+                                                    <div className="col-lg-12">
+                                                        <center>
+                                                            <img className="img-fluid" alt="Menino triste" src="/img/public/menino-triste.gif"/>
+                                                            <h4 style={{color: '#212121'}}><br/>
+                                                                Não exite nenhuma rodada aberta.
+                                                            </h4>
+                                                        </center>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            
                                         </div>
+                                    <br/>
                                     </div>}
                                     <div className="card bg-secondary shadow border-0">
                                         <div className="card-body px-lg-5 py-lg-5">
@@ -230,10 +235,22 @@ export default class HomeScreen extends Component {
                                                                 </center>
                                                                 <hr/>
                                                                 <center>
-                                                                    <i className="fas fa-trophy" style={{color:"#FDD835", fontSize:'3em'}}></i>
-                                                                    <h4 style={{color:'green'}}>
-                                                                        {rodada.premiacao} CIFRAS
-                                                                    </h4>
+                                                                    {rodada.pagamentoEmCifras &&
+                                                                    <div>
+                                                                        <i className="fas fa-trophy" style={{color:"#FDD835", fontSize:'3em'}}></i>
+                                                                        <h4 style={{color:'green'}}>
+                                                                            {rodada.premiacao} CIFRAS
+                                                                        </h4>
+                                                                    </div>
+                                                                    }
+                                                                    {!rodada.pagamentoEmCifras &&
+                                                                    <div>
+                                                                        <i className="fas fa-ticket-alt" style={{color:"#FDD835", fontSize:'3em'}}></i>
+                                                                        <h4 style={{color:'green'}}>
+                                                                            {rodada.premioVoucher}
+                                                                        </h4>
+                                                                    </div>
+                                                                    }
 
                                                                 </center>
                                                                 <hr/>

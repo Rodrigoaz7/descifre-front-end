@@ -4,7 +4,7 @@
 import React, { Component } from "react";
 import providerObterRodada from '../../../providers/usuario/rodadas/obterRodada';
 import utilUsuario from '../../../util/localStorage';
-import Patrocinadores from '../../../ui/components/patrocinador';
+import PatrocinadorRodada from '../../../ui/components/patrocinadorRodada';
 export default class ClassificacaoScreen extends Component {
     constructor() {
         super();
@@ -19,7 +19,6 @@ export default class ClassificacaoScreen extends Component {
         const rodada = await providerObterRodada.obterRodada(idRodada);
         let usuario = utilUsuario.getUser();
         let colocacao = rodada.data.rodadas.jogadores.findIndex(jogada => jogada.quiz.idUsuario === usuario._id);
-
         await this.setState({
             classificacao: rodada.data.rodadas.jogadores,
             colocacao: colocacao + 1,
@@ -53,7 +52,7 @@ export default class ClassificacaoScreen extends Component {
                     <div className="container-fluid pt-lg-md">
                         <div className="row justify-content-center">
                             <div className="col-lg-12">
-                                <Patrocinadores urlImagem={'familia-picui.png'}/>
+                                <PatrocinadorRodada idRodada={localStorage.getItem('idRodadaAtiva')}/>
                                 <div className="card bg-secondary shadow border-0">
                                     <div className="card-body px-lg-5 py-lg-5">
                                         <div className="row">
@@ -89,7 +88,9 @@ export default class ClassificacaoScreen extends Component {
                                                     <h5 style={{ fontSize: '22px', color: '#212121', fontWeight: '400' }}>
                                                         CLASSIFICAÇÃO GERAL
                                                     </h5>
-                                                    <span style={{ fontSize: '12px' }}>(Jogadores com fundo verde estão ganhando cifras nessa rodada)</span>
+                                                    <span style={{ fontSize: '12px' }}>(Jogadores com fundo verde estão ganhando cifras nessa rodada)</span><br/>
+                                                    <span style={{fontSize:'12px',fontWeight:'bold'}}>IMPORTANTE</span><br/>
+                                                    <span style={{ fontSize: '12px' }}>Até o fim dessa rodada sua colocação poderá mudar a medida que outros usuários pontuem mais que você</span>
                                                 </center>
                                                 <br />
                                                 <div className="table-responsive">
