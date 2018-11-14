@@ -16,7 +16,7 @@ export default class HomeScreen extends Component {
         document.title = "Vouchers do usuário - Rodos os vouchers do usuário.";
         const responseVouchers = await providerVoucher.obterVoucher();
         await this.setState({
-            vouchers: responseVouchers.data.vouchersUsuario
+            vouchers: responseVouchers.data.vouchersUsuario===undefined?[]:responseVouchers.data.vouchersUsuario
         });
     }
 
@@ -70,7 +70,8 @@ export default class HomeScreen extends Component {
                                                     <div className="card-body px-lg-5 py-lg-5">
                                                         <div className="row">
                                                             <div className="col-lg-12">
-                                                                <div className="col-lg-offset-2 col-lg-8">
+                                                                <div className="offset-lg-2 col-lg-8">
+                                                        
                                                                     <PatrocinadorRodada idRodada={voucher.rodada}/>
                                                                 </div>
                                                                 <hr/>
