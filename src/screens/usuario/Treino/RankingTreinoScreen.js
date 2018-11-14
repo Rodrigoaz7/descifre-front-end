@@ -15,15 +15,15 @@ export default class ClassificacaoScreen extends Component {
             pagina: 1,
             total: 1,
             totalGeral: 0,
-            contador: 0
+            loading: false
         }
     }
 
     async componentDidMount() {
-
+        await this.setState({ loading: true })
         let ranking = await providerRanking.obterRanking(1);
 
-        this.setState({ classificacao: ranking.data.ranking, colocacao: ranking.data.colocacao + 1, totalGeral: ranking.data.total })
+        this.setState({ classificacao: ranking.data.ranking, colocacao: ranking.data.colocacao + 1, totalGeral: ranking.data.total, loading: false })
         let total = ranking.data.total;
 
         if (total < 10) total = 1;
@@ -35,12 +35,13 @@ export default class ClassificacaoScreen extends Component {
     }
 
     handlePageChange = async (pageNumber) => {
-        await this.setState({ pagina: pageNumber });
+        await this.setState({ loading: true, pagina: pageNumber });
 
         const resultado = await providerRanking.obterRanking(this.state.pagina);
 
         await this.setState({
-            classificacao: resultado.data.ranking
+            classificacao: resultado.data.ranking,
+            loading: false
         });
 
         window.scrollTo(0, 0);
@@ -69,113 +70,125 @@ export default class ClassificacaoScreen extends Component {
                         <span className="span-50"></span>
                     </div>
                     <div className="container-fluid pt-lg-md">
-                        <div className="row justify-content-center">
-                            <div className="col-lg-12">
-                                <div className="card bg-secondary shadow border-0">
-                                    <div className="card-body px-lg-5 py-lg-5">
-                                        <div className="row">
-                                            <div className="col-6">
+                        {
+                            this.state.loading &&
+                            <div className="row justify-content-center">
+                                <center>
+                                    <img className="img-fluid" alt="Menino triste" src="/img/public/loading.gif" />
+                                </center>
+                            </div>
+                        }
+                        {
+                            !this.state.loading &&
 
-                                                <center>
-                                                    <h4 style={{ fontSize: '50px', color: '#212121', fontWeight: '400' }}>
-                                                        {this.state.totalGeral}
+                            <div className="row justify-content-center">
+                                <div className="col-lg-12">
+                                    <div className="card bg-secondary shadow border-0">
+                                        <div className="card-body px-lg-5 py-lg-5">
+                                            <div className="row">
+                                                <div className="col-6">
+
+                                                    <center>
+                                                        <h4 style={{ fontSize: '50px', color: '#212121', fontWeight: '400' }}>
+                                                            {this.state.totalGeral}
+                                                        </h4>
+                                                        <h5 style={{ fontSize: '16px', color: '#212121', fontWeight: '400' }}>
+                                                            JOGADORES
+                                                    </h5>
+                                                    </center>
+
+                                                </div>
+                                                <div className="col-6">
+
+                                                    <center>
+                                                        <h4 style={{ fontSize: '50px', color: '#212121', fontWeight: '400' }}>
+                                                            {this.state.colocacao}º
                                                     </h4>
-                                                    <h5 style={{ fontSize: '16px', color: '#212121', fontWeight: '400' }}>
-                                                        JOGADORES
+                                                        <h5 style={{ fontSize: '16px', color: '#212121', fontWeight: '400' }}>
+                                                            SUA COLOCAÇÃO
                                                     </h5>
-                                                </center>
+                                                    </center>
 
-                                            </div>
-                                            <div className="col-6">
-
-                                                <center>
-                                                    <h4 style={{ fontSize: '50px', color: '#212121', fontWeight: '400' }}>
-                                                        {this.state.colocacao}º
-                                                    </h4>
-                                                    <h5 style={{ fontSize: '16px', color: '#212121', fontWeight: '400' }}>
-                                                        SUA COLOCAÇÃO
-                                                    </h5>
-                                                </center>
-
-                                            </div>
-                                        </div>
-                                        <hr />
-                                        <div className="row">
-                                            <div className="col-lg-12">
-                                                <center>
-                                                    <h5 style={{ fontSize: '22px', color: '#212121', fontWeight: '400' }}>
-                                                        CLASSIFICAÇÃO GERAL
-                                                    </h5>
-                                                    <span style={{ fontSize: '12px' }}>(Jogadores com fundo verde estão ganhando cifras nessa rodada)</span>
-                                                </center>
-                                                <br />
-                                                <div className="table-responsive">
-                                                    <table className="table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th scope="col">#</th>
-                                                                <th scope="col">
-                                                                    <center>
-                                                                        Nome
-                                                                </center>
-                                                                </th>
-                                                                <th scope="col">
-                                                                    <center>
-                                                                        Pontuação
-                                                                </center>
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {
-                                                                this.state.classificacao.map((jogador, index) => {
-                                                                    
-                                                                    return (
-                                                                        <tr key={index} bgcolor={index < this.state.ganhadoresTamanho ? "#DCEDC8" : "#FFFFFF"}>
-                                                                            <th scope="row">
-                                                                                {  
-                                                                                    (index + (this.state.pagina*10) - 9)
-                                                                                }
-                                                                               
-
-                                                                            </th>
-                                                                            <td>
-                                                                                <center>
-                                                                                    {jogador.usuario.email}
-                                                                                </center>
-                                                                            </td>
-                                                                            <td>
-                                                                                <center>
-                                                                                    {
-                                                                                        jogador.pontuacao
-                                                                                    }
-
-                                                                                </center>
-                                                                            </td>
-                                                                        </tr>
-                                                                    )
-                                                                })
-                                                            }
-                                                        </tbody>
-                                                    </table>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="row justify-content-center">
-                                            <Pagination
-                                                currentPage={this.state.pagina}
-                                                totalPages={this.state.total}
-                                                onChange={this.handlePageChange}
-                                            />
+                                            <hr />
+                                            <div className="row">
+                                                <div className="col-lg-12">
+                                                    <center>
+                                                        <h5 style={{ fontSize: '22px', color: '#212121', fontWeight: '400' }}>
+                                                            CLASSIFICAÇÃO GERAL
+                                                    </h5>
+                                                        <span style={{ fontSize: '12px' }}>(Jogadores com fundo verde estão ganhando cifras nessa rodada)</span>
+                                                    </center>
+                                                    <br />
+                                                    <div className="table-responsive">
+                                                        <table className="table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">#</th>
+                                                                    <th scope="col">
+                                                                        <center>
+                                                                            Nome
+                                                                </center>
+                                                                    </th>
+                                                                    <th scope="col">
+                                                                        <center>
+                                                                            Pontuação
+                                                                </center>
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {
+                                                                    this.state.classificacao.map((jogador, index) => {
+
+                                                                        return (
+                                                                            <tr key={index} bgcolor={this.state.pagina === 1 ? "#DCEDC8" : "#FFFFFF"}>
+                                                                                <th scope="row">
+                                                                                    {
+                                                                                        (index + (this.state.pagina * 10) - 9)
+                                                                                    }
+
+
+                                                                                </th>
+                                                                                <td>
+                                                                                    <center>
+                                                                                        {jogador.usuario.email}
+                                                                                    </center>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <center>
+                                                                                        {
+                                                                                            jogador.pontuacao
+                                                                                        }
+
+                                                                                    </center>
+                                                                                </td>
+                                                                            </tr>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="row justify-content-center">
+                                                <Pagination
+                                                    currentPage={this.state.pagina}
+                                                    totalPages={this.state.total}
+                                                    onChange={this.handlePageChange}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <br />
                                 </div>
-                                <br />
-                                <br />
-                                <br />
-                                <br />
                             </div>
-                        </div>
+                        }
                     </div>
                 </section>
             </div>
