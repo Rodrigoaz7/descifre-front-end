@@ -8,7 +8,7 @@ import providerCriarQuiz from '../../../providers/usuario/quiz/criarQuiz';
 import {browserHistory} from "react-router/lib";
 import Swal from 'sweetalert2';
 import providerQuantidadeCifras from '../../../providers/usuario/cifras/quantidadeCifras';
-
+import ModalHelp from '../../../ui/components/modals/ModalHelp';
 
 export default class HomeScreen extends Component {
     constructor() {
@@ -18,7 +18,8 @@ export default class HomeScreen extends Component {
             idUsuario: '',
             carregando: false,
             nome: '',
-            cifras: 0
+            cifras: 0,
+            modalRefresh: 0
         }
     }
     async componentDidMount() {
@@ -31,8 +32,10 @@ export default class HomeScreen extends Component {
             rodadas: rodadas,
             idUsuario: usuario._id,
             nome: usuario.pessoa.nome,
-            cifras: requestCifras.data.quantidadeCifras
+            cifras: requestCifras.data.quantidadeCifras,
+            modalRefresh: 1
         });
+        console.log(this.state.rodadas)
         await this.setState({
             carregando: true
         });
@@ -93,65 +96,7 @@ export default class HomeScreen extends Component {
                     <div className="container-fluid pt-lg-md">
                         <div className="row justify-content-center">
                         <div className="modal" id="myModal">
-                            <div className="modal-dialog modal-lg">
-                                <div className="modal-content">
-                                    <div className="modal-header">
-                                        <h4 className="modal-title">Solução de dúvidas</h4>
-                                        <button type="button" className="close" data-dismiss="modal">&times;</button>
-                                    </div>
-
-                                    <div className="modal-body">
-                                        {this.state.nome},<br/>
-                                        <p style={{textAlign:'justify'}}>
-                                            Estamos aqui para explicar a você o funcionamento da rodada do De$cifre:
-                                            <br/>
-                                        </p>
-                                        <center>
-                                            <i style={{fontSize:'2em'}} className="fas fa-lock-open"></i><br/>
-                                        </center>
-                                            
-                                        <p style={{textAlign:'justify'}}> 
-                                            O cadeado aberto representa o horário de abertura da rodada. A partir desse horário
-                                            você já pode clicar em "Jogar agora"  e iniciar sua rodada.
-                                        </p>
-                                        
-                                        <center>
-                                            <i style={{fontSize:'2em'}} className="fas fa-lock"></i><br/>
-                                        </center>
-                                            
-                                        <p style={{textAlign:'justify'}}> 
-                                            O cadeado fechado representa o horário máximo que você pode entrar na rodada. Depois desse horário
-                                            a rodada será processada e você não poderá mais entrar nela.
-                                        </p>
-                                        
-                                        <center>
-                                            <i style={{fontSize:'2em'}} className="fas fa-clock"></i><br/>
-                                        </center>
-                                            
-                                        <p style={{textAlign:'justify'}}> 
-                                            O relógio representa quanto tempo você tem para responder as perguntas: quando você entrar na rodada você terá um minuto para responder o máximo de questões possíeis.
-                                        </p>
-                                        <center><strong>Detalhes importantes</strong></center>
-                                        <p style={{textAlign:'justify'}}> 
-                                            A prêmiação das rodadas padrões do De$cifre são distribuídas da seguinte forma:<br/>
-                                            <strong>1º</strong> Lugar -> 5 cifras<br/>
-                                            <strong>2º</strong> Lugar -> 3 cifras<br/>
-                                            <strong>3º</strong> Lugar -> 2 cifras<br/>
-                                            <strong>Em caso de empate o jogador que iniciou a rodada primeiro irá ganhar no critério de desempate.</strong>
-                                            <br/>
-                                            <strong>O JOGO</strong><br/>
-                                            Ao clicar em jogar agora o usuário terá 1 minuto para responder o máximo de perguntas que conseguir, ao final desse minuto ele não poderá mais responder perguntas
-                                            e so conseguirá ver a classificação dessa rodada.
-                                        </p>
-                                        
-                                    </div>
-
-                                    <div className="modal-footer">
-                                        <button type="button" className="btn btn-danger" data-dismiss="modal">Sair</button>
-                                    </div>
-
-                                </div>
-                            </div>
+                            <ModalHelp key={this.state.modalRefresh} nome={this.state.nome}/>
                         </div>
                             {this.state.carregando && <div className="col-lg-12">
                                 {
@@ -236,11 +181,29 @@ export default class HomeScreen extends Component {
                                                                 <hr/>
                                                                 <center>
                                                                     {rodada.pagamentoEmCifras &&
-                                                                    <div>
-                                                                        <i className="fas fa-trophy" style={{color:"#FDD835", fontSize:'3em'}}></i>
-                                                                        <h4 style={{color:'green'}}>
-                                                                            {rodada.premiacao} CIFRAS
-                                                                        </h4>
+                                                                    <div className="row">
+                                                                        <div className="col-lg-6 col-6">
+                                                                            <i className="fas fa-money-bill-alt" style={{color:"#81C784", fontSize:'2em'}}></i>
+                                                                            <table>
+                                                                                <tbody>
+                                                                                    {rodada.ganhadores.map((ganhador, index)=>{
+                                                                                        return(
+                                                                                            
+                                                                                            <tr key={index}>
+                                                                                                <td>{index+1}º</td>
+                                                                                                <td>{rodada.premiacao*ganhador.porcentagemPremio/100<10?'0':''}{(rodada.premiacao*ganhador.porcentagemPremio/100)} cifras</td>
+                                                                                            </tr>
+                                                                                        )
+                                                                                    })}
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                        <div className="col-lg-6 col-6">
+                                                                            <i className="fas fa-users" style={{color:"#424242", fontSize:'2em'}}></i>
+                                                                            <h4 style={{color:'#525f7f', marginTop:'0.3em'}}>{rodada.jogadores.length}</h4>
+                                                                            <center>JOGADORES</center>
+                                                                        </div>
+                                                                        
                                                                     </div>
                                                                     }
                                                                     {!rodada.pagamentoEmCifras &&
