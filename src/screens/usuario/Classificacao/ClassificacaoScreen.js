@@ -5,6 +5,7 @@ import React, { Component } from "react";
 import providerObterRodada from '../../../providers/usuario/rodadas/obterRodada';
 import utilUsuario from '../../../util/localStorage';
 import PatrocinadorRodada from '../../../ui/components/patrocinadorRodada';
+import CirculoPontos from '../../../ui/components/classificacao/circuloPontos';
 export default class ClassificacaoScreen extends Component {
     constructor() {
         super();
@@ -95,38 +96,22 @@ export default class ClassificacaoScreen extends Component {
                                                 <br />
                                                 <div className="table-responsive">
                                                     <table className="table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th scope="col">#</th>
-                                                                <th scope="col">
-                                                                    <center>
-                                                                        Nome
-                                                                </center>
-                                                                </th>
-                                                                <th scope="col">
-                                                                    <center>
-                                                                        Pontuação
-                                                                </center>
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
                                                         <tbody>
                                                             {
                                                                 this.state.classificacao.map((jogador, index) => {
                                                                     return (
                                                                         <tr key={index} bgcolor={index < this.state.ganhadoresTamanho ? "#DCEDC8" : "#FFFFFF"}>
-                                                                            <th scope="row">{index + 1}</th>
-                                                                            <td>
+                                                                            <th scope="row">
                                                                                 <center>
-                                                                                    {jogador.quiz.nomeUsuario}
+                                                                                    <span style={{fontSize:'2em'}}>
+                                                                                        {index + 1}°
+                                                                                    </span>
                                                                                 </center>
-                                                                            </td>
+                                                                            </th>
                                                                             <td>
                                                                                 <center>
-                                                                                    {
-                                                                                        jogador.quiz.pontuacao
-                                                                                    }
-
+                                                                                    <CirculoPontos pontos={jogador.quiz.pontuacao}/>
+                                                                                    {jogador.quiz.nomeUsuario}
                                                                                 </center>
                                                                             </td>
                                                                         </tr>
