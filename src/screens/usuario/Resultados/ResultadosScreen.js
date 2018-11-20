@@ -4,14 +4,15 @@
 import React, { Component } from "react";
 import { browserHistory } from "react-router";
 import PatrocinadorRodada from '../../../ui/components/patrocinadorRodada';
-
+import ModalResultados from '../../../ui/components/modals/ModalResultados';
 export default class ResultadoScreen extends Component {
     constructor() {
         super();
         this.state = {
             resultados:[],
             respostasCertas: 0,
-            pontuacao: 0
+            pontuacao: 0,
+            keyModal: 0
         }
     }
 
@@ -30,7 +31,8 @@ export default class ResultadoScreen extends Component {
             });
             await this.setState({
                 respostasCertas: respostasCertas,
-                pontuacao: pontuacao
+                pontuacao: pontuacao,
+                keyModal: this.state.keyModal+1
             });
         }
         document.title = `Resultados da rodada - De$cifre, muito mais do que um jogo.`;
@@ -68,6 +70,9 @@ export default class ResultadoScreen extends Component {
                         <div className="row justify-content-center">
                             <div className="col-lg-12">
                                 <PatrocinadorRodada idRodada={localStorage.getItem('idRodadaAtiva')}/>
+                                <div className="modal" id="myModal">
+                                    <ModalResultados key={this.state.keyModal} resultados={this.state.resultados}/>
+                                </div>
                                 <div className="card bg-secondary shadow border-0">
                                     <div className="card-body px-lg-5 py-lg-5">
                                         <div className="row">
@@ -98,60 +103,11 @@ export default class ResultadoScreen extends Component {
                                         </div>
                                         <hr/>
                                         <div className="row">
-                                            <div className="col-lg-12">
-                                                <div className="table-responsive">
-                                                    <table className="table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th scope="col">#</th>
-                                                                <th scope="col">
-                                                                    <center>
-                                                                        Resposta
-                                                                    </center>
-                                                                </th>
-                                                                <th scope="col">
-                                                                    <center>
-                                                                        Resultado
-                                                                    </center>
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {
-                                                                this.state.resultados.map((resultado, index)=>{
-                                                                    return(
-                                                                        <tr key={index}>
-                                                                            <th scope="row">{index+1}</th>
-                                                                            <td>
-                                                                                <center>
-                                                                                    {resultado.resposta ? resultado.resposta : "Você pulou esta questão"}
-                                                                                </center>
-                                                                            </td>
-                                                                            <td>
-                                                                                <center>
-                                                                                    {
-                                                                                        resultado.status &&
-                                                                                        <span>Certo</span>
-                                                                                    }
-                                                                                    {
-                                                                                        !resultado.status &&
-                                                                                        <span>Errado</span>
-                                                                                    }
-                                                                                </center>
-                                                                            </td>
-                                                                        </tr>
-                                                                    )
-                                                                })
-                                                            }
-                                                        </tbody>
-                                                    </table>
-                                                </div>
+                                            <div className="col-lg-6 col-6">
+                                                <button type="button" className="btn btn-block btn-primary" data-toggle="modal" data-target="#myModal">Respostas</button>
                                             </div>
-                                        </div>
-                                        <hr/>
-                                        <div className="row">
-                                            <div className="col-lg-12">
-                                                <button onClick={this.verClassificacao} type="button" className="btn btn-block btn-success">Ver classificação</button>
+                                            <div className="col-lg-6 col-6">
+                                                <button onClick={this.verClassificacao} type="button" className="btn btn-block btn-success">Classificação</button>
                                             </div>
                                         </div>
                                     </div>
