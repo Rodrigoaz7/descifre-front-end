@@ -107,7 +107,9 @@ export default class ResultadoScreen extends Component {
                                                 <button type="button" className="btn btn-block btn-primary" data-toggle="modal" data-target="#myModal">Respostas</button>
                                             </div>
                                             <div className="col-lg-6 col-6">
-                                                <button onClick={this.verClassificacao} type="button" className="btn btn-block btn-success">Classificação</button>
+                                                <button onClick={this.verClassificacao} type="button" className="btn btn-block btn-success">
+                                                    <span style={{fontSize:'0.9em'}}>Classificação</span>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
