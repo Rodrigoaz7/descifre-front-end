@@ -13,6 +13,7 @@ export default class PerfilScreen extends Component {
             nome: '',
             email: '',
             contaBancaria: '',
+            banco: '',
             agencia: '',
             sexo: '',
             telefone: '',
@@ -31,6 +32,7 @@ export default class PerfilScreen extends Component {
                 nome: usuario.pessoa.nome,
                 email: usuario.email,
                 conta: usuario.pessoa.conta,
+                banco: usuario.pessoa.banco,
                 agencia: usuario.pessoa.agencia,
                 sexo: usuario.pessoa.sexo,
                 telefone: usuario.pessoa.telefone,
@@ -91,21 +93,34 @@ export default class PerfilScreen extends Component {
                                         <h3>{this.state.nome}</h3>
                                         <br />
                                         <div className="row justify-content-center">
-                                            <div className="col-lg-5">
+                                            <div className="col-lg-4">
                                                 <div className="form-group">
                                                     <center><small className="d-block text-uppercase font-weight-bold mb-3">Nome</small></center>
                                                     <input type="text" className="form-control form-control-alternative" value={this.state.nome} onChange={this.handlerNomeChange} readOnly />
                                                 </div>
                                             </div>
-                                            <div className="col-lg-5">
+                                            <div className="col-lg-4">
                                                 <div className="form-group">
                                                     <center><small className="d-block text-uppercase font-weight-bold mb-3">Email</small></center>
                                                     <input type="text" className="form-control form-control-alternative" value={this.state.email} onChange={this.handlerEmailChange} readOnly />
                                                 </div>
                                             </div>
+                                            <div className="col-lg-2">
+                                                <div className="form-group">
+                                                    <center><small className="d-block text-uppercase font-weight-bold mb-3">Telefone</small></center>
+                                                    <input type="text" className="form-control form-control-alternative" value={this.state.telefone} onChange={this.handlerTelefoneChange} readOnly />
+                                                </div>
+                                            </div>
                                         </div>
                                         <br />
                                         <div className="row justify-content-center">
+                                            <div className="col-lg-5">
+                                                <div className="form-group">
+                                                    <center><small className="d-block text-uppercase font-weight-bold mb-3">Banco</small></center>
+                                                    <input type="text" className="form-control form-control-alternative" value={this.state.banco} readOnly />
+                                                    
+                                                </div>
+                                            </div>
                                             <div className="col-lg-5">
                                                 <div className="form-group">
                                                     <div className="row">
@@ -120,12 +135,7 @@ export default class PerfilScreen extends Component {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="col-lg-5">
-                                                <div className="form-group">
-                                                    <center><small className="d-block text-uppercase font-weight-bold mb-3">Telefone</small></center>
-                                                    <input type="text" className="form-control form-control-alternative" value={this.state.telefone} onChange={this.handlerTelefoneChange} readOnly />
-                                                </div>
-                                            </div>
+                                            
                                         </div>
                                         <br />
                                         <div className="row justify-content-center">

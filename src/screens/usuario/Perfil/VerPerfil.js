@@ -21,6 +21,7 @@ export default class PerfilScreen extends Component {
             nome: '',
             email: '',
             contaBancaria: '',
+            banco: '',
             agencia: '',
             sexo: '',
             telefone: '',
@@ -43,6 +44,7 @@ export default class PerfilScreen extends Component {
             idPessoa: usuario.pessoa._id,
             nome: usuario.pessoa.nome,
             email: usuario.email,
+            banco: usuario.pessoa.banco || "",
             conta: usuario.pessoa.conta || "",
             agencia: usuario.pessoa.agencia || "",
             sexo: usuario.pessoa.sexo || "",
@@ -69,6 +71,10 @@ export default class PerfilScreen extends Component {
 
     handlerTelefoneChange = async (e) => {
         this.setState({ telefone: e.target.value })
+    }
+
+    handlerBancoChange = async (e) => {
+        this.setState({ banco: e.target.value })
     }
 
     handlerContaChange = async (e) => {
@@ -100,6 +106,7 @@ export default class PerfilScreen extends Component {
         let data = {
             nome: this.state.nome,
             email: this.state.email,
+            banco: this.state.banco,
             conta: this.state.conta,
             agencia: this.state.agencia,
             sexo: this.state.sexo,
@@ -206,21 +213,38 @@ export default class PerfilScreen extends Component {
                                         <h3>Seus dados</h3>
                                         <br />
                                         <div className="row justify-content-center">
-                                            <div className="col-lg-5">
+                                            <div className="col-lg-4">
                                                 <div className="form-group">
                                                     <center><small className="d-block text-uppercase font-weight-bold mb-3">Nome</small></center>
                                                     <input type="text" className="form-control form-control-alternative" value={this.state.nome} onChange={this.handlerNomeChange} />
                                                 </div>
                                             </div>
-                                            <div className="col-lg-5">
+                                            <div className="col-lg-4">
                                                 <div className="form-group">
                                                     <center><small className="d-block text-uppercase font-weight-bold mb-3">Email</small></center>
                                                     <input type="text" className="form-control form-control-alternative" value={this.state.email} onChange={this.handlerEmailChange} />
                                                 </div>
                                             </div>
+                                            <div className="col-lg-2">
+                                                <div className="form-group">
+                                                    <center><small className="d-block text-uppercase font-weight-bold mb-3">Telefone</small></center>
+                                                    <input type="text" className="form-control form-control-alternative" value={this.state.telefone == null ? "" : this.state.telefone} onChange={this.handlerTelefoneChange} />
+                                                </div>
+                                            </div>
                                         </div>
                                         <br />
                                         <div className="row justify-content-center">
+                                            <div className="col-lg-5">
+                                                <div className="form-group">
+                                                    <center><small className="d-block text-uppercase font-weight-bold mb-3">Banco</small></center>
+                                                    <select className="form-control" onClick={this.handlerBancoChange}>
+                                                        <option value="Banco do Brasil" selected={this.state.banco === "Branco do Brasil"}>Banco do Brasil</option>
+                                                        <option values="Bradesco" selected={this.state.banco === "Bradesco"}>Bradesco</option>
+                                                        <option value="Caixa" selected={this.state.banco === "Caixa"}>Caixa</option>
+                                                    </select>
+                                                    
+                                                </div>
+                                            </div>
                                             <div className="col-lg-5">
                                                 <div className="form-group">
                                                     <div className="row">

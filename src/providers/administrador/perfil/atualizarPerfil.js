@@ -9,6 +9,7 @@ const realizarAtualizacao = async (data) => {
     data_formatada.append('idPessoa', data.idPessoa);
     data_formatada.append('nome', data.nome);
     data_formatada.append('email', data.email);
+    data_formatada.append('banco', data.banco);
     data_formatada.append('conta', data.conta);
     data_formatada.append('agencia', data.agencia);
     data_formatada.append('sexo', data.sexo);
