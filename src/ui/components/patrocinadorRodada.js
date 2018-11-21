@@ -17,28 +17,21 @@ export default class Patrocinadores extends Component {
         }
     }
     async componentDidMount(){
-        try {
-            const requestPatrocinador = await axios.get(`${variables.urlApi}/usuario/patrocinador/${localStorage.getItem('idRodadaAtiva')}/${utilLocalStorage.getToken()}`);
-            await axios.get(`${variables.urlApi}/usuario/patrocinadores/${localStorage.getItem('idRodadaAtiva')}/${utilLocalStorage.getToken()}`);
-            let urlApi = '';
-            if(variables.host==='http://localhost:8080'){
-                urlApi = `${variables.host}${variables.urlApi}/usuario/patrocinadores/${localStorage.getItem('idRodadaAtiva')}/${utilLocalStorage.getToken()}`;
-            }else{
-                urlApi = `${variables.urlApi}/usuario/patrocinadores/${localStorage.getItem('idRodadaAtiva')}/${utilLocalStorage.getToken()}`;
-            }
-            await this.setState({
-                urlImg:urlApi,
-                showImg: true,
-                patrocinador: requestPatrocinador.data.patrocinador
-            });
-
-        } catch (error) {
-            await this.setState({
-                showImg: false
-            });
-        }
+        //let urlApi;
         
+        const requestPatrocinador = await axios.get(`${variables.urlApi}/usuario/patrocinador/${this.props.idRodada}/${utilLocalStorage.getToken()}`);
         
+        // if(variables.host==='http://localhost:8080'){
+        //     urlApi = `${variables.host}${variables.urlApi}/usuario/patrocinadores/${this.props.idRodada}/${utilLocalStorage.getToken()}`;
+        // }else{
+        //     urlApi = `${variables.urlApi}/usuario/patrocinadores/${this.props.idRodada}/${utilLocalStorage.getToken()}`;
+        // }
+        
+        await this.setState({
+            urlImg:requestPatrocinador.data.patrocinador.urlExterna,
+            showImg: true,
+            patrocinador: requestPatrocinador.data.patrocinador
+        });
     }
     render() {
         return (

@@ -71,7 +71,6 @@ export default class HomeScreen extends Component {
                                                         <div className="row">
                                                             <div className="col-lg-12">
                                                                 <div className="offset-lg-2 col-lg-8">
-                                                        
                                                                     <PatrocinadorRodada idRodada={voucher.rodada}/>
                                                                 </div>
                                                                 <hr/>
