@@ -5,7 +5,7 @@ import Admin from './screens/administrador/index';
 import Usuario from './screens/usuario/index';
 import Patrocinador from './screens/patrocinador/index';
 import { Router, Route, IndexRoute, browserHistory, Redirect} from 'react-router/lib';
-import registerServiceWorker from './registerServiceWorker';
+// import registerServiceWorker from './registerServiceWorker';
 
 const loggedPatrocinador = () => {
     if(localStorage.getItem('descifre_userData')!==null && localStorage.getItem('descifre_tokenUsuario')!==null){
@@ -143,4 +143,4 @@ ReactDOM.render(
         <Redirect from="*" to='/erros/404'/>
     </Router>
     , document.getElementById('root'));
-registerServiceWorker();
+//registerServiceWorker();
