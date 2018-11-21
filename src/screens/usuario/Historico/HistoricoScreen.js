@@ -60,6 +60,7 @@ export default class HomeScreen extends Component {
         let jogadas = this.state.quizzes[index].jogadas;
         localStorage.setItem('resultadoQuiz', JSON.stringify(jogadas));
         localStorage.setItem('idRodadaEntrar', idRodada);
+        localStorage.setItem('idRodadaAtiva', idRodada);
         browserHistory.push('/usuario/resultados');
         window.location.reload();
     }
