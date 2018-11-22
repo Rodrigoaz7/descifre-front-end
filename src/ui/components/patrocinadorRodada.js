@@ -62,11 +62,6 @@ export default class Patrocinadores extends Component {
                                         <strong>Telefone: </strong>{this.state.patrocinador.telefone}<br/>
                                         <strong>Localização: </strong>{this.state.patrocinador.localizacao}
                                     </div>
-
-                                    <div className="modal-footer">
-                                        <button type="button" className="btn btn-danger" data-dismiss="modal">Sair</button>
-                                    </div>
-
                                 </div>
                             </div>
                         </div>

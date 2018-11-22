@@ -70,7 +70,7 @@ export default class ResultadoScreen extends Component {
                         <div className="row justify-content-center">
                             <div className="col-lg-12">
                                 <PatrocinadorRodada idRodada={localStorage.getItem('idRodadaAtiva')}/>
-                                <div className="modal" id="myModal">
+                                <div className="modal" id="modalResultados">
                                     <ModalResultados key={this.state.keyModal} resultados={this.state.resultados}/>
                                 </div>
                                 <div className="card bg-secondary shadow border-0">
@@ -104,7 +104,7 @@ export default class ResultadoScreen extends Component {
                                         <hr/>
                                         <div className="row">
                                             <div className="col-lg-6 col-6">
-                                                <button type="button" className="btn btn-block btn-primary" data-toggle="modal" data-target="#myModal">Respostas</button>
+                                                <button type="button" className="btn btn-block btn-primary" data-toggle="modal" data-target="#modalResultados">Respostas</button>
                                             </div>
                                             <div className="col-lg-6 col-6">
                                                 <button onClick={this.verClassificacao} type="button" className="btn btn-block btn-success">
