@@ -4,6 +4,7 @@
 import React, { Component } from "react";
 import providerVerificarVoucher from '../../../providers/patrocinador/voucher/verificarVoucher';
 import providerAtivarVoucher from '../../../providers/patrocinador/voucher/ativarVoucher';
+import providerGetVoucher from '../../../providers/patrocinador/voucher/getVouchers';
 import Erros from '../../../ui/components/erros';
 import Swal from 'sweetalert2';
 export default class HomeScreen extends Component {
@@ -12,11 +13,17 @@ export default class HomeScreen extends Component {
         this.state = {
             codigo: '',
             erros: [],
-            reloadErros: 0
+            reloadErros: 0,
+            vouchers: []
         }
     }
     async componentDidMount() {
         document.title = "Patrocinador - Tela de verificação de vouchers.";
+        const requestVouchers = await providerGetVoucher.obterVouchers();
+        await this.setState({
+            vouchers: requestVouchers.data.vouchers
+        });
+        console.log(this.state.vouchers)
     }
     submitForm = async (e) => {
         e.preventDefault();
@@ -56,7 +63,7 @@ export default class HomeScreen extends Component {
                         Swal({
                             type: 'error',
                             title: 'Oops...',
-                            text: 'Tivemos um problema ao ativar o voucher!',
+                            text: `${requestAtivarVoucher.data.msg}`,
                         })
                     }
                     await this.setState({
@@ -110,6 +117,73 @@ export default class HomeScreen extends Component {
                                                 </div>
                                             </div>
                                         </form>
+                                        <hr/>
+                                        <center><h4>VOUCHERS DISTRIBUÍDOS</h4></center>
+                                        <br/>
+                                        <div className="row">
+                                            <div className="col-lg-12">
+                                                <div className="table-responsive">
+                                                    <table className="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">#</th>
+                                                                <th scope="col">
+                                                                    <center>
+                                                                        Prêmio
+                                                                    </center>
+                                                                </th>
+                                                                <th scope="col">
+                                                                    <center>
+                                                                        Código
+                                                                    </center>
+                                                                </th>
+                                                                <th scope="col">
+                                                                    <center>
+                                                                        Nome
+                                                                    </center>
+                                                                </th>
+                                                                <th scope="col">
+                                                                    <center>
+                                                                        E-mail
+                                                                    </center>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {
+                                                                this.state.vouchers.map((voucher, index)=>{
+                                                                    return(
+                                                                        <tr key={index}>
+                                                                            <th scope="row">{index+1}</th>
+                                                                            <td>
+                                                                                <center>
+                                                                                    {voucher.premio}
+                                                                                </center>
+                                                                            </td>
+                                                                            <td>
+                                                                                <center>
+                                                                                    {voucher.codigoVoucher}
+                                                                                </center>
+                                                                            </td>
+                                                                            <td>
+                                                                                <center>
+                                                                                    {voucher.usuario===undefined?'Sem ganhador até o momento':voucher.usuario.pessoa.nome}
+                                                                                </center>
+                                                                            </td>
+                                                                            <td>
+                                                                                <center>
+                                                                                    {voucher.usuario===undefined?'Sem ganhador até o momento':voucher.usuario.pessoa.email}
+                                                                                </center>
+                                                                            </td>
+                                                                        </tr>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
