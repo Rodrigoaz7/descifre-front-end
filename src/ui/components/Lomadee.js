@@ -17,7 +17,10 @@ export default class Lomadee extends Component {
                         <div className="row">
                             <div className="col-lg-12">
                             
-                                <iframe src="https://community.lomadee.com/developers/vitrine_responsiva/frameads.html?sourceId=36027283" width="100%" height="183" scrolling="no" frameBorder="0"></iframe>
+                            
+                            <div class="g3S6Z4x927jE" style={{width: '728px', height: '90px'}}>
+                                <script type="text/javascript" class="lomadee-recommender-script" src="//ad.lomadee.com/v1/eyJwdWJsaXNoZXJJZCI6MjI3ODQ1MTQsInNpdGVJZCI6MzM5NDc3NDIsInNvdXJjZUlkIjozNjAyNzI3OX0%3D.js?w=728&h=90"></script>
+                            </div>
 
                             </div>
                         </div>
