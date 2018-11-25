@@ -17,7 +17,7 @@ export default class Lomadee extends Component {
                         <div className="row">
                             <div className="col-lg-12">
                             
-                                <iframe src="http://community.lomadee.com/developers/vitrine_responsiva/frameads.html?sourceId=36027283" width="100%" height="183" scrolling="no" frameBorder="0"></iframe>
+                                <iframe src="https://community.lomadee.com/developers/vitrine_responsiva/frameads.html?sourceId=36027283" width="100%" height="183" scrolling="no" frameBorder="0"></iframe>
 
                             </div>
                         </div>
