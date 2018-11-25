@@ -9,7 +9,7 @@ import { browserHistory } from "react-router/lib";
 import Swal from 'sweetalert2';
 import providerQuantidadeCifras from '../../../providers/usuario/cifras/quantidadeCifras';
 import ModalHelp from '../../../ui/components/modals/ModalHelp';
-
+import Lomadee from '../../../ui/components/Lomadee';
 export default class HomeScreen extends Component {
     constructor() {
         super();
@@ -144,6 +144,7 @@ export default class HomeScreen extends Component {
                                         </div>
                                     </div>
                                 </div><br />
+                                <Lomadee/>
                                 {
                                     this.state.rodadas.length > 0 &&
                                     this.state.rodadas.map((rodada, index) => {
