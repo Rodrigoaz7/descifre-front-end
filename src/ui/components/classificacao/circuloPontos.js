@@ -27,7 +27,12 @@ export default class CirculoPontos extends Component {
             <div style={style}>
                 <span style={{backgroundColor:`${this.state.color}`}} className="dot">
                     <div style={{padding:'0.3em'}}>
-                        <span style={{fontWeight:'900', color:'#ffffff', fontSize:'1.5em'}}>{this.state.pontos}</span>
+                        {this.state.pontos<100 &&
+                            <span style={{fontWeight:'900', color:'#ffffff', fontSize:'1.5em'}}>{this.state.pontos}</span>
+                        }
+                        {this.state.pontos>100 &&
+                            <span style={{fontWeight:'900', color:'#ffffff', fontSize:'1em'}}>{this.state.pontos}</span>
+                        }
                     </div>
                 </span>
             </div>
