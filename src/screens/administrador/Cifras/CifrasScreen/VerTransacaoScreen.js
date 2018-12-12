@@ -21,7 +21,7 @@ export default class CifrasScreen extends Component {
 
     async componentDidMount() {
         const dados = this.props.location.state.data;
-
+        console.log(dados)
         if (dados) {
             this.setState({
                 data_transferencia: dados.data_transferencia,

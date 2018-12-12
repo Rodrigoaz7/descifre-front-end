@@ -26,7 +26,22 @@ export default class CifrasScreen extends Component {
     }
 
     async componentDidMount() {
-        const response = await providerCifras.getTransacoes(this.state.pagina, "", "", "");
+        let response = [];
+        let veioDaHome = false;
+        if(this.props.location.state) {
+            veioDaHome = this.props.location.state.saque;
+            document.getElementById('Saque').checked = true;
+        }
+        
+        if(veioDaHome){
+            response = await providerCifras.getTransacoes(this.state.pagina, "saque", "", "");
+            console.log(response)
+            await this.setState({vindoDaHome: true})
+        } else {
+            console.log(response)
+            response = await providerCifras.getTransacoes(this.state.pagina, "", "", "");
+        }
+
         let resultado_tamanho = await quantTransacoes.getNumeroDeTransacoes();
         let total = parseInt(resultado_tamanho.data.quantidade, 10);
 
@@ -103,11 +118,11 @@ export default class CifrasScreen extends Component {
                                             </div>
                                             <div className="col-lg-2">
                                                 <center><small className="text-uppercase font-weight-bold        mb-3">Saque</small></center>
-                                                <center><input type="radio" id="Saque" name="tt" value="saque" onClick={this.handlerRadio} /></center>
+                                                <center><input type="radio" id="Saque" name="tt" value="saque" onClick={this.handlerRadio}/></center>
                                             </div>
                                             <div className="col-lg-2">
                                                 <center><small className="text-uppercase font-weight-bold        mb-3">Compra</small></center>
-                                                <center><input type="radio" id="Compra" name="tt" value="compra" onClick={this.handlerRadio} /></center>
+                                                <center><input type="radio" id="Compra" name="tt" value="compra" onClick={this.handlerRadio}/></center>
                                             </div>
                                             <div className="col-lg-2">
                                                 <center><small className="text-uppercase font-weight-bold        mb-3">Transferência</small></center>
