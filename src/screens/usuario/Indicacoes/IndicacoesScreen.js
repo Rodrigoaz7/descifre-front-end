@@ -80,6 +80,9 @@ export default class HomeScreen extends Component {
                                         <div className="row">
                                             <div className="col-lg-12">
                                                 <h4 style={{ color: '#212121' }}>
+                                                    No momento as indicações estão indisponíveis.
+                                                </h4>
+                                                {/* <h4 style={{ color: '#212121' }}>
                                                     Envie essa url para que os seus amigos possam se cadastrar, a cada indicação você ganha 5 cifras e seu amigo também.
                                                 </h4>
                                                 <center>
@@ -93,7 +96,7 @@ export default class HomeScreen extends Component {
                                                 </h4>
                                                 <center>
                                                     <a href={`whatsapp://send?text=Oi estou te indicando para jogar o De$cifre, um incrível jogo onde você pode ganhar dinheiro de verdade, cadastre-se usuando esse link: ${this.state.url}`} className="btn btn-success">Enviar via whatsapp</a>
-                                                </center>
+                                                </center> */}
                                             </div>
                                         </div>
                                     </div>

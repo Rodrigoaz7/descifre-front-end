@@ -118,7 +118,7 @@ export default class CadastroSreenIndicacao extends Component {
                                         <div className="form-group">
                                             <Erros erros={this.state.erros}/>
                                         </div>
-                                        <form onSubmit={this.handleSubmit}>
+                                        {/* <form onSubmit={this.handleSubmit}>
                                             
                                             <div className="form-group">
                                                 <div className="input-group input-group-alternative mb-3">
@@ -196,7 +196,7 @@ export default class CadastroSreenIndicacao extends Component {
                                             <div className="text-center">
                                                 <button type="submit" className="btn btn-primary mt-4">Criar minha conta</button>
                                             </div>
-                                        </form>
+                                        </form> */}
                                     </div>
                                 </div>
                             </div>
