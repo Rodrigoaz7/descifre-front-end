@@ -75,7 +75,6 @@ export default class NovaQuestaoScreen extends Component {
         // Get em categorias.
         const resultado_questoes = await providerListarQuestoes.getQuestoes();
         let categorias_formatado = jsonutil.mutationArrayJson(resultado_questoes.data.categorias, ['_id', 'nome'], ['value', 'label']);
-
         // Setando o elas para o select.
         this.setState({
             categorias: categorias_formatado

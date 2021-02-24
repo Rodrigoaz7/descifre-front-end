@@ -60,7 +60,7 @@ export default class NovoPatrocinadorScreen extends Component {
             localizacao: localizacao,
             token: utilLocalStorage.getToken()
         };
-
+        console.log(data)
         let postCadastro = await providerCadastro.realizarCadastro(data);
         
         if (!postCadastro.status) {

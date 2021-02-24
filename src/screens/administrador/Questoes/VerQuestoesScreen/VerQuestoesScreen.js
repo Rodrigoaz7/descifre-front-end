@@ -36,7 +36,7 @@ export default class VerQuestoesScreen extends Component {
     handleChange = async (selectedOption) => {
         this.setState({ selectedOption, pagina: 1 });
         const resultado_questoes = await providerListarQuestoes.getQuestoes(selectedOption.value, 1);
-        this.setState({ questoes: resultado_questoes.data.questoes });
+        this.setState({ questoes: resultado_questoes.data.questoes, total: resultado_questoes.data.questoes.length });
         const quantidade_questoes = await providerQuantidadeQuestoes.numeroQuestoes(selectedOption.value);
         this.setState({total: quantidade_questoes.data.quantidadeQuestoes})
     }
