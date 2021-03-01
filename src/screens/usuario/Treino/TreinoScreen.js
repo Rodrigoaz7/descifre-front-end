@@ -21,7 +21,8 @@ export default class HomeScreen extends Component {
             alternativaCorreta: '',
             loading: false,
             tempoQuestao: 30,
-            completions: 0
+            completions: 0,
+            desabilitarOpcoes: false
         }
     }
     async componentDidMount() {
@@ -85,6 +86,8 @@ export default class HomeScreen extends Component {
 
     handleResposta = async (e) => {
         e.preventDefault();
+        // desabilitar opcoes
+        this.setState({ desabilitarOpcoes: true });
 
         let data = {
             idTreino: this.state.treino._id,
@@ -95,10 +98,11 @@ export default class HomeScreen extends Component {
         }
         const response = await providerProcessarQuestaoTreino.processar(data);
         const questao = await providerObterQuestaoTreino.getQuestao(this.state.treino._id);
-        await this.setState({ treino: response.data.treino, alternativaCorreta: response.data.correta })
+        await this.setState({ treino: response.data.treino, alternativaCorreta: response.data.correta });
+        setTimeout(() => {}, 1000);
         setTimeout(function () {
             if (this.state.treino.qntdVidas === 0) this.handleClickSair();
-            this.setState({ alternativaCorreta: '', questao: questao.data.questao, tempoQuestao: 30, completions: this.state.completions + 1 });
+            this.setState({ alternativaCorreta: '', questao: questao.data.questao, tempoQuestao: 30, completions: this.state.completions + 1, desabilitarOpcoes: false });
         }.bind(this), 1000);
     }
 
@@ -256,7 +260,7 @@ export default class HomeScreen extends Component {
                                                                             return (
                                                                                 <div className="custom-control custom-radio mb-3 radio" key={indexAlternativa}>
                                                                                     <input name="resposta" className="custom-control-input" id={`alternativa${indexAlternativa}`} type="radio" value={alternativa.descricao}
-                                                                                        checked={this.state.respostaSelecionada === alternativa.descricao}
+                                                                                        checked={this.state.respostaSelecionada === alternativa.descricao} disabled={this.state.desabilitarOpcoes}
                                                                                     />
                                                                                     <label className="custom-control-label" htmlFor={`alternativa${indexAlternativa}`}>
                                                                                         {
